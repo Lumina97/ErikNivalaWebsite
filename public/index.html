@@ -7,47 +7,34 @@
 
 <body>
 
-    <h1>Data Selfie app</h1>
+    <h1>Reddit Image Gathering</h1>
+    <h4>Specify a subreddit and how many posts you want to search for images and send the request!</h4>
+
 
     <p>
-        latitude: <span id="latitude"></span>&deg;<br>
-        longitute: <span id="longitute"></span>&deg;<br>
+        subreddit to search: <span> <input id="subredditToSearch" placeholder="Enter subreddit">   </span><br>
+        SearchAmount: <span >  <input id="SearchAmount" placeholder="Enter how many posts to search">    </span><br>
     </p>
-    <button onclick="SendLocationData()">Send location</button>
+    <button onclick="SendImageGatheringRequest()">Send Image gather request</button>
 
 
-    <script>
-        var latitude;
-        var longitute;
-
-        if ('geolocation' in navigator) {
-            console.log("Geolocation available");
-
-            navigator.geolocation.getCurrentPosition(async position => {
-                latitude = position.coords.latitude;
-                longitute = position.coords.longitude;
-
-                document.getElementById('latitude').innerHTML = latitude;
-                document.getElementById('longitute').innerHTML = longitute;
-            });
-
-        }
-        else {
-            console.log("Geolocation not available");
-        }
-    </script>
+<!--===============SEND SUBREDDIT REQUEST==================-->
 
     <script>
-        async function SendLocationData() {
-            const sendData = { latitude, longitute };
+        async function SendImageGatheringRequest() {
+            const subreddit = document.getElementById('subredditToSearch').value;
+            const amount =  document.getElementById('SearchAmount').value;
+
+
+            const sendData = {subreddit,amount };
             const options = {
                 method: 'POST',
                 body: JSON.stringify(sendData),
                 headers: { 'Content-Type': 'application/json' }
             };
-            const response = await fetch('/api', options);
-            const receiveData = await response.json();
-            console.log(receiveData);
+            const response = await fetch('/ImageLoader',options);
+            const receivedData = await response.json();
+            console.log(receivedData);
         }
     </script>
 
