@@ -1,7 +1,6 @@
 const Datastore = require('nedb');
 const express = require('express');
 const RedditImageLoader = require('./RedditAPI');
-const { request, response } = require('express');
 
 const app = express();
 const database = new Datastore('database.db');
