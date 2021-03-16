@@ -9,7 +9,7 @@ async function GetRedditPosts(subreddit, amount) {
 
     return new Promise(async function (resolve, reject) {
 
-        console.log("Getting reddit posts - RedditAPI.js - GetRedditPosts()")
+        console.log("Getting " + amount + " reddit posts - RedditAPI.js - GetRedditPosts()")
         if (amount === 'undifined')
             amount = 25;
 

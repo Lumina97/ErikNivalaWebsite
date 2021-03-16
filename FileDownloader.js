@@ -39,7 +39,7 @@ async function DownloadFilesFromLinks(links) {
 async function DownloadHTTPSFile(link) {
 
     console.log("HTTPS DOWNLOAD: " + link);
-    const baseDest = "/home/erik/DEV/Images/" + SubRedditToScan;
+    const baseDest = "D:\\Dev\\WebDev\\RedditImageData\\" + SubRedditToScan;
     const fileLocationarray = link.split("/");
     const fileLocation = fileLocationarray[fileLocationarray.length - 1];
     console.log("file location: " + fileLocation);
@@ -83,7 +83,7 @@ async function DownloadHTTPSFile(link) {
 }
 
 async function DownloadHTTPFile(link) {
-    const baseDest = "/home/erik/DEV/Images/" + SubRedditToScan;
+    const baseDest = "D:\\Dev\\WebDev\\RedditImageData\\" + SubRedditToScan;
     const fileLocationarray = link.split("/");
     const fileLocation = fileLocationarray[fileLocationarray.length - 1];
 

@@ -12,7 +12,7 @@ module.exports =
       SubRedditToScan = subreddit;
       AmountOfPosts = parseInt(amount);
 
-      image_links = await RedditLinksGatherer.GetImageLinksFromSubreddit(subreddit,amount)
+      image_links = await RedditLinksGatherer.GetImageLinksFromSubreddit(subreddit,AmountOfPosts)
       .catch(() => {
         console.log("There was an error Getting posts!");
         reject(false);
