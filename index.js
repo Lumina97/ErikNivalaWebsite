@@ -1,6 +1,6 @@
 const Datastore = require('nedb');
 const express = require('express');
-const RedditAPI = require('./RedditAPI');
+const RedditAPI = require('./RedditAPI/RedditAPI');
 const mime = require('mime-types');
 const fs = require('fs');
 
@@ -21,15 +21,9 @@ app.post('/ImageLoader', async function (request, response) {
     userID++;
 
     await RedditAPI.DownloadImagesFromSubreddit(data.subreddit, data.amount, userID)
-        //Reddit Error handling 
-        .catch(() => {
-            console.log("ERROR There was an error getting your data!");
-            response.json({ "ERROR": "There was an error getting your data!" })
-            return;
-        })
         .then((result) => {
             console.log("SUCESS Fulfilled request!");
-            response.json({ path : result });
+            response.json({ path: result });
             return;
 
             // var stats = fs.statSync(result)
@@ -44,6 +38,11 @@ app.post('/ImageLoader', async function (request, response) {
 
             // response.download(result, (err) => { console.log(err) });
 
+        })
+        .catch(() => {
+            console.log("ERROR There was an error getting your data!");
+            response.json({ "ERROR": "There was an error getting your data!" })
+            return ;
         }) // Set disposition and send it.
         //Post Request Error handling
         .catch((err) => {

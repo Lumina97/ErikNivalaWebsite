@@ -136,13 +136,7 @@ async function RefreshToken(sucessCallback, erroCallback) {
       .then(async function () {
         //==================================Get refresh token 
         console.log("Starting AuthRefreshTokenPromise(). - RedditAPI.js - RefreshToken()");
-        await AuthRefreshTokenPromise()
-          .catch(() => {
-            //refresh token fail
-            console.log("Could not Refresh Token! - RedditAPI.js - RefreshToken()");
-            erroCallback(false);
-            return;
-          })
+        await AuthRefreshTokenPromise()        
           .then(function (result) {
             //Refresh token sucess 
             fs.writeFile("Tokens", JSON.stringify(result), function (error) {
@@ -155,6 +149,12 @@ async function RefreshToken(sucessCallback, erroCallback) {
 
             console.log("Sucessfully refreshed token - RedditAPI.js - RefreshToken()");
             sucessCallback(true);
+            return;
+          }) 
+           .catch(() => {
+            //refresh token fail
+            console.log("Could not Refresh Token! - RedditAPI.js - RefreshToken()");
+            erroCallback(false);
             return;
           });
         //================================== 
@@ -224,37 +224,38 @@ async function GetToken() {
     if (typeof Acess_Token === 'undefined') {
       console.log('token is undefined');
       await RefreshTokenPromise()
+        .then(() => {
+          resolve(Acess_Token);
+          return;
+        })
         .catch(() => {
           console.log("There was an error refreshing the token! - RedditAuthentication.js - GetToken() ln 226");
           reject(false);
-          return;
-        })
-        .then(() => {
-          resolve(Acess_Token);
           return;
         });
       return;
     }
 
     await CheckAcessTokenTimeLimitReached()
-      //time limit not reached
-      .catch(() => {
-        resolve(Acess_Token);
-        return;
-      })
       //time limit reached!
       .then(async function (err) {
 
         await RefreshTokenPromise()
+          .then(() => {
+            resolve(Acess_Token);
+            return;
+          })
           .catch(() => {
             console.log("There was an error refreshing the token! - RedditAuthentication.js - GetToken() ln 234");
             reject(false);
             return;
-          }).then(() => {
-            resolve(Acess_Token);
-            return;
           });
       })
+      //time limit not reached
+      .catch(() => {
+        resolve(Acess_Token);
+        return;
+      });
   })
 }
 
@@ -293,19 +294,31 @@ module.exports =
   GetAutheticationToken: async function () {
 
     return new Promise(async function (resolve, reject) {
-      console.log('=================================');
-      console.log('======GetAutheticationToken======');
-      console.log('=================================');
+      console.log();
+      console.log('===============================================');
+      console.log('=============GetAutheticationToken=============');
+      console.log('===============================================');
       console.log();
 
       await GetToken()
+        .then(() => {
+          console.log("Sucesfully retrieved acess token! Token: " + Acess_Token);
+          resolve(Acess_Token);
+          console.log();
+          console.log('===============================================');
+          console.log('=========END GetAutheticationToken=============');
+          console.log('===============================================');
+          console.log();
+          return;
+        })
         .catch(() => {
           console.log("There was an error refreshing the token! - RedditAuthentication.js");
           reject(false);
-          return;
-        }).then(() => {
-          console.log("Sucesfully retrieved acess token! Token: " + Acess_Token);
-          resolve(Acess_Token);
+          console.log();
+          console.log('===============================================');
+          console.log('=========END GetAutheticationToken=============');
+          console.log('===============================================');
+          console.log();
           return;
         });
     })

@@ -146,9 +146,10 @@ module.exports = {
 
         return new Promise(async function (resolve, reject) {
 
-            console.log('=================================');
-            console.log('======DownloadFilesFromLinks=====');
-            console.log('=================================');
+            console.log();
+            console.log('===============================================');
+            console.log('=============DownloadFilesFromLinks============');
+            console.log('===============================================');
             console.log();
 
             await DownloadFilesFromLinks(fileLinks)

@@ -1,1 +1,0 @@
-{"access_token":"456556608586-Xv43h1TwEj_RzKJuIGfY_Xu4IPixeQ","token_type":"bearer","expires_in":3600,"refresh_token":"456556608586-ZYa8Ne2Z9tZzTjMZ_PD9e0f5T9hSWg","scope":"edit flair history identity modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread"}

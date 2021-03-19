@@ -56,9 +56,11 @@ async function ZipFile(userID) {
 module.exports = {
     CreateZipFromUserID: async function (userID) {
         return new Promise(async function (resolve, reject) {
-            console.log('=================================');
-            console.log('=======CreateZipFromUserID=======');
-            console.log('=================================');
+
+            console.log();
+            console.log('===============================================');
+            console.log('==============CreateZipFromUserID==============');
+            console.log('===============================================');
             console.log();
 
 
@@ -66,10 +68,20 @@ module.exports = {
             await ZipFile(userID)
                 .catch(() => {
                     console.log("Error creating archive!");
+                    console.log();
+                    console.log('===============================================');
+                    console.log('==========END CreateZipFromUserID==============');
+                    console.log('===============================================');
+                    console.log();
                     reject(false);
                     return;
                 }).then((result) => {
                     console.log("Created archive! Returning path: " + result);
+                    console.log();
+                    console.log('===============================================');
+                    console.log('==========END CreateZipFromUserID==============');
+                    console.log('===============================================');
+                    console.log();
                     resolve(result);
                 });
         });
