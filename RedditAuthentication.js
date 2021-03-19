@@ -4,8 +4,8 @@ const fs = require('fs');
 const querystring = require('querystring');
 
 
-
-let Refresh_Token ;
+let LastTokenRefreshTime;
+let Refresh_Token;
 let Acess_Token;
 //===================AUTHORIZATION=========================
 
@@ -20,6 +20,7 @@ async function MakeAuthenticationRequest(successCallback, errorCallback) {
 
   console.log("Received Auth Request. - RedditAPI.js -MakeAuthenticationRequest()")
   successCallback(data);
+  return;
 
 
   // const payload = querystring.stringify({
@@ -71,13 +72,16 @@ async function RefreshAcessToken(refreshtoken, successCallback, errorCallback) {
   if (res_Data.error) {
     Console.log("Unable to receive Bearer token: " + res_Data.error)
     errorCallback(false);
+    return;
   }
   else {
 
     Refresh_Token = res_Data.refresh_token;
     Acess_Token = res_Data.access_token;
+    LastTokenRefreshTime = Date.now()
 
     successCallback(res_Data);
+    return;
   }
 }
 
@@ -86,10 +90,12 @@ function AuthRequestPromise() {
     MakeAuthenticationRequest((successCallback) => {
       console.log("AuthRequestPromise - resolve");
       resolve(successCallback);
+      return;
     },
       (errorCallback) => {
         console.log("AuthRequestPromise - reject");
         reject(errorCallback);
+        return;
       });
   })
 }
@@ -99,10 +105,12 @@ function AuthRefreshTokenPromise() {
     RefreshAcessToken(Refresh_Token, (successCallback) => {
       console.log("AuthRefreshTokenPromise - resolve");
       resolve(successCallback);
+      return;
     },
       (errorCallback) => {
         console.log("AuthRefreshTokenPromise - reject");
         reject(errorCallback);
+        return;
       });
   })
 }
@@ -111,9 +119,11 @@ async function RefreshTokenPromise() {
   return new Promise((resolve, reject) => {
     RefreshToken((sucessCallback) => {
       resolve(sucessCallback);
+      return;
     },
       (errorCallback) => {
         reject(errorCallback);
+        return;
       })
   })
 }
@@ -131,6 +141,7 @@ async function RefreshToken(sucessCallback, erroCallback) {
             //refresh token fail
             console.log("Could not Refresh Token! - RedditAPI.js - RefreshToken()");
             erroCallback(false);
+            return;
           })
           .then(function (result) {
             //Refresh token sucess 
@@ -138,13 +149,16 @@ async function RefreshToken(sucessCallback, erroCallback) {
               if (error) {
                 console.log("Error writing refresh token to file! - RedditAPI.js - RefreshToken()");
                 erroCallback(false)
+                return;
               }
             });
+
             console.log("Sucessfully refreshed token - RedditAPI.js - RefreshToken()");
             sucessCallback(true);
+            return;
           });
         //================================== 
-
+        return;
       })
       .catch(async function () {
         //================================ Read token file FAIL
@@ -156,6 +170,8 @@ async function RefreshToken(sucessCallback, erroCallback) {
           .catch(() => {
             console.log("Error receiving auth response. RedditAPI.js - RefreshToken()");
             erroCallback(false);
+            return;
+
           })
           .then(async function (result) {
             fs.writeFile("Tokens", JSON.stringify(result), function (error) {
@@ -164,13 +180,14 @@ async function RefreshToken(sucessCallback, erroCallback) {
             console.log("Received valid AUTH response. RedditAPI.js - RefreshToken()");
             await RefreshTokenPromise();
           });
-
+        return;
       });
   }
   catch (error) {
     // handle getting accesscode etc 
     console.log(error);
     erroCallback(false);
+    return;
   }
 }
 
@@ -178,8 +195,9 @@ async function ReadTokenFile() {
   return new Promise((resolve, reject) => {
     fs.readFile("Tokens", 'utf8', function (err, data) {
       if (err) {
-        debug.log(err);
+        console.log(err);
         reject(false);
+        return;
       }
       if (data.length > 0) {
         const obj = JSON.parse(data);
@@ -187,14 +205,85 @@ async function ReadTokenFile() {
         Refresh_Token = obj.refresh_token;
         Acess_Token = obj.access_token;
         console.log('Loaded Acess Tokens - RedditAPI.js - ReadTokenFile()');
-        console.log("File refresh token: " + Refresh_Token);
         resolve(true);
+        return;
       }
       else {
         console.log("Issue reading file  - RedditAPI.js - ReadTokenFile()");
         reject(false);
+        return;
+
       }
     });
+  })
+}
+
+async function GetToken() {
+  return new Promise(async function (resolve, reject) {
+
+    if (typeof Acess_Token === 'undefined') {
+      console.log('token is undefined');
+      await RefreshTokenPromise()
+        .catch(() => {
+          console.log("There was an error refreshing the token! - RedditAuthentication.js - GetToken() ln 226");
+          reject(false);
+          return;
+        })
+        .then(() => {
+          resolve(Acess_Token);
+          return;
+        });
+      return;
+    }
+
+    await CheckAcessTokenTimeLimitReached()
+      //time limit not reached
+      .catch(() => {
+        resolve(Acess_Token);
+        return;
+      })
+      //time limit reached!
+      .then(async function (err) {
+
+        await RefreshTokenPromise()
+          .catch(() => {
+            console.log("There was an error refreshing the token! - RedditAuthentication.js - GetToken() ln 234");
+            reject(false);
+            return;
+          }).then(() => {
+            resolve(Acess_Token);
+            return;
+          });
+      })
+  })
+}
+
+
+
+async function CheckAcessTokenTimeLimitReached() {
+  return new Promise(async function (resolve, reject) {
+    if (typeof LastTokenRefreshTime === 'undefined') {
+      console.log("last token time is undefined! -  CheckAcessTokenTimeLimitReached() - 257")
+      resolve();
+      return;
+    }
+
+    let timePassed = Date.now() - LastTokenRefreshTime;
+    let tokenTime = new Date(LastTokenRefreshTime);
+    tokenTime.setHours(tokenTime.getHours() + 1);
+    console.log("timepassed: " + timePassed)
+    console.log("tokenTime: " + tokenTime)
+
+    if (timePassed > tokenTime) {
+      console.log('new token required!');
+      resolve();
+      return;
+    }
+    else {
+      console.log('token is still viable!');
+      reject();
+      return;
+    }
   })
 }
 
@@ -204,13 +293,21 @@ module.exports =
   GetAutheticationToken: async function () {
 
     return new Promise(async function (resolve, reject) {
-      await RefreshTokenPromise().catch(() => {
-        console.log("There was an error refreshing the token! - RedditAuthentication.js");
-        reject(false);
-      }).then(()=>{
+      console.log('=================================');
+      console.log('======GetAutheticationToken======');
+      console.log('=================================');
+      console.log();
+
+      await GetToken()
+        .catch(() => {
+          console.log("There was an error refreshing the token! - RedditAuthentication.js");
+          reject(false);
+          return;
+        }).then(() => {
           console.log("Sucesfully retrieved acess token! Token: " + Acess_Token);
-        resolve(Acess_Token);
-      });
+          resolve(Acess_Token);
+          return;
+        });
     })
   }
 }

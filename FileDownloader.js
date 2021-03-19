@@ -2,6 +2,8 @@ const fs = require('fs');
 const https = require('https');
 const http = require('http');
 
+const root = "D:\\Dev\\WebDev\\RedditImageData\\";
+let ID;
 
 //=====================FILE DOWNLOAD======================
 
@@ -15,7 +17,7 @@ async function DownloadFilesFromLinks(links) {
             console.log("Starting download...");
 
             //======================DOWNLOAD FILES
-            for (i = 0; i < links.length; i++) {
+            for (let i = 0; i < links.length; i++) {
                 if (links[i].includes('https')) {
                     console.log("Starting HTTPS Download...");
                     await DownloadHTTPSFile(links[i]);
@@ -25,6 +27,7 @@ async function DownloadFilesFromLinks(links) {
                     await DownloadHTTPFile(links[i]);
                 }
             }
+            resolve(true);
         }
         else {
             console.log("Error With image links! - Filedownloader.js - DownloadFilesFromLinks()")
@@ -32,101 +35,122 @@ async function DownloadFilesFromLinks(links) {
             return;
         }
 
-        resolve(true);
     });
 }
 
 async function DownloadHTTPSFile(link) {
 
-    console.log("HTTPS DOWNLOAD: " + link);
-    const baseDest = "D:\\Dev\\WebDev\\RedditImageData\\" + SubRedditToScan;
-    const fileLocationarray = link.split("/");
-    const fileLocation = fileLocationarray[fileLocationarray.length - 1];
-    console.log("file location: " + fileLocation);
+    return new Promise(async function (resolve, reject) {
+        console.log("HTTPS DOWNLOAD: " + link);
+        const baseDest = root + id + "\\" + SubRedditToScan;
+        const fileLocationarray = link.split("/");
+        const fileLocation = fileLocationarray[fileLocationarray.length - 1];
+        console.log("file location: " + fileLocation);
 
-    console.log("Checking file directory...");
+        console.log("Checking file directory...");
 
 
-    if (fs.existsSync(baseDest) == false) {
-        await fs.mkdir(baseDest, { recursive: true }, (error) => {
+        if (fs.existsSync(baseDest) == false) {
+            await fs.mkdir(baseDest, { recursive: true }, (error) => {
 
-            if (error) {
-                console.log("error creating directory! : " + error);
-            }
-            else
-                console.log("Created directory: " + baseDest);
-        });
-    }
-    let dest = baseDest + "/" + fileLocation;
+                if (error) {
+                    console.log("error creating directory! : " + error);
+                    reject();
 
-    const req = https.get(link, function (res) {
-        const filestream = fs.createWriteStream(dest);
-        res.pipe(filestream);
+                }
+                else
+                    console.log("Created directory: " + baseDest);
+            });
+        }
+        let dest = baseDest + "/" + fileLocation;
 
-        //handle filestream write errors
-        filestream.on("error", function (error) {
-            console.log("Error downloading file: ");
+        const req = https.get(link, function (res) {
+            const filestream = fs.createWriteStream(dest);
+            res.pipe(filestream);
+
+            //handle filestream write errors
+            filestream.on("error", function (error) {
+                console.log("Error downloading file: ");
+                console.log(error);
+                reject();
+
+            })
+
+            // done downloading
+            filestream.on("finish", function () {
+                filestream.close();
+                console.log("Downloaded: " + fileLocation);
+                resolve();
+            })
+        })
+        //handle https download errors
+        req.on("error", function (error) {
+            console.log("Error downloading file");
             console.log(error);
+            reject();
         })
-
-        // done downloading
-        filestream.on("finish", function () {
-            filestream.close();
-            console.log("Downloaded: " + fileLocation);
-        })
-    })
-    //handle https download errors
-    req.on("error", function (error) {
-        console.log("Error downloading file");
-        console.log(error);
     })
 }
 
 async function DownloadHTTPFile(link) {
-    const baseDest = "D:\\Dev\\WebDev\\RedditImageData\\" + SubRedditToScan;
-    const fileLocationarray = link.split("/");
-    const fileLocation = fileLocationarray[fileLocationarray.length - 1];
 
-    let dest = baseDest + "/" + fileLocation;
+    return new Promise(async function (resolve, reject) {
+        const baseDest = root + id + "\\" + SubRedditToScan;
+        const fileLocationarray = link.split("/");
+        const fileLocation = fileLocationarray[fileLocationarray.length - 1];
 
-    if (fs.existsSync(baseDest) == false) {
-        await fs.mkdir(baseDest, { recursive: true }, () => {
-            console.log("Created directory: " + baseDest);
+        let dest = baseDest + "/" + fileLocation;
 
-            fs.on('error', function (err) {
-                console.log('Error  making directory: ' + err);
+        if (fs.existsSync(baseDest) == false) {
+            await fs.mkdir(baseDest, { recursive: true }, (error) => {
+
+                if (error) {
+                    console.log("error creating directory! : " + error);
+                    reject();
+                }
+                else
+                    console.log("Created directory: " + baseDest);
+            });
+        }
+
+        const req = http.get(link, function (res) {
+            const filestream = fs.createWriteStream(dest);
+            res.pipe(filestream);
+
+            //handle filestream write errors
+            filestream.on("error", function (error) {
+                console.log("Error downloading file: ");
+                console.log(error);
+                reject();
             })
 
-        });
-    }
-    const req = http.get(link, function (res) {
-        const filestream = fs.createWriteStream(dest);
-        res.pipe(filestream);
-
-        //handle filestream write errors
-        filestream.on("error", function (error) {
-            console.log("Error downloading file: ");
+            // done downloading
+            filestream.on("finish", function () {
+                filestream.close();
+                console.log("Downloaded: " + fileLocation);
+                resolve();
+            })
+        })
+        //handle https download errors
+        req.on("error", function (error) {
+            console.log("Error downloading file");
             console.log(error);
+            reject();
         })
-
-        // done downloading
-        filestream.on("finish", function () {
-            filestream.close();
-            console.log("Downloaded: " + fileLocation);
-        })
-    })
-    //handle https download errors
-    req.on("error", function (error) {
-        console.log("Error downloading file");
-        console.log(error);
     })
 }
 
 module.exports = {
+    DownloadFilesFromLinks: async function (fileLinks, user) {
+        id = user;
 
-    DownloadFilesFromLinks : async function (fileLinks) {
-        
         return new Promise(async function (resolve, reject) {
+
+            console.log('=================================');
+            console.log('======DownloadFilesFromLinks=====');
+            console.log('=================================');
+            console.log();
+
             await DownloadFilesFromLinks(fileLinks)
                 .catch((err) => {
                     if (err) console.log("Error downloading file! :" + err);
@@ -134,7 +158,6 @@ module.exports = {
                 })
                 .then(() => {
                     console.log("Sucessfully downloaded files from links!");
-                    //TODO: Return a zip file to download/send to the user!
                     resolve(true);
                 })
         })

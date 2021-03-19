@@ -9,6 +9,12 @@ async function GetRedditPosts(subreddit, amount) {
 
     return new Promise(async function (resolve, reject) {
 
+        console.log('=================================');
+        console.log('==========GetRedditPosts=========');
+        console.log('=================================');
+        console.log();
+
+
         console.log("Getting " + amount + " reddit posts - RedditAPI.js - GetRedditPosts()")
         if (amount === 'undifined')
             amount = 25;
@@ -59,6 +65,7 @@ async function GetRedditPosts(subreddit, amount) {
         if (bHasAnyImageLinks == false) {
             console.log("No image links found! - RedditLinksGatherer.js - GetRedditPosts()")
             reject(false);
+            return;
         }
         else {
             console.log("image links found! - RedditLinksGatherer.js - GetRedditPosts()")
@@ -75,12 +82,15 @@ module.exports = {
         return new Promise(async function (resolve, reject) {
 
             //Get acess token for reddit api
-            await RedditAuthentication.GetAutheticationToken().catch(() => {
-                console.log("There was an error refreshing the token!");
-                reject(false);
-            }).then((result) => {
-                Acess_Token = result;
-            });
+            await RedditAuthentication.GetAutheticationToken()
+                .catch(() => {
+                    console.log("There was an error refreshing the token!");
+                    reject(false);
+                    return;
+                })
+                .then((result) => {
+                    Acess_Token = result;
+                });
 
             // validate input
             if (typeof subreddit === 'undefined') {
@@ -98,6 +108,7 @@ module.exports = {
                 .catch((err) => {
                     if (err) console.log("Error Getting image links: " + err);
                     reject(false);
+                    return;
                 })
                 .then((result) => {
                     resolve(result);
