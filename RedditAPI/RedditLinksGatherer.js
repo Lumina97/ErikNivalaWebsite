@@ -3,17 +3,11 @@ const querystring = require('querystring');
 const RedditAuthentication = require('./RedditAuthentication');
 
 const oAuthURL = "https://oauth.reddit.com"
-
+let Acess_Token;
 
 async function GetRedditPosts(subreddit, amount) {
 
     return new Promise(async function (resolve, reject) {
-
-        console.log('=================================');
-        console.log('==========GetRedditPosts=========');
-        console.log('=================================');
-        console.log();
-
 
         console.log("Getting " + amount + " reddit posts - RedditAPI.js - GetRedditPosts()")
         if (amount === 'undifined')
@@ -81,20 +75,37 @@ module.exports = {
 
         return new Promise(async function (resolve, reject) {
 
+            console.log();
+            console.log('===============================================');
+            console.log('=================GetRedditPosts================');
+            console.log('===============================================');
+            console.log();
+
             //Get acess token for reddit api
             await RedditAuthentication.GetAutheticationToken()
-                .catch(() => {
-                    console.log("There was an error refreshing the token!");
-                    reject(false);
-                    return;
-                })
                 .then((result) => {
                     Acess_Token = result;
+                })
+                .catch(() => {
+                    console.log("There was an error refreshing the token!");
+                    console.log();
+                    console.log('===============================================');
+                    console.log('=============END GetRedditPosts================');
+                    console.log('===============================================');
+                    console.log();
+                    reject(false);
+                    return;
                 });
+
 
             // validate input
             if (typeof subreddit === 'undefined') {
                 console.log("Passed in subreddit was undefined! - DownloadImagesFromSubreddit() ")
+                console.log();
+                console.log('===============================================');
+                console.log('=============END GetRedditPosts================');
+                console.log('===============================================');
+                console.log();
                 reject(false);
                 return;
             }
@@ -104,14 +115,25 @@ module.exports = {
             }
 
             //wait to get links
-            await GetRedditPosts(subreddit, amountOfPostsSearched)
-                .catch((err) => {
-                    if (err) console.log("Error Getting image links: " + err);
-                    reject(false);
+            await GetRedditPosts(subreddit, amountOfPostsSearched)              
+                .then((result) => {
+                    console.log();
+                    console.log('===============================================');
+                    console.log('=============END GetRedditPosts================');
+                    console.log('===============================================');
+                    console.log();
+                    resolve(result);
                     return;
                 })
-                .then((result) => {
-                    resolve(result);
+                .catch((err) => {
+                    if (err) console.log("Error Getting image links: " + err);
+                    console.log();
+                    console.log('===============================================');
+                    console.log('=============END GetRedditPosts================');
+                    console.log('===============================================');
+                    console.log();
+                    reject(false);
+                    return;
                 });
         });
     }
