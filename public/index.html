@@ -5,37 +5,77 @@
     <title>Page Title</title>
 </head>
 
-<body>
+<body style="background-color: #2f3033">
 
     <h1>Reddit Image Gathering</h1>
     <h4>Specify a subreddit and how many posts you want to search for images and send the request!</h4>
 
 
     <p>
-        subreddit to search: <span> <input id="subredditToSearch" placeholder="Enter subreddit">   </span><br>
-        SearchAmount: <span >  <input id="SearchAmount" placeholder="Enter how many posts to search">    </span><br>
+        subreddit to search: <span> <input style="background-color: #2f3033" id="subredditToSearch" value="Funny">
+        </span><br>
+        SearchAmount: <span> <input style="background-color: #2f3033" id="SearchAmount" value="3"> </span><br>
     </p>
-    <button onclick="SendImageGatheringRequest()">Send Image gather request</button>
+    <button style="background-color: #2f3033" onclick="SendImageGatheringRequest()"> Send Image gather request</button>
 
 
-<!--===============SEND SUBREDDIT REQUEST==================-->
+    <!--===============SEND SUBREDDIT REQUEST==================-->
 
     <script>
         async function SendImageGatheringRequest() {
             const subreddit = document.getElementById('subredditToSearch').value;
-            const amount =  document.getElementById('SearchAmount').value;
+            const amount = document.getElementById('SearchAmount').value;
 
-            const sendData = {subreddit,amount };
+            const sendData = { subreddit, amount };
             console.log("Sending data: " + JSON.stringify(sendData));
             const options = {
                 method: 'POST',
                 body: JSON.stringify(sendData),
                 headers: { 'Content-Type': 'application/json' }
             };
-            const response = await fetch('/ImageLoader',options);
-            const receivedData = await response.json();
-            console.log(receivedData);
+           const response =  await fetch('/ImageLoader', options);
+           const data =response.json().then((result) => {
+               console.log(result);
+            window.open(result.path); 
+           });
         }
+
+        // async function downloadFile() {
+        //     const writer = createWriteStream("D:\\Dev\\WebDev");
+        //     const subreddit = document.getElementById('subredditToSearch').value;
+        //     const amount = document.getElementById('SearchAmount').value;
+
+        //     const sendData = { subreddit, amount };
+
+        //     return Axios({
+        //         method: 'POST',
+        //         url: "/ImageLoader",
+        //         body: JSON.stringify(sendData),
+        //         headers: { 'Content-Type': 'application/json' },
+        //         responseType: 'stream',
+        //     }).then(response => {
+
+        //         //ensure that the user can call `then()` only when the file has
+        //         //been downloaded entirely.
+
+        //         return new Promise((resolve, reject) => {
+        //             response.data.pipe(writer);
+        //             let error = null;
+        //             writer.on('error', err => {
+        //                 error = err;
+        //                 writer.close();
+        //                 reject(err);
+        //             });
+        //             writer.on('close', () => {
+        //                 if (!error) {
+        //                     resolve(true);
+        //                 }
+        //                 //no need to call the reject here, as it will have been called in the
+        //                 //'error' stream;
+        //             });
+        //         });
+        //     });
+        // }
     </script>
 
 

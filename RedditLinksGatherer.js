@@ -1,0 +1,118 @@
+const axios = require('axios');
+const querystring = require('querystring');
+const RedditAuthentication = require('./RedditAuthentication');
+
+const oAuthURL = "https://oauth.reddit.com"
+
+
+async function GetRedditPosts(subreddit, amount) {
+
+    return new Promise(async function (resolve, reject) {
+
+        console.log('=================================');
+        console.log('==========GetRedditPosts=========');
+        console.log('=================================');
+        console.log();
+
+
+        console.log("Getting " + amount + " reddit posts - RedditAPI.js - GetRedditPosts()")
+        if (amount === 'undifined')
+            amount = 25;
+
+        const params = querystring.stringify({
+            'limit': amount
+        })
+
+        let urlink = oAuthURL + "/r/" + subreddit + "/hot" + "?" + params;
+
+        const config = {
+            method: 'get',
+            url: urlink,
+            headers: {
+                "Authorization": "BEARER " + Acess_Token,
+                'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1'
+            }
+        }
+
+        const response = await axios(config)
+            .catch((result) => {
+                console.log("Error getting reddit posts! - RedditAPI.js - GetRedditPosts()")
+                console.log(result);
+                reject(false);
+                return;
+            });
+        const postArray = response.data.data.children;
+
+        console.log(response.status);
+
+        let image_links = [];
+
+        let bHasAnyImageLinks = false;
+        for (post of postArray) {
+            if (post.kind == "t3" && (post.data.url.includes(".jpg")
+                || post.data.url.includes(".png")
+                || post.data.url.includes("gallery")
+                || post.data.url.includes(".gifv"))) {
+                image_links.push(post.data.url);
+                console.log("URL: " + post.data.url);
+                bHasAnyImageLinks = true;
+            }
+            else {
+                console.log("Not an image post");
+            }
+        }
+
+        if (bHasAnyImageLinks == false) {
+            console.log("No image links found! - RedditLinksGatherer.js - GetRedditPosts()")
+            reject(false);
+            return;
+        }
+        else {
+            console.log("image links found! - RedditLinksGatherer.js - GetRedditPosts()")
+            resolve(image_links);
+        }
+    });
+}
+
+
+module.exports = {
+
+    GetImageLinksFromSubreddit: async function (subreddit, amountOfPostsSearched) {
+
+        return new Promise(async function (resolve, reject) {
+
+            //Get acess token for reddit api
+            await RedditAuthentication.GetAutheticationToken()
+                .catch(() => {
+                    console.log("There was an error refreshing the token!");
+                    reject(false);
+                    return;
+                })
+                .then((result) => {
+                    Acess_Token = result;
+                });
+
+            // validate input
+            if (typeof subreddit === 'undefined') {
+                console.log("Passed in subreddit was undefined! - DownloadImagesFromSubreddit() ")
+                reject(false);
+                return;
+            }
+            if (typeof amountOfPostsSearched === 'undefined' || isNaN(amountOfPostsSearched) == true || typeof amountOfPostsSearched != "number") {
+                console.log("Amount of posts was either not an integer or undefined - Defaulting to 25 - DownloadImagesFromSubreddit()")
+                amountOfPostsSearched = 25;
+            }
+
+            //wait to get links
+            await GetRedditPosts(subreddit, amountOfPostsSearched)
+                .catch((err) => {
+                    if (err) console.log("Error Getting image links: " + err);
+                    reject(false);
+                    return;
+                })
+                .then((result) => {
+                    resolve(result);
+                });
+        });
+    }
+}
