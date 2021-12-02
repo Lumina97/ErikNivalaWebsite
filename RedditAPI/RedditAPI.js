@@ -23,7 +23,8 @@ module.exports =
 
       await SubValidator.ValidateSubreddit(subreddit)
         .then(async function () {
-          return await RedditLinksGatherer.GetImageLinksFromSubreddit(subreddit, AmountOfPosts)
+          image_links = await RedditLinksGatherer.GetImageLinksFromSubreddit(subreddit, AmountOfPosts);
+          return;
         })
         .then(async function () {
           return await FileDownloader.DownloadFilesFromLinks(image_links, ID);
