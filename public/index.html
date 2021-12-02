@@ -2,22 +2,29 @@
 <html>
 
 <head>
-    <title>Page Title</title>
+    <title>Image Gatherer</title>
 </head>
 
 <body style="background-color: #2f3033">
+    
+    <h1 style="color: #ffffff">Reddit Image Gathering</h1>
+    <h4 style="color: #ffffff">Specify a subreddit and how many posts you want to search for images and send the request!</h4>
 
-    <h1>Reddit Image Gathering</h1>
-    <h4>Specify a subreddit and how many posts you want to search for images and send the request!</h4>
 
-
-    <p>
-        subreddit to search: <span> <input style="background-color: #2f3033" id="subredditToSearch" value="Funny">
+    <p style="color: #ffffff"> 
+        subreddit to search: <span> <input style="background-color: #ffffff" id="subredditToSearch" value="Gonewild">
         </span><br>
-        SearchAmount: <span> <input style="background-color: #2f3033" id="SearchAmount" value="3"> </span><br>
+        SearchAmount: <span> <input style="background-color: #ffffff" id="SearchAmount" value="100"> </span><br>
     </p>
-    <button style="background-color: #2f3033" onclick="SendImageGatheringRequest()"> Send Image gather request</button>
+    <button style="background-color: #ffffff" onclick="SendImageGatheringRequest()"> Send Image gather request</button>
 
+    <br>
+    <br>
+    <br>
+    <br>
+    <button id="LogInButton" style="background-color: #ffffff" onclick=""> Log in</button>
+
+   
 
     <!--===============SEND SUBREDDIT REQUEST==================-->
 
@@ -77,6 +84,13 @@
         //     });
         // }
     </script>
+
+
+<script type="text/javascript">
+    document.getElementById("LogInButton").onclick = function () {
+        location.href = "LogIn.html";
+    };
+</script>
 
 
 </body>

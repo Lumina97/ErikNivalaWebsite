@@ -9,9 +9,10 @@ async function GetRedditPosts(subreddit, amount) {
 
     return new Promise(async function (resolve, reject) {
 
-        console.log("Getting " + amount + " reddit posts - RedditAPI.js - GetRedditPosts()")
         if (amount === 'undifined')
-            amount = 25;
+        amount = 25;
+        
+        console.log("Getting " + amount + " reddit posts - RedditAPI.js - GetRedditPosts()")
 
         const params = querystring.stringify({
             'limit': amount
@@ -37,19 +38,26 @@ async function GetRedditPosts(subreddit, amount) {
             });
         const postArray = response.data.data.children;
 
-        console.log(response.status);
+        console.log("respons: " + response.status);
 
         let image_links = [];
+        let amountOfImages = 0;
 
         let bHasAnyImageLinks = false;
         for (post of postArray) {
-            if (post.kind == "t3" && (post.data.url.includes(".jpg")
-                || post.data.url.includes(".png")
-                || post.data.url.includes("gallery")
-                || post.data.url.includes(".gifv"))) {
+            if ((post.kind == "t3" && (post.data.url.includes(".jpg")      /*|| post.data.url.includes("gallery")|| post.data.url.includes(".gifv")*/                                                                  
+                || post.data.url.includes(".png") )
+                &&
+                (post.data.title.includes("[f]") || 
+                post.data.title.includes("[F]") ||
+                post.data.title.includes("(f)") ||
+                post.data.title.includes("(F)")
+                )))
+                {
                 image_links.push(post.data.url);
                 console.log("URL: " + post.data.url);
                 bHasAnyImageLinks = true;
+                amountOfImages++;
             }
             else {
                 console.log("Not an image post");
@@ -62,7 +70,7 @@ async function GetRedditPosts(subreddit, amount) {
             return;
         }
         else {
-            console.log("image links found! - RedditLinksGatherer.js - GetRedditPosts()")
+            console.log("Found " + amountOfImages + " links! - RedditLinksGatherer.js - GetRedditPosts()")
             resolve(image_links);
         }
     });

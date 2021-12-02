@@ -1,6 +1,7 @@
 const fs = require('fs');
 const https = require('https');
 const http = require('http');
+const { Console } = require('console');
 
 const root = "D:\\Dev\\WebDev\\RedditImageData\\";
 let ID;
@@ -15,7 +16,7 @@ async function DownloadFilesFromLinks(links) {
 
             console.log("have image links");
             console.log("Starting download...");
-
+            
             //======================DOWNLOAD FILES
             for (let i = 0; i < links.length; i++) {
                 if (links[i].includes('https')) {
