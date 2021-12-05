@@ -5,8 +5,12 @@ const RedditAPI = require('./RedditAPI/RedditAPI');
 const LogInManager = require('./LogIn/LogInManager')
 const mime = require('mime-types');
 const fs = require('fs');
+const genuuid = require('uuid');
+const session = require('express-session');
+
 
 const app = express();
+
 const database = new Datastore('database.db');
 database.loadDatabase();
 
@@ -14,9 +18,34 @@ app.listen(3000, () => console.log("listening on 3000")).on('error', console.log
 
 app.use(express.static('public'))
 app.use(express.json({ limit: '1mb' }));
+
 //app.use(cookieParser());
 
 let userID = 0;
+
+app.use(session(
+    {
+        name:'SessionCookie',
+        genid: function(req)
+        {
+            console.log('Session id created');
+            return genuuid();
+        },
+        secret: 'Shh! Secret!',
+        resave: false,
+        saveUninitialized: false,
+        cookie: { secure: false, expires: 60000}
+    }
+));
+
+
+app.get('/', (req, res) => {
+    res.send('<h1>home page</h1>');
+});
+
+app.get('/secret', (req, res) => {
+    res.send('<h2>You have accessed Secret Page</h2>');
+});
 
 //a get route for adding a cookie
 /*app.get('/setcookie', (req, res) => {
