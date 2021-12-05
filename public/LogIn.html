@@ -8,7 +8,61 @@
 <body style="background-color: #2f3033" >
 
 
-<h1>Log in page</h1>
+<h1>Log in</h1>
+<div id="LogInContainer">    
+    <input type="text" placeholder="Username..." id="UsernameInput" > 
+    <br>
+    <input type="text" placeholder="password..." id="PasswordInput" > 
+
+    <div id="LogInButtons"> 
+        <button id="CreateAccountBTN" > Create Account </button>
+        <button id="SubmitLoginBTN"> Log in</button>
+    </div>
+</div>
+
+<script>
+
+    document.getElementById('CreateAccountBTN').onclick = async function CreateAccount()
+    {
+        const username =  document.getElementById('UsernameInput').value;
+        const password =  document.getElementById('PasswordInput').value;
+        
+        const sendData = { username, password};
+        const final = JSON.stringify(sendData);
+        console.log('Sending Data: ' + final);
+
+        const options = {
+            method: 'POST',
+            body: final,
+            headers: { 'Content-Type': 'application/json' }
+        };
+        const response = await fetch('/CreateAccount', options);     
+        const data = response.json().then((result)=> {
+            console.log(result);
+        });
+    }
+
+    document.getElementById('SubmitLoginBTN').onclick = async function SubmitLogin()
+    {
+        const username =  document.getElementById('UsernameInput').value;
+        const password =  document.getElementById('PasswordInput').value;
+        
+        const sendData = { username, password};
+        const final = JSON.stringify(sendData);
+        console.log('Sending Data: ' + final);
+
+        const options = {
+            method: 'POST',
+            body: final,
+            headers: { 'Content-Type': 'application/json' }
+        };
+        const response = await fetch('/LogIn', options);     
+        const data = response.json().then((result)=> {
+            console.log(result);
+        });
+    }
+</script>
+
 
 
 </body>
