@@ -1,12 +1,12 @@
 const fs = require('fs');
 const archiver = require('archiver');
 
-const root = "D:\\Dev\\WebDev\\RedditImageData\\";
+const root =  __dirname + "\\Images\\";
 
-async function ZipFile(userID) {
+async function ZipFile() {
     return new Promise(async function (resolve, reject) {
 
-        const filepath = root + userID + ".zip";
+        const filepath = root + "Gonewild.zip";
         const output = fs.createWriteStream(filepath);
         const archive = archiver('zip', {
             zlib: { levle: 9 }
@@ -14,7 +14,7 @@ async function ZipFile(userID) {
 
         output.on('close', function () {
             console.log(archive.pointer() + 'total bytes');
-            console.log('archiver has been finalized and the outputfile descriptro has closed');
+            console.log('archiver has been finalized and the output file  has closed');
             resolve(filepath);
 
         });
@@ -46,7 +46,7 @@ async function ZipFile(userID) {
 
         archive.pipe(output);
 
-        const file = root + "\\" + userID;
+        const file = root + "Gonewild"; //add user ID/username
         archive.directory(file, 'images');
 
         archive.finalize();
@@ -54,7 +54,7 @@ async function ZipFile(userID) {
 }
 
 module.exports = {
-    CreateZipFromUserID: async function (userID) {
+    CreateZipFromUserID: async function () {
         return new Promise(async function (resolve, reject) {
 
             console.log();
@@ -65,9 +65,9 @@ module.exports = {
 
 
 
-            await ZipFile(userID)
-                .catch(() => {
-                    console.log("Error creating archive!");
+            await ZipFile()
+                .catch((err) => {
+                    console.log("Error creating archive! \n " + err + '\n');
                     console.log();
                     console.log('===============================================');
                     console.log('==========END CreateZipFromUserID==============');

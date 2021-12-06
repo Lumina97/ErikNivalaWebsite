@@ -6,7 +6,7 @@ const FileZipper = require('./../FileZipper');
 
 module.exports =
 {
-  DownloadImagesFromSubreddit: async function (subreddit, amount, userID) {
+  DownloadImagesFromSubreddit: async function (subreddit, amount) {
 
     return new Promise(async function (resolve, reject) {
 
@@ -19,7 +19,6 @@ module.exports =
       let image_links = [];
       SubRedditToScan = subreddit;
       AmountOfPosts = parseInt(amount);
-      let ID = userID;
 
       await SubValidator.ValidateSubreddit(subreddit)
         .then(async function () {
@@ -27,10 +26,10 @@ module.exports =
           return;
         })
         .then(async function () {
-          return await FileDownloader.DownloadFilesFromLinks(image_links, ID);
+          return await FileDownloader.DownloadFilesFromLinks(image_links);
         })
         .then(async function () {
-          return await FileZipper.CreateZipFromUserID(ID);
+          return await FileZipper.CreateZipFromUserID();
         })
         .then((result) => {
           resolve(result);

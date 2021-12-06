@@ -39,6 +39,7 @@
                 headers: { 'Content-Type': 'application/json' }
             };
             const response = await fetch('/CreateAccount', options);
+  
             const data = response.json().then((result) => {
                 console.log(result);
 
@@ -70,20 +71,39 @@
                 headers: { 'Content-Type': 'application/json' }
             };
             const response = await fetch('/LogIn', options);
-            const data = response.json().then((result) => {
-                console.log(result);
+            const urlstring = response.url.toString();
 
-                const textbox = document.getElementById('LogInErrorText');
-
-                if (result == '"true"')
-                {
-                    textbox.textContent = "Log In scuessful";
-                    console.log("Log In  scuessful");
-                }
-                else {
+            if(urlstring.includes('LogIn'))
+            {
+                const data = response.json().then((result) => {
+                    console.log(result);
                     textbox.textContent = result;
-                }
-            });
+                });
+            }
+            else
+            {
+                location.href= urlstring;
+            }
+
+            
+
+ 
+            
+            
+            
+            // const data = response.json().then((result) => {
+            //     console.log(result);
+
+            //     const textbox = document.getElementById('LogInErrorText');
+
+            //     if (result == '"true"') {
+            //         textbox.textContent = "Log In scuessful";
+            //         console.log("Log In  scuessful");
+            //     }
+            //     else {
+            //         textbox.textContent = result;
+            //     }
+            // });
         }
     </script>
 
