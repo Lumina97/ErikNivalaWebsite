@@ -1,51 +1,147 @@
 const Datastore = require('nedb');
 const express = require('express');
-//const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 const RedditAPI = require('./RedditAPI/RedditAPI');
 const LogInManager = require('./LogIn/LogInManager')
-const mime = require('mime-types');
-const fs = require('fs');
-const genuuid = require('uuid');
-const session = require('express-session');
-
+const { v4: uuidv4 } = require('uuid');
+const sessions = require('express-session');
+const { application, request, response } = require('express');
 
 const app = express();
 
 const database = new Datastore('database.db');
 database.loadDatabase();
 
-app.listen(3000, () => console.log("listening on 3000")).on('error', console.log);
 
 app.use(express.static('public'))
 app.use(express.json({ limit: '1mb' }));
-
-//app.use(cookieParser());
-
-let userID = 0;
-
-app.use(session(
-    {
-        name:'SessionCookie',
-        genid: function(req)
-        {
-            console.log('Session id created');
-            return genuuid();
-        },
-        secret: 'Shh! Secret!',
-        resave: false,
-        saveUninitialized: false,
-        cookie: { secure: false, expires: 60000}
-    }
-));
+app.use(cookieParser());
 
 
-app.get('/', (req, res) => {
-    res.send('<h1>home page</h1>');
+const oneDay = 1000 * 60 * 60 * 24;
+const secretKey = uuidv4();
+var session;
+
+app.use(sessions({
+    name: 'SessionCookie',
+    // genid: function (req) {
+    //     console.log('session id created');
+    //     return uuidv4();
+    // },
+    secret: secretKey,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false, maxAge: oneDay }
+}));
+
+app.listen(3000, () => console.log("listening on 3000")).on('error', console.log);
+
+app.post('/CreateAccount', async function (request, response) {
+    const data = request.body;
+    console.log("Account Creation request with Username: " + data.username + " and password: " + data.password);
+    await LogInManager.CreateNewAccount(data.username, data.password)
+        .then((result) => {
+            if (result) {
+                console.log("Created account! \t" + result);
+                response.json(JSON.stringify("Sucess"));
+                return;
+            }
+        })
+        .catch((err) => {
+            if (err) {
+                console.log("Error creating account! index.js\n" + err);
+                response.json(JSON.stringify(err));
+                return;
+            }
+        })
+})
+
+app.post('/LogIn', async function (request, response) {
+    const data = request.body;
+    console.log(" Log In request with Username: " + data.username + " and password: " + data.password);
+    await LogInManager.ValidateLogInInformation(data.username, data.password)
+        .then((result) => {
+            if (result) {
+
+                session=request.session;
+                session.userid=request.body.username;
+                console.log(request.session)   
+                console.log("Finished Log in process: -index.js\t " + result);
+
+                const URL = 'http://localhost:3000/index.html'
+                console.log('Redicreting to ' + URL);
+                response.redirect(URL);
+                return;
+            }
+        })
+        .catch((err) => {
+            if (err) {
+                console.log("There has been an error with the log in process. - Index.js \n" + err);
+                response.json(JSON.stringify("There has been an error with the log in process."));
+                return;
+            }
+        })
+})
+
+app.get('/LogOut', (request,response) => {
+    request.session.destroy();
+    console.log('Deleted seesion and redirection user to main page - logout')
+    response.redirect('/');
+})
+
+app.post('/download', (request, response) => {
+    console.log(request.body.path);
+    response.download(request.body.path);
 });
 
-app.get('/secret', (req, res) => {
-    res.send('<h2>You have accessed Secret Page</h2>');
-});
+app.post('/ImageLoader', async function (request, response) {
+    const data = request.body;
+    console.log("ImageLoader Request: " + JSON.stringify(data));
+
+    await RedditAPI.DownloadImagesFromSubreddit(data.subreddit, data.amount)
+        .catch(() => {
+            console.log("ERROR There was an error getting your data!");
+            response.json({ "ERROR": "There was an error getting your data!" })
+            return;
+        })
+        .then((result) => {
+            console.log("SUCESS Fulfilled request!");
+            response.json({ path: result }); //.then(() => {
+            //         return;
+            // })
+            // .catch((err) =>
+            // {
+            //     console.log("Error Creating a response json! err: \n"+err);
+            //     return;
+            // });
+            return;
+
+            // var stats = fs.statSync(result)
+            // var fileSizeInBytes = stats.size;
+            // var mimetype = mime.lookup(result);
+
+            // console.log('size: ' + fileSizeInBytes);
+
+            // response.setHeader('Content-Length', fileSizeInBytes);
+            // response.setHeader('Content-Type', mimetype);
+            // response.setHeader('Content-Disposition', 'attachment; filename=' + result);   
+
+            // response.download(result, (err) => { console.log(err) });
+
+        });
+    // Set disposition and send it.
+    // //Post Request Error handling
+    // .catch((err) => {
+    //     console.log("Error occured during call to Imageloader! - index.js - ImageLoader Request()");
+    //     console.log(err);
+    //     return;
+    // });
+})
+
+
+
+
+
 
 //a get route for adding a cookie
 /*app.get('/setcookie', (req, res) => {
@@ -82,107 +178,3 @@ app.get('/getcookie',(req,res)=> {
 });
 
 */
-
-
-app.post('/CreateAccount', async function (request,response) {
-    const data = request.body;
-    console.log("Account Creation request with Username: " + data.username + " and password: " + data.password);
-    await LogInManager.CreateNewAccount(data.username, data.password)
-    .then((result) => {
-        if(result)
-        {
-            console.log("Created account! \t" + result);
-            response.json(JSON.stringify("Sucess"));
-            return;
-        }
-    })
-    .catch((err) => {
-        if(err)
-        {
-            console.log("Error creating account! index.js\n"+err);
-            response.json(JSON.stringify(err));
-            return;
-        }
-    })
-})
-
-app.post('/LogIn', async function (request,response) {
-    const data = request.body;
-    console.log(" Log In request with Username: " + data.username + " and password: " + data.password);
-    await LogInManager.ValidateLogInInformation(data.username, data.password)
-    .then((result) => {
-        if(result) 
-        {
-            console.log("Finished Log in process: " + result);
-            response.json(JSON.stringify(result));
-            return;
-        }
-    })
-    .catch((err) => {
-        if(err)
-        {
-            console.log("There has been an error with the log in process. - Index.js \n"+ err );
-            response.json(JSON.stringify(err));
-            return;
-        }
-    })
-})
-
-app.post('/ImageLoader', async function (request, response) {
-    const data = request.body;
-    console.log("ImageLoader Request: " + JSON.stringify(data));
-    userID++;
-
-    await RedditAPI.DownloadImagesFromSubreddit(data.subreddit, data.amount, userID)
-        .then((result) => {
-            console.log("SUCESS Fulfilled request!");
-            response.json({ path: result });
-            return;
-
-            // var stats = fs.statSync(result)
-            // var fileSizeInBytes = stats.size;
-            // var mimetype = mime.lookup(result);
-
-            // console.log('size: ' + fileSizeInBytes);
-
-            // response.setHeader('Content-Length', fileSizeInBytes);
-            // response.setHeader('Content-Type', mimetype);
-            // response.setHeader('Content-Disposition', 'attachment; filename=' + result);   
-
-            // response.download(result, (err) => { console.log(err) });
-
-        })
-        .catch(() => {
-            console.log("ERROR There was an error getting your data!");
-            response.json({ "ERROR": "There was an error getting your data!" })
-            return ;
-        }) // Set disposition and send it.
-        //Post Request Error handling
-        .catch((err) => {
-            console.log("Error occured during call to Imageloader! - index.js - ImageLoader Request()");
-            console.log(err);
-            return;
-        });
-})
-
-
-
-app.post('/api', (request, response) => {
-    const data = request.body;
-    const time = Date.now();
-    data.timestamp = time;
-    database.insert(data);
-    response.json(data);
-});
-
-app.get('/api', (request, response) => {
-    database.find({}, (error, data) => {
-        if (error) {
-            response.end();
-            return;
-        }
-
-        response.json(data);
-
-    });
-})

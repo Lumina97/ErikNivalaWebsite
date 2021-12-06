@@ -3,8 +3,7 @@ const https = require('https');
 const http = require('http');
 const { Console } = require('console');
 
-const root = "D:\\Dev\\WebDev\\RedditImageData\\";
-let ID;
+const root =  __dirname + "\\Images\\";
 
 //=====================FILE DOWNLOAD======================
 
@@ -21,11 +20,21 @@ async function DownloadFilesFromLinks(links) {
             for (let i = 0; i < links.length; i++) {
                 if (links[i].includes('https')) {
                     console.log("Starting HTTPS Download...");
-                    await DownloadHTTPSFile(links[i]);
+                    await DownloadHTTPSFile(links[i])
+                    .catch((err) => 
+                    {
+                        console.log('Error downloading file, \t'+err);
+                        links[i] = null;
+                    });
                 }
                 else if (links[i].includes('http')) {
                     console.log("Starting HTTP Download...");
-                    await DownloadHTTPFile(links[i]);
+                    await DownloadHTTPFile(links[i])       
+                    .catch((err) => 
+                    {
+                        console.log('Error downloading file, \t'+err);
+                        links[i] = null;
+                    });;
                 }
             }
             resolve(true);
@@ -43,7 +52,7 @@ async function DownloadHTTPSFile(link) {
 
     return new Promise(async function (resolve, reject) {
         console.log("HTTPS DOWNLOAD: " + link);
-        const baseDest = root + id + "\\" + SubRedditToScan;
+        const baseDest = root + "\\" + SubRedditToScan;
         const fileLocationarray = link.split("/");
         const fileLocation = fileLocationarray[fileLocationarray.length - 1];
         console.log("file location: " + fileLocation);
@@ -74,7 +83,7 @@ async function DownloadHTTPSFile(link) {
                 console.log("Error downloading file: ");
                 console.log(error);
                 reject();
-
+                return;
             })
 
             // done downloading
@@ -82,6 +91,7 @@ async function DownloadHTTPSFile(link) {
                 filestream.close();
                 console.log("Downloaded: " + fileLocation);
                 resolve();
+                return;
             })
         })
         //handle https download errors
@@ -89,6 +99,7 @@ async function DownloadHTTPSFile(link) {
             console.log("Error downloading file");
             console.log(error);
             reject();
+            return;
         })
     })
 }
@@ -142,8 +153,7 @@ async function DownloadHTTPFile(link) {
 }
 
 module.exports = {
-    DownloadFilesFromLinks: async function (fileLinks, user) {
-        id = user;
+    DownloadFilesFromLinks: async function (fileLinks) {
 
         return new Promise(async function (resolve, reject) {
 

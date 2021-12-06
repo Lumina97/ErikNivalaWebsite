@@ -6,15 +6,16 @@
 </head>
 
 <body style="background-color: #2f3033">
-    
+
     <h1 style="color: #ffffff">Reddit Image Gathering</h1>
-    <h4 style="color: #ffffff">Specify a subreddit and how many posts you want to search for images and send the request!</h4>
+    <h4 style="color: #ffffff">Specify a subreddit and how many posts you want to search for images and send the
+        request!</h4>
 
 
-    <p style="color: #ffffff"> 
-        subreddit to search: <span> <input style="background-color: #ffffff" id="subredditToSearch" value="Funny">
+    <p style="color: #ffffff">
+        subreddit to search: <span> <input style="background-color: #ffffff" id="subredditToSearch" value="Gonewild">
         </span><br>
-        SearchAmount: <span> <input style="background-color: #ffffff" id="SearchAmount" value="100"> </span><br>
+        SearchAmount: <span> <input style="background-color: #ffffff" id="SearchAmount" value="15"> </span><br>
     </p>
     <button style="background-color: #ffffff" onclick="SendImageGatheringRequest()"> Send Image gather request</button>
 
@@ -22,9 +23,10 @@
     <br>
     <br>
     <br>
-    <button id="LogInButton" style="background-color: #ffffff" onclick=""> Log in</button>
+    <button id="LogInButton" style="background-color: #ffffff"> Log in</button>
+    <button id="LogOutButton" style="background-color: #ffffff"> Log out</button>
 
-    
+
     <!--===============  scripts  ==================-->
     <script>
 
@@ -40,59 +42,45 @@
                 body: JSON.stringify(sendData),
                 headers: { 'Content-Type': 'application/json' }
             };
-           const response =  await fetch('/ImageLoader', options);
-           const data =response.json().then((result) => {
-               console.log(result);
-           // window.open(result.path); 
-           });
+            const response = await fetch('/ImageLoader', options);
+            const data = response.json().then(async function(result) {
+                console.log(result);
+                console.log('Sending path to download!');
+                await DownloadFile(result);               
+            });
         }
 
-        // async function downloadFile() {
-        //     const writer = createWriteStream("D:\\Dev\\WebDev");
-        //     const subreddit = document.getElementById('subredditToSearch').value;
-        //     const amount = document.getElementById('SearchAmount').value;
+        async function DownloadFile(filepath)
+        {
+            const options = {
+                method: 'POST',
+                body: JSON.stringify(filepath),
+                headers: { 'Content-Type': 'application/json' }
+            };
+            console.log('Sent download request!');
+            const response = await fetch('/download', options);
+            console.log(response.body);            
+        }
 
-        //     const sendData = { subreddit, amount };
-
-        //     return Axios({
-        //         method: 'POST',
-        //         url: "/ImageLoader",
-        //         body: JSON.stringify(sendData),
-        //         headers: { 'Content-Type': 'application/json' },
-        //         responseType: 'stream',
-        //     }).then(response => {
-
-        //         //ensure that the user can call `then()` only when the file has
-        //         //been downloaded entirely.
-
-        //         return new Promise((resolve, reject) => {
-        //             response.data.pipe(writer);
-        //             let error = null;
-        //             writer.on('error', err => {
-        //                 error = err;
-        //                 writer.close();
-        //                 reject(err);
-        //             });
-        //             writer.on('close', () => {
-        //                 if (!error) {
-        //                     resolve(true);
-        //                 }
-        //                 //no need to call the reject here, as it will have been called in the
-        //                 //'error' stream;
-        //             });
-        //         });
-        //     });
-        // }
     </script>
 
 
-<script type="text/javascript">
-    document.getElementById("LogInButton").onclick = function () {
-        location.href = "LogIn.html";
-    };
-</script>
+    <script type="text/javascript">
+        document.getElementById("LogInButton").onclick = function () {
+            location.href = "LogIn.html";
+        };
 
+        document.getElementById('LogOutButton').onclick = async function () 
+        {
+            const options = 
+            {
+                method: 'GET'
+            };
+            const response = await fetch('/LogOut', options);
+            console.log(response);
+        }
 
+    </script>
 </body>
 
 </html>
