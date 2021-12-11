@@ -1,19 +1,15 @@
-const Datastore = require('nedb');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const RedditAPI = require('./RedditAPI/RedditAPI');
 const LogInManager = require('./LogIn/LogInManager')
 const { v4: uuidv4 } = require('uuid');
 const sessions = require('express-session');
-const { application, request, response } = require('express');
+const path = require('path');
+const { request, response } = require('express');
 
 const app = express();
 
-const database = new Datastore('database.db');
-database.loadDatabase();
-
-
-app.use(express.static('public'))
+// app.use(express.static('public'))
 app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
 
@@ -24,10 +20,10 @@ var session;
 
 app.use(sessions({
     name: 'SessionCookie',
-    // genid: function (req) {
-    //     console.log('session id created');
-    //     return uuidv4();
-    // },
+    genid: function (req) {
+        console.log('session id created');
+        return uuidv4();
+    },
     secret: secretKey,
     resave: false,
     saveUninitialized: true,
@@ -58,32 +54,42 @@ app.post('/CreateAccount', async function (request, response) {
 
 app.post('/LogIn', async function (request, response) {
     const data = request.body;
-    console.log(" Log In request with Username: " + data.username + " and password: " + data.password);
+    console.log("Log In request with Username: " + data.username + " and password: " + data.password);
     await LogInManager.ValidateLogInInformation(data.username, data.password)
         .then((result) => {
             if (result) {
+                session = request.session;
+                session.id = request.genid;
+                session.userid = request.body.username;         
+                request.session = session;
 
-                session=request.session;
-                session.userid=request.body.username;
-                console.log(request.session)   
-                console.log("Finished Log in process: -index.js\t " + result);
+                console.log('Request session: ');
+                console.log(request.session);
+                console.log(request.session.id);
+                console.log('Session: '); 
+                console.log(session);
+                console.log(session.id);
 
-                const URL = 'http://localhost:3000/index.html'
-                console.log('Redicreting to ' + URL);
-                response.redirect(URL);
+
+
+               // console.log('Session ID: ' + request.session.id);
+                console.log("Finished Log in process: -index.js");
+
+                console.log('Redicreting to /ImageGatherer ');
+                response.redirect('/ImageGatherer');
                 return;
             }
         })
         .catch((err) => {
             if (err) {
                 console.log("There has been an error with the log in process. - Index.js \n" + err);
-                response.json(JSON.stringify("There has been an error with the log in process."));
+                response.json(JSON.stringify(err));
                 return;
             }
         })
 })
 
-app.get('/LogOut', (request,response) => {
+app.get('/LogOut', (request, response) => {
     request.session.destroy();
     console.log('Deleted seesion and redirection user to main page - logout')
     response.redirect('/');
@@ -99,44 +105,44 @@ app.post('/ImageLoader', async function (request, response) {
     console.log("ImageLoader Request: " + JSON.stringify(data));
 
     await RedditAPI.DownloadImagesFromSubreddit(data.subreddit, data.amount)
-        .catch(() => {
-            console.log("ERROR There was an error getting your data!");
-            response.json({ "ERROR": "There was an error getting your data!" })
-            return;
-        })
         .then((result) => {
             console.log("SUCESS Fulfilled request!");
-            response.json({ path: result }); //.then(() => {
-            //         return;
-            // })
-            // .catch((err) =>
-            // {
-            //     console.log("Error Creating a response json! err: \n"+err);
-            //     return;
-            // });
+            response.json({ path: result });
             return;
-
-            // var stats = fs.statSync(result)
-            // var fileSizeInBytes = stats.size;
-            // var mimetype = mime.lookup(result);
-
-            // console.log('size: ' + fileSizeInBytes);
-
-            // response.setHeader('Content-Length', fileSizeInBytes);
-            // response.setHeader('Content-Type', mimetype);
-            // response.setHeader('Content-Disposition', 'attachment; filename=' + result);   
-
-            // response.download(result, (err) => { console.log(err) });
-
+        })
+        .catch((error) => {
+            console.log("ERROR There was an error getting your data!");
+            response.json({ "ERROR": "There was an error getting your data!\t" + error })
+            return;
         });
-    // Set disposition and send it.
-    // //Post Request Error handling
-    // .catch((err) => {
-    //     console.log("Error occured during call to Imageloader! - index.js - ImageLoader Request()");
-    //     console.log(err);
-    //     return;
-    // });
 })
+
+
+
+//__________________________________________________________
+//---------------------FileServing--------------------------
+//__________________________________________________________
+
+app.get('/', (request,response) => {
+    response.sendFile(path.join(__dirname,'/public/index.html'));
+})
+
+app.get('/ImageGatherer', (request, response) => {
+    if(session != null && request.session.id == session.id)
+    {
+        console.log('ImageGatherer');
+        response.sendFile(path.join(__dirname, '/public/ImageGatherer.html'));
+    }
+    else
+    {
+        console.log('Invalid Session!');
+        response.sendFile(path.join(__dirname,'/public/index.html'));
+    }
+});
+
+
+
+
 
 
 

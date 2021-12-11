@@ -107,7 +107,7 @@ async function DownloadHTTPSFile(link) {
 async function DownloadHTTPFile(link) {
 
     return new Promise(async function (resolve, reject) {
-        const baseDest = root + id + "\\" + SubRedditToScan;
+        const baseDest = root + "\\" + SubRedditToScan;
         const fileLocationarray = link.split("/");
         const fileLocation = fileLocationarray[fileLocationarray.length - 1];
 
