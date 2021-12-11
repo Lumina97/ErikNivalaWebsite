@@ -47,7 +47,7 @@ async function GetRedditPosts(subreddit, amount) {
         for (post of postArray) {
             if ((post.kind == "t3" && (post.data.url.includes(".jpg")      /*|| post.data.url.includes("gallery")|| post.data.url.includes(".gifv")*/                                                                  
                 || post.data.url.includes(".png") )
-                &&
+                && // 
                 (post.data.title.includes("[f]") || 
                 post.data.title.includes("[F]") ||
                 post.data.title.includes("(f)") ||
@@ -66,7 +66,7 @@ async function GetRedditPosts(subreddit, amount) {
 
         if (bHasAnyImageLinks == false) {
             console.log("No image links found! - RedditLinksGatherer.js - GetRedditPosts()")
-            reject(false);
+            reject('No images in specified search!');
             return;
         }
         else {
@@ -114,7 +114,7 @@ module.exports = {
                 console.log('=============END GetRedditPosts================');
                 console.log('===============================================');
                 console.log();
-                reject(false);
+                reject("Unable to find subreddit");
                 return;
             }
             if (typeof amountOfPostsSearched === 'undefined' || isNaN(amountOfPostsSearched) == true || typeof amountOfPostsSearched != "number") {
@@ -140,7 +140,7 @@ module.exports = {
                     console.log('=============END GetRedditPosts================');
                     console.log('===============================================');
                     console.log();
-                    reject(false);
+                    reject(err);
                     return;
                 });
         });

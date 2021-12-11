@@ -1,60 +1,46 @@
-const { Console } = require('console');
-const { copyFile } = require('fs');
-const Datastore = require('nedb');
-
-const database = new Datastore('LogInData.db');
-database.loadDatabase();
-
+const Database = require('../DataBase/Database');
 
 async function CreateAccount(username, password) {
     return new Promise(async function (resolve, reject) {
-        await database.find({ Username: username }, async function (err, docs) {
-            if (docs.length > 0 &&  docs[0].Username == username) {
-                console.log("Username already exists!");
-                reject("Username already exists!");
+        await Database.AddUserToDatabase(username, password)
+            .catch((error) => {
+                console.log(error);
+                reject(error);
                 return;
-            }
-            else if (err != null) {
-                console.log("There was an error searching the database for the username! - LogInManager.js\n " + err);
-                reject(err);
+            })
+            .then((result) => {
+                console.log(result);
+                resolve(result);
                 return;
-            }
-
-            else {
-                const data = { 'Username': username, 'Password': password };
-                database.insert(data);
-                resolve("Sucessfully created account!");
-                return;
-            }
-        })
+            })
     })
 }
-
-
 
 async function ValidateLogin(username, password) {
     return new Promise(async function (resolve, reject) {
 
-        await database.find({ Username: username, Password: password }, async function (err, docs) {
-            if (docs != null && docs.length > 0) {
-                console.log(docs[0].Username);
-                console.log("matching username");
-                resolve('true');
+        await Database.FindUserInDatabase(username)
+        .catch((error) =>{
+            console.log('ERROR:' + error);
+            reject(error);
+            return;
+        })
+        .then((result) =>{
+            if(result.Password == password)
+            {
+                console.log('Username and password match!');
+                resolve(true);
                 return;
             }
-
-            if (err != null) {
-                console.log("There has been an error retrieving log in information from the database. -LoginManager.js\n " + err);
-                reject(err);
-                return;
+            else {
+                const text = 'Username or password are wrong!';
+                console.log(text);
+                reject(text);
             }
 
-            const text ="Username or password are wrong.";
-            console.log(text);
-            reject(text);
-        });
+
+        })       
     });
-
 }
 
 
