@@ -3,10 +3,9 @@ const archiver = require('archiver');
 
 const root =  __dirname + "\\Images\\";
 
-async function ZipFile() {
+async function ZipFile(ID) {
     return new Promise(async function (resolve, reject) {
-
-        const filepath = root + "Gonewild.zip";
+        const filepath = root + ID + ".zip";
         const output = fs.createWriteStream(filepath);
         const archive = archiver('zip', {
             zlib: { levle: 9 }
@@ -46,7 +45,7 @@ async function ZipFile() {
 
         archive.pipe(output);
 
-        const file = root + "Gonewild"; //add user ID/username
+        const file = root + ID; //add user ID/username
         archive.directory(file, 'images');
 
         archive.finalize();
@@ -54,7 +53,7 @@ async function ZipFile() {
 }
 
 module.exports = {
-    CreateZipFromUserID: async function () {
+    CreateZipFromUserID: async function (ID) {
         return new Promise(async function (resolve, reject) {
 
             console.log();
@@ -65,7 +64,7 @@ module.exports = {
 
 
 
-            await ZipFile()
+            await ZipFile(ID)
                 .catch((err) => {
                     console.log("Error creating archive! \n " + err + '\n');
                     console.log();

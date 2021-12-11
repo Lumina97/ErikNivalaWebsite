@@ -1,13 +1,12 @@
 const fs = require('fs');
 const https = require('https');
 const http = require('http');
-const { Console } = require('console');
 
 const root =  __dirname + "\\Images\\";
 
 //=====================FILE DOWNLOAD======================
 
-async function DownloadFilesFromLinks(links) {
+async function DownloadFilesFromLinks(links, ID) {
 
     return new Promise(async function (resolve, reject) {
 
@@ -20,7 +19,7 @@ async function DownloadFilesFromLinks(links) {
             for (let i = 0; i < links.length; i++) {
                 if (links[i].includes('https')) {
                     console.log("Starting HTTPS Download...");
-                    await DownloadHTTPSFile(links[i])
+                    await DownloadHTTPSFile(links[i],ID)
                     .catch((err) => 
                     {
                         console.log('Error downloading file, \t'+err);
@@ -29,7 +28,7 @@ async function DownloadFilesFromLinks(links) {
                 }
                 else if (links[i].includes('http')) {
                     console.log("Starting HTTP Download...");
-                    await DownloadHTTPFile(links[i])       
+                    await DownloadHTTPFile(links[i],ID)       
                     .catch((err) => 
                     {
                         console.log('Error downloading file, \t'+err);
@@ -48,11 +47,11 @@ async function DownloadFilesFromLinks(links) {
     });
 }
 
-async function DownloadHTTPSFile(link) {
+async function DownloadHTTPSFile(link, ID) {
 
     return new Promise(async function (resolve, reject) {
         console.log("HTTPS DOWNLOAD: " + link);
-        const baseDest = root + "\\" + SubRedditToScan;
+        const baseDest = root + "\\"+ ID + "\\" + SubRedditToScan;
         const fileLocationarray = link.split("/");
         const fileLocation = fileLocationarray[fileLocationarray.length - 1];
         console.log("file location: " + fileLocation);
@@ -104,10 +103,10 @@ async function DownloadHTTPSFile(link) {
     })
 }
 
-async function DownloadHTTPFile(link) {
+async function DownloadHTTPFile(link, ID) {
 
     return new Promise(async function (resolve, reject) {
-        const baseDest = root + "\\" + SubRedditToScan;
+        const baseDest = root + "\\"+ ID + "\\" + SubRedditToScan;
         const fileLocationarray = link.split("/");
         const fileLocation = fileLocationarray[fileLocationarray.length - 1];
 
@@ -153,7 +152,7 @@ async function DownloadHTTPFile(link) {
 }
 
 module.exports = {
-    DownloadFilesFromLinks: async function (fileLinks) {
+    DownloadFilesFromLinks: async function (fileLinks, ID) {
 
         return new Promise(async function (resolve, reject) {
 
@@ -163,14 +162,14 @@ module.exports = {
             console.log('===============================================');
             console.log();
 
-            await DownloadFilesFromLinks(fileLinks)
+            await DownloadFilesFromLinks(fileLinks, ID)
                 .catch((err) => {
                     if (err) console.log("Error downloading file! :" + err);
                     reject(false);
                 })
-                .then(() => {
+                .then((result) => {
                     console.log("Sucessfully downloaded files from links!");
-                    resolve(true);
+                    resolve(ID);
                 })
         })
     }

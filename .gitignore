@@ -10,7 +10,7 @@ lerna-debug.log*
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 #directories
-dir_to_ignore/Images
+dir_to_ignore/Images/*
 
 
 # Runtime data

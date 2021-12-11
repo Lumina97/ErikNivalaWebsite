@@ -5,7 +5,7 @@ const LogInManager = require('./LogIn/LogInManager')
 const { v4: uuidv4 } = require('uuid');
 const sessions = require('express-session');
 const path = require('path');
-const { request, response } = require('express');
+
 
 const app = express();
 
@@ -31,6 +31,11 @@ app.use(sessions({
 }));
 
 app.listen(3000, () => console.log("listening on 3000")).on('error', console.log);
+
+
+//-----------------------------------------------------------------------
+//----------------------Account Management-------------------------------
+//-----------------------------------------------------------------------
 
 app.post('/CreateAccount', async function (request, response) {
     const data = request.body;
@@ -95,36 +100,51 @@ app.get('/LogOut', (request, response) => {
     response.redirect('/');
 })
 
+
+//-----------------------------------------------------------------------
+//--------------------------Image Gatherer-------------------------------
+//-----------------------------------------------------------------------
+
+
 app.post('/download', (request, response) => {
     console.log(request.body.path);
     response.download(request.body.path);
 });
 
 app.post('/ImageLoader', async function (request, response) {
-    const data = request.body;
-    console.log("ImageLoader Request: " + JSON.stringify(data));
+   
+    const sessiondata = request.session;
 
-    await RedditAPI.DownloadImagesFromSubreddit(data.subreddit, data.amount)
-        .then((result) => {
-            console.log("SUCESS Fulfilled request!");
-            response.json({ path: result });
-            return;
-        })
-        .catch((error) => {
-            console.log("ERROR There was an error getting your data!");
-            response.json({ "ERROR": "There was an error getting your data!\t" + error })
-            return;
-        });
+    if (sessiondata != null && session != null && sessiondata.id == session.id) {
+
+        const data = request.body;
+        console.log("ImageLoader Request: " + JSON.stringify(data));
+
+        await RedditAPI.DownloadImagesFromSubreddit(data.subreddit, data.amount, session)
+            .then((result) => {
+                console.log("SUCESS Fulfilled request!");
+                response.json({ path: result });
+                return;
+            })
+            .catch((error) => {
+                console.log("ERROR There was an error getting your data!");
+                response.json({ "ERROR": "There was an error getting your data!\t" + error })
+                return;
+            });
+    }
+    else {
+        console.log('Invalid Session!');
+        response.redirect(302,'/');
+    }
 })
 
 
 
-//__________________________________________________________
-//---------------------FileServing--------------------------
-//__________________________________________________________
-
+//-----------------------------------------------------------------------
+//--------------------------File Serving---------------------------------
+//-----------------------------------------------------------------------
 app.get('/', (request,response) => {
-    response.sendFile(path.join(__dirname,'/public/index.html'));
+    response.sendFile(path.join(__dirname,'/public/LogIn.html'));
 })
 
 app.get('/ImageGatherer', (request, response) => {
@@ -136,7 +156,7 @@ app.get('/ImageGatherer', (request, response) => {
     else
     {
         console.log('Invalid Session!');
-        response.sendFile(path.join(__dirname,'/public/index.html'));
+        response.redirect('/');
     }
 });
 
