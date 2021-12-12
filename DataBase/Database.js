@@ -8,7 +8,7 @@ async function FindUser(username)
     return new Promise(async function(resolve, reject) 
     {
         console.log('Looking for username');
-        await database.find({Username: username}, async function(err,docs) {
+        await database.find({ "Username": username}, async function(err,docs) {
             if(docs.length > 0 && docs[0].Username == username) {
                 console.log('User exists!');
                 const User = {'Username' : docs[0].Username, 'Password': docs[0].Password};
@@ -19,7 +19,12 @@ async function FindUser(username)
                 console.log('Error while accessing database: ' +err);
                 reject(err);
                 return;
-            };
+            }
+            else{
+                console.log('User does not exist!');
+                reject('User does not exist');
+                return;
+            }
         })
     });
 }

@@ -1,3 +1,4 @@
+const { isStringObject } = require('util/types');
 const Database = require('../DataBase/Database');
 
 async function CreateAccount(username, password) {
