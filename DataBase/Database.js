@@ -17,7 +17,7 @@ async function FindUser(username)
             }
             else if(err != null) {
                 console.log('Error while accessing database: ' +err);
-                reject(err);
+                reject( new Error(err));
                 return;
             }
             else{
@@ -32,25 +32,28 @@ async function FindUser(username)
 async function AddUser(username, password)
 {
     return new Promise( async function(resolve, reject) {
-        await FindUserInDatabase()
+        await FindUser()
         .then((result) => {
-            const error = 'User already exists in Database!'
+            const error = 'User already exists!'
             console.log(error + '\n');
             reject(error);
             return;
         })
         .catch((error) => {
-            console.log(error + '\n');
-            reject(error);
-            return;
+            if(error instanceof Error )
+            {
+                console.log(error + '\n');
+                reject(error);
+                return;
+            }
+            else
+            {
+                console.log('Adding user to database!');
+                const data = { 'Username' : username, 'Password' : password};
+                database.insert(data);
+                resolve('Added user!');
+            }
         })
-        .finally(() =>{
-            console.log('Adding user to database!');
-            const data = { 'Username' : username, 'Password' : password};
-            database.insert(data);
-            resolve('Added user!');
-            return;
-        });
     });
 }
 

@@ -20,14 +20,15 @@ async function CreateAccount(username, password) {
 async function ValidateLogin(username, password) {
     return new Promise(async function (resolve, reject) {
 
-        await Database.FindUserInDatabase(username)
-        .catch((error) =>{
-            console.log('ERROR:' + error);
-            reject(error);
-            return;
-        })
+        await Database.FindUserInDatabase(username)    
         .then((result) =>{
-            if(result.Password == password)
+            if (typeof result === 'string' || result instanceof String)
+            {
+                    console.log(result);
+                    reject(result);
+                    return;
+            }
+            else if(result.Password == password)
             {
                 console.log('Username and password match!');
                 resolve(true);
@@ -38,9 +39,12 @@ async function ValidateLogin(username, password) {
                 console.log(text);
                 reject(text);
             }
-
-
-        })       
+        })  
+        .catch((error) =>{
+            console.log('ERROR:' + error);
+            reject(error);
+            return;
+        });     
     });
 }
 
