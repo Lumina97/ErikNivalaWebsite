@@ -3,90 +3,28 @@
 
 <head>
     <title>Page Title</title>
+    <link rel='stylesheet' href="./CSS/LogIn.css">
+    <script src="./JS/LogInHTML.js"></script>
+
+
 </head>
 
-<body style="background-color: #2f3033">
-
-
+<body class="center">
     <h1>Log in</h1>
+
     <div id="LogInContainer">
+
         <input type="text" placeholder="Username..." id="UsernameInput" value="Erik">
         <br>
-        <input type="text" placeholder="password..." id="PasswordInput" value="123">
+        <input type="password" placeholder="Password..." id="PasswordInput"  value="123">
 
         <div id="LogInButtons">
-            <button id="CreateAccountBTN"> Create Account </button>
-            <button id="SubmitLoginBTN"> Log in</button>
+            <button id="SubmitLoginBTN" onclick="SubmitLogin()"> Log in</button>
+            <br>
+            <button id="CreateAccountBTN" onclick="CreateAccount()"> Create Account </button>
         </div>
         <div>
-            <p id="LogInErrorText" style="color: red;"> </p>
+            <p id="LogInErrorText"> </p>
         </div>
     </div>
-
-    <script>
-        const textbox = document.getElementById('LogInErrorText');
-        document.getElementById('CreateAccountBTN').onclick = async function CreateAccount() {
-            const username = document.getElementById('UsernameInput').value;
-            const password = document.getElementById('PasswordInput').value;
-
-            const sendData = { username, password };
-            const final = JSON.stringify(sendData);
-            console.log('Sending Data: ' + final);
-
-            const options = {
-                method: 'POST',
-                body: final,
-                headers: { 'Content-Type': 'application/json' }
-            };
-            const response = await fetch('/CreateAccount', options);
-  
-            const data = response.json().then((result) => {
-                console.log(result);
-
-                const textbox = document.getElementById('LogInErrorText');
-
-                if (result == "true")
-                {
-                    textbox.textContent = "Account Created scuessful";
-                    console.log("Account Created  scuessful");
-                }
-                else {
-                    textbox.textContent = result;
-                }
-
-            });
-        }
-
-        document.getElementById('SubmitLoginBTN').onclick = async function SubmitLogin() {
-            const username = document.getElementById('UsernameInput').value;
-            const password = document.getElementById('PasswordInput').value;
-
-            const sendData = { username, password };
-            const final = JSON.stringify(sendData);
-            console.log('Sending Data: ' + final);
-
-            const options = {
-                method: 'POST',
-                body: final,
-                headers: { 'Content-Type': 'application/json' }
-            };
-            const response = await fetch('/LogIn', options);
-            const urlstring = response.url.toString();
-
-            if(urlstring.includes('LogIn'))
-            {
-                const data = response.json().then((result) => {
-                    console.log(result);
-                    textbox.textContent = result;
-                });
-            }
-            else
-            {
-                location.href= urlstring;
-            }
-        }
-    </script>
-
-
-
 </body>
