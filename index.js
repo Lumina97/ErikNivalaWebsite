@@ -10,9 +10,9 @@ const path = require('path');
 const app = express();
 
 // app.use(express.static('public'))
+app.use(express.static(__dirname + '/public'));
 app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
-
 
 const oneDay = 1000 * 60 * 60 * 24;
 const secretKey = uuidv4();
