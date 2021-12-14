@@ -1,4 +1,6 @@
 const textbox = document.getElementById('LogInErrorText');
+
+
 async function CreateAccount() {
     const username = document.getElementById('UsernameInput').value;
     const password = document.getElementById('PasswordInput').value;
