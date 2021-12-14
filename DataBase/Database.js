@@ -5,9 +5,10 @@ database.loadDatabase();
 
 async function FindUser(username)
 {
+
     return new Promise(async function(resolve, reject) 
     {
-        console.log('Looking for username');
+        console.log('Looking for username: ' +username);
         await database.find({ "Username": username}, async function(err,docs) {
             if(docs.length > 0 && docs[0].Username == username) {
                 console.log('User exists!');

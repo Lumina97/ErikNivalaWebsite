@@ -1,4 +1,4 @@
-const textbox = document.getElementById('LogInErrorText');
+
 
 
 async function CreateAccount() {
@@ -16,21 +16,20 @@ async function CreateAccount() {
     };
     const response = await fetch('/CreateAccount', options);
 
-    const data = response.json().then((result) => {
-        console.log(result);
-
-        const textbox = document.getElementById('LogInErrorText');
-
-        if (result == "true")
-        {
-            textbox.textContent = "Account Created scuessful";
-            console.log("Account Created  scuessful");
-        }
-        else {
-            textbox.textContent = result;
-        }
-
-    });
+    const data = response.json()
+   
+    const urlstring = response.url.toString();
+    if(urlstring.includes('LogIn'))
+    {
+        const data = response.json().then((result) => {
+            console.log(result);
+             document.getElementById('LogInErrorText') = result;
+        });
+    }
+    else
+    {
+        location.href= urlstring;
+    }   
 }
 
 async function SubmitLogin() {
@@ -48,12 +47,12 @@ async function SubmitLogin() {
     };
     const response = await fetch('/LogIn', options);
     const urlstring = response.url.toString();
-
+    
     if(urlstring.includes('LogIn'))
     {
         const data = response.json().then((result) => {
             console.log(result);
-            textbox.textContent = result;
+            document.getElementById('LogInErrorText') = textbox.textContent = result;
         });
     }
     else

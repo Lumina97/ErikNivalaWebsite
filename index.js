@@ -5,6 +5,7 @@ const LogInManager = require('./LogIn/LogInManager')
 const { v4: uuidv4 } = require('uuid');
 const sessions = require('express-session');
 const path = require('path');
+const { request } = require('express');
 
 const app = express();
 
@@ -16,6 +17,7 @@ const oneDay = 1000 * 60 * 60 * 24;
 const secretKey = uuidv4();
 var session;
 var downloadRequestDict = {};
+var CreatedAccountDict = {};
 
 app.use(sessions({
     name: 'SessionCookie',
@@ -42,8 +44,10 @@ app.post('/CreateAccount', async function (request, response) {
     await LogInManager.CreateNewAccount(data.username, data.password)
         .then((result) => {
             if (result) {
+
+                CreatedAccountDict[request.session.id] = JSON.stringify({'username': data.username, 'password':data.password });
                 console.log("Created account! \t" + result);
-                response.json(JSON.stringify("Sucess"));
+                response.redirect('/CreatedAccountLogin');
                 return;
             }
         })
@@ -56,10 +60,11 @@ app.post('/CreateAccount', async function (request, response) {
         })
 })
 
-app.post('/LogIn', async function (request, response) {
-    const data = request.body;
-    console.log("Log In request with Username: " + data.username + " and password: " + data.password);
-    await LogInManager.ValidateLogInInformation(data.username, data.password)
+
+async function LogIn(username, password, request)
+{
+    return new Promise((async function (resolve, reject) {
+        await LogInManager.ValidateLogInInformation(username, password)
         .then((result) => {
             if (result) {
                 session = request.session;
@@ -74,22 +79,63 @@ app.post('/LogIn', async function (request, response) {
                 console.log(session);
                 console.log(session.id);
 
-
-
                 // console.log('Session ID: ' + request.session.id);
                 console.log("Finished Log in process: -index.js");
 
                 console.log('Redicreting to /ImageGatherer ');
-                response.redirect('/ImageGatherer');
+                resolve('/ImageGatherer');
                 return;
             }
         })
         .catch((err) => {
             if (err) {
                 console.log("There has been an error with the log in process. - Index.js \n" + err);
-                response.json(JSON.stringify(err));
+                reject(JSON.stringify(err));
                 return;
             }
+        })
+    }));
+}
+
+app.get('/CreatedAccountLogin', async function(request,response) {
+    var data;
+    var foundData = false;
+    for (const [key, value] of Object.entries(CreatedAccountDict)) {
+        console.log(key, value);
+        if(key == request.session.id)
+        {
+            console.log('Found account creation request!');
+            data = JSON.parse(value);
+            delete  CreatedAccountDict[key];
+            foundData = true;
+        }
+      }
+      if(foundData == false)
+      {
+        console.log('No account creation data was found!');
+        response.json(JSON.stringify({'ERROR' : 'Error Redirecting after account creation. Try logging in.'}));
+        return;
+      }
+    
+    await LogIn(data.username, data.password,request)
+       .then((result) => {
+            response.redirect(result);
+        })
+        .catch((error) => {
+            response.json(error);
+        })
+})
+
+app.post('/LogIn', async function (request, response) {
+    
+    const data = request.body;
+    console.log("Log In request with Username: " + data.username + " and password: " + data.password);
+    await LogIn(data.username, data.password,request)
+      .then((result) => {
+            response.redirect(result);
+        })
+        .catch((error) => {
+            response.json(error);
         })
 })
 
@@ -133,6 +179,7 @@ app.post('/download', async function (request, response) {
             const path = value;
             console.log(path);        
             response.download(path);
+            delete downloadRequestDict[key];
         }
       }
  })
