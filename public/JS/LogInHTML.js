@@ -5,6 +5,20 @@ async function CreateAccount() {
     const username = document.getElementById('UsernameInput').value;
     const password = document.getElementById('PasswordInput').value;
 
+    const errorTextbox = document.getElementById('LogInErrorText');
+    if(username.length < 4){
+        const text = 'Username has to be more then 4 characters!';
+        errorTextbox.textContent =text ;
+        console.log(text);
+        return;
+    }   
+    if(password.length < 4){
+        const text = 'Password has to be more then 4 characters!';
+        console.log(text);
+        errorTextbox.value = text ;
+        return;
+    }
+
     const sendData = { username, password };
     const final = JSON.stringify(sendData);
     console.log('Sending Data: ' + final);
@@ -23,7 +37,7 @@ async function CreateAccount() {
     {
         const data = response.json().then((result) => {
             console.log(result);
-             document.getElementById('LogInErrorText') = result;
+            errorTextbox.value = result;
         });
     }
     else
@@ -52,7 +66,7 @@ async function SubmitLogin() {
     {
         const data = response.json().then((result) => {
             console.log(result);
-            document.getElementById('LogInErrorText') = textbox.textContent = result;
+            document.getElementById('LogInErrorText').textContent = result;
         });
     }
     else

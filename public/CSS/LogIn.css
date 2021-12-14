@@ -28,7 +28,9 @@ body {
 
 #LogInErrorText
 {
-    color: red;
+    color:#ff8282 ;
+    text-shadow: .5px .5px rgba(0, 0, 0, 0.486); 
+    font-size: 22px;
 }
 
 input
