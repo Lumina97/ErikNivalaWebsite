@@ -60,10 +60,10 @@ button:hover {
 #InputFields
 {
     grid-template-columns: 2;
-    grid-template-rows: 2;
+    grid-template-rows: 4;
     grid-auto-rows: minmax(20px,auto);
     grid-auto-columns: minmax(240px,auto);
-
+    border: solid  black 2px;
     display: grid;
 }
 
@@ -107,7 +107,7 @@ input.rightAlign
 p
 {
     color: black;
-    text-shadow: 1px 1px #6106ffd8 ;
+    text-shadow: 1px 1px #6106ffd8 ;    
 }
 
 input
@@ -122,15 +122,21 @@ input
     margin: 20px;
 }
 
-input::placeholder
-{
-    color: black;
-}
-
 input:hover
 {
     background-color: #6106ffd8 ;
     border: solid  #8AEFB4 2px;
     border-radius: 25px;
     color: white;
+}
+
+#FilterUnorderedList
+{
+    list-style: none;
+   /* border: solid black 2px; */
+    min-height: 16px;
+    text-align: left;
+    grid-row:4;
+    grid-column:2;
+    color: #8AEFB4;
 }

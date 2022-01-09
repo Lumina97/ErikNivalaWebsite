@@ -6,7 +6,7 @@ const FileZipper = require('./../FileZipper');
 
 module.exports =
 {
-  DownloadImagesFromSubreddit: async function (subreddit, amount, session) {
+  DownloadImagesFromSubreddit: async function (subreddit, amount, session, postTitleFilters) {
 
     return new Promise(async function (resolve, reject) {
 
@@ -25,7 +25,7 @@ module.exports =
 
       await SubValidator.ValidateSubreddit(subreddit)
         .then(async function () {
-          image_links = await RedditLinksGatherer.GetImageLinksFromSubreddit(subreddit, AmountOfPosts);
+          image_links = await RedditLinksGatherer.GetImageLinksFromSubreddit(subreddit, AmountOfPosts,postTitleFilters);
           return;
         })
         .then(async function () {

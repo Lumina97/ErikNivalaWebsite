@@ -2,8 +2,15 @@
 async function SendImageGatheringRequest() {
     const subreddit = document.getElementById('subredditToSearch').value;
     const amount = document.getElementById('SearchAmount').value;
+    const filterList = document.getElementById('FilterUnorderedList');
 
-    const sendData = { subreddit, amount };
+    var filters = {};
+    for(let i = 0 ; i < filterList.childElementCount; i++)
+    {
+        filters[i] = filterList.childNodes[i].innerText;
+    }    
+    
+    const sendData = { subreddit, amount, filters };
     console.log("Sending data: " + JSON.stringify(sendData));
     const options = {
         method: 'POST',
@@ -44,7 +51,6 @@ async function DownloadFile(filepath) {
     console.log(response);   
 }
 
-
 async function LogOutBTN() {
     const options =
     {
@@ -53,4 +59,39 @@ async function LogOutBTN() {
     const response = await fetch('/LogOut', options);
     console.log(response);
     location.href = '/';
+}
+
+window.onload = function () {
+    const node = document.getElementById("TitleFilters");
+    if (node) {
+        node.addEventListener('keyup', function (event) {
+            if (event.key === "Enter") {
+                AddFilterToList();
+            }
+        });
+    }
+    else {
+        console.log('NEIN!!');
+    }
+}
+
+function AddFilterToList()
+{
+    const listElement = document.getElementById("FilterUnorderedList");
+    const FilterInputField = document.getElementById("TitleFilters");
+
+    
+    if (FilterInputField.value == "") return;
+    
+    console.log('Adding to list: ' + FilterInputField.value);
+    var li = document.createElement("li");
+    li.innerText = FilterInputField.value;
+    listElement.appendChild(li);
+    FilterInputField.value = null;
+}
+
+async function ClearFilters()
+{
+    const listElement = document.getElementById("FilterUnorderedList");
+    listElement.innerHTML = "";
 }

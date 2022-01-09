@@ -193,7 +193,7 @@ app.post('/ImageLoader', async function (request, response) {
         const data = request.body;
         console.log("ImageLoader Request: " + JSON.stringify(data));
 
-        await RedditAPI.DownloadImagesFromSubreddit(data.subreddit, data.amount, session)
+        await RedditAPI.DownloadImagesFromSubreddit(data.subreddit, data.amount, session, data.filters)
             .then((result) => {
                 console.log("SUCESS Fulfilled request!");
                 var returnData;
