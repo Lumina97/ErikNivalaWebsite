@@ -10,28 +10,34 @@
 <body>
 
     <h1 class="center" >Reddit Image Gathering</h1>
-   <!---  <h4 class="center" >Specify a subreddit and how many posts you want to search for images and send the
-        request!</h4> -->
-
 
         <div class="center" id="InputFields">
         
             <p id="RedditEntryP" class="center"> subreddit to search:</p>
 
-            <input class="rightAlign" id="subredditToSearch" placeholder="Subreddit..." value="Gonewild">
+            <input class="rightAlign" id="subredditToSearch" placeholder="Subreddit..." value="wallpaper">
                 
             <p id="SearchAmountP" class="center">SearchAmount:</p>
 
-            <input class='rightAlign' id="SearchAmount" placeholder="Amount of posts..." value="1">
- 
+            <input class='rightAlign' id="SearchAmount" placeholder="Amount of posts..." value="10">
+
+            <p id="TitleFiltersP" class="center">Add Filter:</p>
+
+            <input class='rightAlign TitleFiltersInput' id="TitleFilters" placeholder="Filter...">
+
+            <ul class="rightAlign" id="FilterUnorderedList">
+                <li>1920x1080</li>          
+            </ul>
+
+            <button class="center" id="ClearFilters" onclick="ClearFilters()"> Clear filters</button> 
+
         </div>
+
     <div class="center" id="ButtonDiv">
     <button class="center" id="SendImageRequestButton" onclick="SendImageGatheringRequest()"> Send Image gather request</button>
     <br>
     <button class="center" id="LogOutButton"  onclick="LogOutBTN()"> Log out</button>
     </div>
 </body>
-
-
 
 </html>

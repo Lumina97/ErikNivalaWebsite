@@ -1,17 +1,18 @@
 const axios = require('axios');
+const { title } = require('process');
 const querystring = require('querystring');
 const RedditAuthentication = require('./RedditAuthentication');
 
 const oAuthURL = "https://oauth.reddit.com"
 let Acess_Token;
 
-async function GetRedditPosts(subreddit, amount) {
+async function GetRedditPosts(subreddit, amount, titleFilters) {
 
     return new Promise(async function (resolve, reject) {
 
         if (amount === 'undifined')
-        amount = 25;
-        
+            amount = 25;
+
         console.log("Getting " + amount + " reddit posts - RedditAPI.js - GetRedditPosts()")
 
         const params = querystring.stringify({
@@ -45,15 +46,14 @@ async function GetRedditPosts(subreddit, amount) {
 
         let bHasAnyImageLinks = false;
         for (post of postArray) {
-            if ((post.kind == "t3" && (post.data.url.includes(".jpg")      /*|| post.data.url.includes("gallery")|| post.data.url.includes(".gifv")*/                                                                  
-                || post.data.url.includes(".png") )
-                && // 
-                (post.data.title.includes("[f]") || 
-                post.data.title.includes("[F]") ||
-                post.data.title.includes("(f)") ||
-                post.data.title.includes("(F)")
-                )))
-                {
+            if ((post.kind == "t3" && (post.data.url.includes(".jpg")
+                || post.data.url.includes(".png"))
+            )) {
+                if (FilterTitle(post.data.title, titleFilters) == false) {
+                    console.log('Titel does not meet filter requirements!')
+                    continue;
+                }
+
                 image_links.push(post.data.url);
                 console.log("URL: " + post.data.url);
                 bHasAnyImageLinks = true;
@@ -76,10 +76,24 @@ async function GetRedditPosts(subreddit, amount) {
     });
 }
 
+// Iterates given title and checks if the given filters exist within the title
+async function FilterTitle(Title, Filters) {
+    for (let i = 0; i < Filters.length; i++) {
+        console.log('TITLE: \t' +  title);
+        console.log('Filter: \t' +  Filter[i]);
+
+        if(Title.includes(Filter[i] ) ) 
+        {
+        console.log('title containts filter!');
+            return true;
+        }
+    }
+    return false;
+}
 
 module.exports = {
 
-    GetImageLinksFromSubreddit: async function (subreddit, amountOfPostsSearched) {
+    GetImageLinksFromSubreddit: async function (subreddit, amountOfPostsSearched, titleFilters) {
 
         return new Promise(async function (resolve, reject) {
 
@@ -123,7 +137,7 @@ module.exports = {
             }
 
             //wait to get links
-            await GetRedditPosts(subreddit, amountOfPostsSearched)              
+            await GetRedditPosts(subreddit, amountOfPostsSearched,titleFilters)
                 .then((result) => {
                     console.log();
                     console.log('===============================================');
