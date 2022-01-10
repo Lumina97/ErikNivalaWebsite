@@ -1,11 +1,14 @@
 const fs = require('fs');
+const path = require('path');
 const archiver = require('archiver');
 
-const root =  __dirname + "\\Images\\";
+const root =  __dirname +"\\Images\\";
+path.normalize(root);
 
 async function ZipFile(ID) {
     return new Promise(async function (resolve, reject) {
         const filepath = root + ID + ".zip";
+        path.normalize(filepath);
         const output = fs.createWriteStream(filepath);
         const archive = archiver('zip', {
             zlib: { levle: 9 }
@@ -46,6 +49,7 @@ async function ZipFile(ID) {
         archive.pipe(output);
 
         const file = root + ID; //add user ID/username
+        path.normalize(filepath);
         archive.directory(file, 'images');
 
         archive.finalize();

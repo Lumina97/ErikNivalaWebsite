@@ -1,8 +1,10 @@
 const fs = require('fs');
+const path = require('path');
 const https = require('https');
 const http = require('http');
 
-const root =  __dirname + "\\Images\\";
+const root =  __dirname  +"\\Images\\";
+path.normalize(root);
 
 //=====================FILE DOWNLOAD======================
 
@@ -51,7 +53,9 @@ async function DownloadHTTPSFile(link, ID) {
 
     return new Promise(async function (resolve, reject) {
         console.log("HTTPS DOWNLOAD: " + link);
-        const baseDest = root + "\\"+ ID + "\\" + SubRedditToScan;
+        const baseDest = root + "\\" + ID + "\\" + SubRedditToScan;
+        path.normalize(baseDest);
+
         const fileLocationarray = link.split("/");
         const fileLocation = fileLocationarray[fileLocationarray.length - 1];
         console.log("file location: " + fileLocation);
@@ -71,7 +75,9 @@ async function DownloadHTTPSFile(link, ID) {
                     console.log("Created directory: " + baseDest);
             });
         }
-        let dest = baseDest + "/" + fileLocation;
+        let dest = baseDest + "\\" + fileLocation;
+        path.normalize(dest);
+        
 
         const req = https.get(link, function (res) {
             const filestream = fs.createWriteStream(dest);
@@ -107,10 +113,13 @@ async function DownloadHTTPFile(link, ID) {
 
     return new Promise(async function (resolve, reject) {
         const baseDest = root + "\\"+ ID + "\\" + SubRedditToScan;
+        path.normalize(baseDest);
+        
         const fileLocationarray = link.split("/");
         const fileLocation = fileLocationarray[fileLocationarray.length - 1];
 
         let dest = baseDest + "/" + fileLocation;
+        path.normalize(dest);
 
         if (fs.existsSync(baseDest) == false) {
             await fs.mkdir(baseDest, { recursive: true }, (error) => {
