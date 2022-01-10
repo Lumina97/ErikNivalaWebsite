@@ -2,6 +2,7 @@ const RedditLinksGatherer = require('./RedditLinksGatherer');
 const SubValidator = require('./SubredditValidator');
 const FileDownloader = require('./../FileDownloader');
 const FileZipper = require('./../FileZipper');
+const path = require('path');
 
 
 module.exports =
@@ -21,7 +22,7 @@ module.exports =
       AmountOfPosts = parseInt(amount);
       var today = new Date();
       var date = today.getHours()+'_'+today.getMinutes()+'_'+today.getSeconds();
-      const ID =  session.userid + '\\' + String(date);
+      const ID =  path.join(session.userid,String(date));
 
       await SubValidator.ValidateSubreddit(subreddit)
         .then(async function () {
