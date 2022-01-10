@@ -226,7 +226,7 @@ app.post('/ImageLoader', async function (request, response) {
 //--------------------------File Serving---------------------------------
 //-----------------------------------------------------------------------
 app.get('/', (request, response) => {
-    response.sendFile(path.join(__dirname, '/public/LandingPage.html'));
+    response.sendFile(path.join(__dirname, '/public/html/LandingPage.html'));
 })
 
 app.get('/ImageGatherer', (request, response) => {
