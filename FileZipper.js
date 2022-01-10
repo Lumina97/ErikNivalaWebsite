@@ -7,7 +7,7 @@ path.normalize(root);
 
 async function ZipFile(ID) {
     return new Promise(async function (resolve, reject) {
-        const filepath = path.join( root , ID);
+        var filepath = path.join( root , ID);
         path.normalize(filepath);
         filepath +=  ".zip";
         const output = fs.createWriteStream(filepath);
@@ -49,8 +49,8 @@ async function ZipFile(ID) {
 
         archive.pipe(output);
 
-        const file = root + ID; //add user ID/username
-        path.normalize(filepath);
+        const file = path.join(root , ID);
+        path.normalize(file);
         archive.directory(file, 'images');
 
         archive.finalize();
