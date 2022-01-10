@@ -2,12 +2,12 @@ const fs = require('fs');
 const path = require('path');
 const archiver = require('archiver');
 
-const root =  __dirname +"\\Images\\";
+const root = path.join(__dirname, "Images");
 path.normalize(root);
 
 async function ZipFile(ID) {
     return new Promise(async function (resolve, reject) {
-        const filepath = root + ID + ".zip";
+        const filepath = path.join( root , ID , ".zip");
         path.normalize(filepath);
         const output = fs.createWriteStream(filepath);
         const archive = archiver('zip', {

@@ -3,7 +3,7 @@ const path = require('path');
 const https = require('https');
 const http = require('http');
 
-const root =  __dirname  +"\\Images\\";
+const root = path.join(__dirname, "Images");
 path.normalize(root);
 
 //=====================FILE DOWNLOAD======================
@@ -53,7 +53,7 @@ async function DownloadHTTPSFile(link, ID) {
 
     return new Promise(async function (resolve, reject) {
         console.log("HTTPS DOWNLOAD: " + link);
-        const baseDest = root + "\\" + ID + "\\" + SubRedditToScan;
+        const baseDest = path.join(root  , ID ,SubRedditToScan);
         path.normalize(baseDest);
 
         const fileLocationarray = link.split("/");
@@ -75,7 +75,7 @@ async function DownloadHTTPSFile(link, ID) {
                     console.log("Created directory: " + baseDest);
             });
         }
-        let dest = baseDest + "\\" + fileLocation;
+        let dest = path.join( baseDest , fileLocation);
         path.normalize(dest);
         
 
@@ -112,13 +112,13 @@ async function DownloadHTTPSFile(link, ID) {
 async function DownloadHTTPFile(link, ID) {
 
     return new Promise(async function (resolve, reject) {
-        const baseDest = root + "\\"+ ID + "\\" + SubRedditToScan;
+        const baseDest = path.join( root , ID , SubRedditToScan);
         path.normalize(baseDest);
         
         const fileLocationarray = link.split("/");
         const fileLocation = fileLocationarray[fileLocationarray.length - 1];
 
-        let dest = baseDest + "/" + fileLocation;
+        let dest = path.join( baseDest , fileLocation);
         path.normalize(dest);
 
         if (fs.existsSync(baseDest) == false) {
