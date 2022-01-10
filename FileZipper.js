@@ -7,8 +7,9 @@ path.normalize(root);
 
 async function ZipFile(ID) {
     return new Promise(async function (resolve, reject) {
-        const filepath = path.join( root , ID , ".zip");
+        const filepath = path.join( root , ID);
         path.normalize(filepath);
+        filepath +=  ".zip";
         const output = fs.createWriteStream(filepath);
         const archive = archiver('zip', {
             zlib: { levle: 9 }
