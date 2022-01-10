@@ -1,0 +1,98 @@
+html, body{
+    padding: 0;
+    margin: 0;
+}
+
+html{
+    height: 100%;
+}
+
+h1 {    
+    font-size: 72px;
+    color: #2F6568;
+    text-shadow: 1px 3px #E57E5E;
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+    text-align: center;
+}
+
+body {
+    background: #162936;
+
+    background: -webkit-linear-gradient(bottom, #162936 5%, #244c53 38%, #cf7651 100%);
+    background: -moz-linear-gradient(bottom, #162936 5%, #244c53 38%, #cf7651 100%);
+    background: linear-gradient(to bottom,#162936 5%, #244c53 38%, #cf7651 100%);
+    color: #585761;
+    text-shadow: 1px 1px #9494947c;
+    font-size: 18px;
+}
+
+#LogInErrorText
+{
+    font-size: 20px;
+    color: #ff0000;
+}
+
+.center {   
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+    text-align: center;
+}
+
+button {
+    background: none;
+    border: solid  #E57E5E 2px;
+    border-radius: 25px;
+    min-width: 220px;
+    height: 35px;     
+    font-size: 16px;
+    color: #e3e7e9;
+    text-anchor:middle;
+    margin-bottom: 10px ;
+}
+
+button:hover {
+    background-color: #E57E5E ;
+    border: solid  #E57E5E 2px;
+    border-radius: 25px;
+    color: white;
+}
+
+#InputFields
+{
+    grid-template-columns: 2;
+    grid-template-rows: 4;
+    grid-auto-rows: minmax(20px,auto);
+    grid-auto-columns: minmax(240px,auto);
+    border: solid  black 2px;
+    display: grid;
+}
+
+input
+{
+    background-color: transparent ;
+    color:  #e3e7e9; 
+    border: solid 2px #E57E5E;
+    border-radius: 25px;
+    width: 210px;
+    height: 20px;
+    text-align: center;
+    margin: 20px;
+}
+
+input:hover
+{
+    background-color: #E57E5E ;
+    border: solid  #E57E5E 2px;
+    border-radius: 25px;
+    color: white;
+}
+
+#MainDiv
+{
+    margin-top: 15%;
+    /*border: 2px white solid;*/
+    border-radius: 1px;
+}
