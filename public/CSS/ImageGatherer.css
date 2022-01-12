@@ -87,7 +87,7 @@ button:hover {
      width:50%;
      height: 8%;
      margin: auto;
-     border: solid black 2px;
+     /* border: solid black 2px; */
      padding: 10px;
 }
 
@@ -104,7 +104,7 @@ button:hover {
     grid-template-rows: 4;
     grid-auto-rows: minmax(20px,auto);
     grid-auto-columns: minmax(240px,auto);
-    border: solid  black 2px;
+    /* border: solid  black 2px; */
     display: grid;
 }
 
