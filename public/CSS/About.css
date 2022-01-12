@@ -1,11 +1,9 @@
 html, body{
     padding: 0;
     margin: 0;
-}
-
-html{
     height: 100%;
 }
+
 
 h1 {    
     font-size: 72px;
@@ -19,13 +17,14 @@ h1 {
 
 body {
     background: #162936;
-
     background: -webkit-linear-gradient(bottom, #162936 5%, #244c53 38%, #cf7651 100%);
     background: -moz-linear-gradient(bottom, #162936 5%, #244c53 38%, #cf7651 100%);
     background: linear-gradient(to bottom,#162936 5%, #244c53 38%, #cf7651 100%);
     color: #585761;
     text-shadow: 1px 1px #9494947c;
     font-size: 18px;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 #LogInErrorText
