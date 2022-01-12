@@ -25,19 +25,18 @@
 
             <input class='rightAlign TitleFiltersInput' id="TitleFilters" placeholder="Filter...">
 
-            <ul class="rightAlign" id="FilterUnorderedList">
-                <li>1920x1080</li>          
-            </ul>
+            <ul class="rightAlign" id="FilterUnorderedList"></ul>
 
             <button class="center" id="ClearFilters" onclick="ClearFilters()"> Clear filters</button> 
 
         </div>
 
     <div class="center" id="ButtonDiv">
-    <button class="center" id="SendImageRequestButton" onclick="SendImageGatheringRequest()"> Send Image gather request</button>
-    <br>
-    <button class="center" id="LogOutButton"  onclick="LogOutBTN()"> Log out</button>
-    </div>
+        <div class="loader" id="loader"></div>
+    <button class="rightAlign " id="SendImageRequestButton" onclick="SendImageGatheringRequest()"> Send Image gather request</button>
+  <br>
+    <button class="rightAlign " id="LogOutButton"  onclick="LogOutBTN()"> Log out</button>
+</div>
 </body>
 
 </html>

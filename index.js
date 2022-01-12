@@ -221,7 +221,6 @@ app.post('/ImageLoader', async function (request, response) {
 })
 
 
-
 //-----------------------------------------------------------------------
 //--------------------------File Serving---------------------------------
 //-----------------------------------------------------------------------
@@ -232,12 +231,23 @@ app.get('/', (request, response) => {
 app.get('/ImageGatherer', (request, response) => {
     if (session != null && request.session.id == session.id) {
         console.log('ImageGatherer');
-        response.sendFile(path.join(__dirname, '/public/ImageGatherer.html'));
+        response.sendFile(path.join(__dirname, '/public/html/ImageGatherer.html'));
     }
     else {
         console.log('Invalid Session!');
         response.redirect('/');
     }
+});
+
+app.get('/About',  (request, response) => {
+   // if (session != null && request.session.id == session.id) {
+        console.log('About');
+        response.sendFile(path.join(__dirname, '/public/html/About.html'));
+   // }
+   // else {
+   //     console.log('Invalid Session!');
+    //    response.redirect('/');
+    //}
 });
 
 

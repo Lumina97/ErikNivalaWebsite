@@ -1,4 +1,10 @@
 // Reddit Server Requests
+window.addEventListener('load', function () {
+    const loader = document.getElementById('loader');
+     loader.style.opacity = 0;
+})
+
+
 async function SendImageGatheringRequest() {
     const subreddit = document.getElementById('subredditToSearch').value;
     const amount = document.getElementById('SearchAmount').value;
@@ -9,6 +15,8 @@ async function SendImageGatheringRequest() {
     {
         filters[i] = filterList.childNodes[i].innerText;
     }    
+
+    loader.style.opacity = 100;
     
     const sendData = { subreddit, amount, filters };
     console.log("Sending data: " + JSON.stringify(sendData));
@@ -29,9 +37,9 @@ async function SendImageGatheringRequest() {
                 console.log("ERROR:" + result.ERROR);
                 return;
             }
+            loader.style.opacity = 0;
             DownloadFile(result);
         });
-
 }
 
 async function DownloadFile(filepath) {
