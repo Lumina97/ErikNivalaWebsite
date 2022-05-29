@@ -22,7 +22,7 @@ module.exports =
       AmountOfPosts = parseInt(amount);
       var today = new Date();
       var date = today.getHours()+'_'+today.getMinutes()+'_'+today.getSeconds();
-      const ID =  path.join(session.userid,String(date));
+      const ID =  path.join(String(session.userid),String(date));
 
       await SubValidator.ValidateSubreddit(subreddit)
         .then(async function () {

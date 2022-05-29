@@ -193,6 +193,13 @@ app.post('/ImageLoader', async function (request, response) {
         const data = request.body;
         console.log("ImageLoader Request: " + JSON.stringify(data));
 
+        if(data.subreddit == false)
+        {
+            console.log("Subreddit or amount of posts was empty!");
+            response.json({ "ERROR": "Subreddit or amount of posts was empty!" });
+            return;
+        }
+
         await RedditAPI.DownloadImagesFromSubreddit(data.subreddit, data.amount, session, data.filters)
             .then((result) => {
                 console.log("SUCESS Fulfilled request!");
