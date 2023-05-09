@@ -45,7 +45,7 @@ app.post('/CreateAccount', async function (request, response) {
         .then((result) => {
             if (result) {
 
-                CreatedAccountDict[request.session.id] = JSON.stringify({'username': data.username, 'password':data.password });
+                CreatedAccountDict[request.session.id] = JSON.stringify({ 'username': data.username, 'password': data.password });
                 console.log("Created account! \t" + result);
                 response.redirect('/CreatedAccountLogin');
                 return;
@@ -61,64 +61,61 @@ app.post('/CreateAccount', async function (request, response) {
 })
 
 
-async function LogIn(username, password, request)
-{
+async function LogIn(username, password, request) {
     return new Promise((async function (resolve, reject) {
         await LogInManager.ValidateLogInInformation(username, password)
-        .then((result) => {
-            if (result) {
-                session = request.session;
-                session.id = request.genid;
-                session.userid = request.body.username;
-                request.session = session;
+            .then((result) => {
+                if (result) {
+                    session = request.session;
+                    session.id = request.genid;
+                    session.userid = request.body.username;
+                    request.session = session;
 
-                console.log('Request session: ');
-                console.log(request.session);
-                console.log(request.session.id);
-                console.log('Session: ');
-                console.log(session);
-                console.log(session.id);
+                    console.log('Request session: ');
+                    console.log(request.session);
+                    console.log(request.session.id);
+                    console.log('Session: ');
+                    console.log(session);
+                    console.log(session.id);
 
-                // console.log('Session ID: ' + request.session.id);
-                console.log("Finished Log in process: -index.js");
+                    // console.log('Session ID: ' + request.session.id);
+                    console.log("Finished Log in process: -index.js");
 
-                console.log('Redicreting to /ImageGatherer ');
-                resolve('/ImageGatherer');
-                return;
-            }
-        })
-        .catch((err) => {
-            if (err) {
-                console.log("There has been an error with the log in process. - Index.js \n" + err);
-                reject(JSON.stringify(err));
-                return;
-            }
-        })
+                    console.log('Redicreting to /ImageGatherer ');
+                    resolve('/ImageGatherer');
+                    return;
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    console.log("There has been an error with the log in process. - Index.js \n" + err);
+                    reject(JSON.stringify(err));
+                    return;
+                }
+            })
     }));
 }
 
-app.get('/CreatedAccountLogin', async function(request,response) {
+app.get('/CreatedAccountLogin', async function (request, response) {
     var data;
     var foundData = false;
     for (const [key, value] of Object.entries(CreatedAccountDict)) {
         console.log(key, value);
-        if(key == request.session.id)
-        {
+        if (key == request.session.id) {
             console.log('Found account creation request!');
             data = JSON.parse(value);
-            delete  CreatedAccountDict[key];
+            delete CreatedAccountDict[key];
             foundData = true;
         }
-      }
-      if(foundData == false)
-      {
+    }
+    if (foundData == false) {
         console.log('No account creation data was found!');
-        response.json(JSON.stringify({'ERROR' : 'Error Redirecting after account creation. Try logging in.'}));
+        response.json(JSON.stringify({ 'ERROR': 'Error Redirecting after account creation. Try logging in.' }));
         return;
-      }
-    
-    await LogIn(data.username, data.password,request)
-       .then((result) => {
+    }
+
+    await LogIn(data.username, data.password, request)
+        .then((result) => {
             response.redirect(result);
         })
         .catch((error) => {
@@ -127,11 +124,11 @@ app.get('/CreatedAccountLogin', async function(request,response) {
 })
 
 app.post('/LogIn', async function (request, response) {
-    
+
     const data = request.body;
     console.log("Log In request with Username: " + data.username + " and password: " + data.password);
-    await LogIn(data.username, data.password,request)
-      .then((result) => {
+    await LogIn(data.username, data.password, request)
+        .then((result) => {
             response.redirect(result);
         })
         .catch((error) => {
@@ -168,21 +165,20 @@ app.post('/download', async function (request, response) {
     }
 });
 
- app.get('/download',  async function (request, response)  {
+app.get('/download', async function (request, response) {
     console.log('Download GET request');
 
     for (const [key, value] of Object.entries(downloadRequestDict)) {
         console.log(key, value);
-        if(key == request.session.id)
-        {
+        if (key == request.session.id) {
             console.log('Found request!');
             const path = value;
-            console.log(path);        
+            console.log(path);
             response.download(path);
             delete downloadRequestDict[key];
         }
-      }
- })
+    }
+})
 
 app.post('/ImageLoader', async function (request, response) {
 
@@ -193,8 +189,7 @@ app.post('/ImageLoader', async function (request, response) {
         const data = request.body;
         console.log("ImageLoader Request: " + JSON.stringify(data));
 
-        if(data.subreddit == false)
-        {
+        if (data.subreddit == false) {
             console.log("Subreddit or amount of posts was empty!");
             response.json({ "ERROR": "Subreddit or amount of posts was empty!" });
             return;
@@ -232,35 +227,47 @@ app.post('/ImageLoader', async function (request, response) {
 //--------------------------File Serving---------------------------------
 //-----------------------------------------------------------------------
 app.get('/', (request, response) => {
+    const sessiondata = request.session;
+
+    if (sessiondata == null && session == null && sessiondata.id != session.id) {
+        session = request.session;
+        session.id = request.genid;
+        session.userid = request.body.username;
+        request.session = session;
+    }
     response.sendFile(path.join(__dirname, '/public/html/About.html'));
 })
 
 app.get('/ImageGatherer', (request, response) => {
-   // if (session != null && request.session.id == session.id) {
-  //      console.log('ImageGatherer');
+    if (session != null && request.session.id == session.id) {
+        console.log('ImageGatherer');
         response.sendFile(path.join(__dirname, '/public/html/ImageGatherer.html'));
-  //  }
-   // else {
-     //   console.log('Invalid Session!');
-       // response.redirect('/');
-    //}
+    }
+    else {
+
+        session = request.session;
+        session.id = request.genid;
+        session.userid = request.body.username;
+        request.session = session;
+
+    }
 });
 
-app.get('/About',  (request, response) => {
-   // if (session != null && request.session.id == session.id) {
+app.get('/About', (request, response) => {
+    if (session != null && request.session.id == session.id) {
         console.log('About');
         response.sendFile(path.join(__dirname, '/public/html/About.html'));
-   // }
-   // else {
-   //     console.log('Invalid Session!');
-    //    response.redirect('/');
-    //}
+    }
+    else {
+        console.log('Invalid Session!');
+        response.redirect('/');
+    }
 });
 
-app.get('/LogIn',  (request, response) => {
-         console.log('About');
-         response.sendFile(path.join(__dirname, '/public/html/LogIn.html'));
- });
+app.get('/LogIn', (request, response) => {
+    console.log('About');
+    response.sendFile(path.join(__dirname, '/public/html/LogIn.html'));
+});
 
 
 
