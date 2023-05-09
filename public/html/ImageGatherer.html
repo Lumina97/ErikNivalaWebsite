@@ -4,13 +4,17 @@
 <head>
     <title>Image Gatherer</title>
     <link rel='stylesheet' href="./CSS/ImageGatherer.css">
+    <link rel='stylesheet' href="./CSS/Header.css">    
+
     <script src="./JS/ImageGathererHTML.js"></script>
+    <script type=module src=./JS/Header.js></script>
+
 </head>
 
 <body>
 
     <h1 class="center" >Reddit Image Gathering</h1>
-
+        <my-header class="center"></my-header>
         <div class="center" id="InputFields">
         
             <p id="RedditEntryP" class="center"> subreddit to search:</p>
@@ -27,7 +31,7 @@
 
             <ul class="rightAlign" id="FilterUnorderedList"></ul>
 
-            <button class="center" id="ClearFilters" onclick="ClearFilters()"> Clear filters</button> 
+            <button class="center" id="ClearFilters" onclick="ClearFilters()">Clear filters</button> 
 
         </div>
 
