@@ -1,7 +1,7 @@
 // Reddit Server Requests
 window.addEventListener('load', function () {
     const loader = document.getElementById('loader');
-     loader.style.opacity = 0;
+    loader.style.opacity = 0;
 })
 
 
@@ -9,15 +9,16 @@ async function SendImageGatheringRequest() {
     const subreddit = document.getElementById('subredditToSearch').value;
     const amount = document.getElementById('SearchAmount').value;
     const filterList = document.getElementById('FilterUnorderedList');
+    const errorTextbox = document.getElementById('ErrorText');
+    errorTextbox.value = "";
 
     var filters = {};
-    for(let i = 0 ; i < filterList.childElementCount; i++)
-    {
+    for (let i = 0; i < filterList.childElementCount; i++) {
         filters[i] = filterList.childNodes[i].innerText;
-    }    
+    }
 
     loader.style.opacity = 100;
-    
+
     const sendData = { subreddit, amount, filters };
     console.log("Sending data: " + JSON.stringify(sendData));
     const options = {
@@ -25,21 +26,26 @@ async function SendImageGatheringRequest() {
         body: JSON.stringify(sendData),
         headers: { 'Content-Type': 'application/json' }
     };
-    const response = await fetch('/ImageLoader', options);
+    const response = await fetch('/ImageLoader', options)
     const data = response.json()
         .catch((error) => {
             console.log('ERROR:' + error);
+            errorTextbox.textContent = error;
+            loader.style.opacity = 0;
             return;
         })
         .then(async function (result) {
             console.log(result);
-            if (result.ERROR) {
+            if (result !== undefined && result.ERROR) {
                 console.log("ERROR:" + result.ERROR);
+                errorTextbox.textContent = result.ERROR;
                 return;
             }
-            loader.style.opacity = 0;
-            DownloadFile(result);
+            else {
+                DownloadFile(result);
+            }
         });
+    loader.style.opacity = 0;
 }
 
 async function DownloadFile(filepath) {
@@ -56,7 +62,7 @@ async function DownloadFile(filepath) {
             window.open('/download');
         });
 
-    console.log(response);   
+    console.log(response);
 }
 
 async function LogOutBTN() {
@@ -83,14 +89,13 @@ window.onload = function () {
     }
 }
 
-function AddFilterToList()
-{
+function AddFilterToList() {
     const listElement = document.getElementById("FilterUnorderedList");
     const FilterInputField = document.getElementById("TitleFilters");
 
-    
+
     if (FilterInputField.value == "") return;
-    
+
     console.log('Adding to list: ' + FilterInputField.value);
     var li = document.createElement("li");
     li.innerText = FilterInputField.value;
@@ -98,8 +103,7 @@ function AddFilterToList()
     FilterInputField.value = null;
 }
 
-async function ClearFilters()
-{
+async function ClearFilters() {
     const listElement = document.getElementById("FilterUnorderedList");
     listElement.innerHTML = "";
 }

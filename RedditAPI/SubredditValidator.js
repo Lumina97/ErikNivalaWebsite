@@ -30,21 +30,28 @@ async function ValidateSubReddit(subreddit) {
                 console.log(result);
                 reject(new Error('Error getting axios response!'));
                 return;
-
             });
-        const postArray = response.data.data.children;
 
-        console.log(response.status);
+        try {
+
+            const postArray = response.data.data.children;
+
+            console.log(response.status);
 
 
-        if (typeof postArray === 'undefined' || postArray.length == 0) {
-            console.log("Subreddit does not exist! - SubredditValidator.js - ValidateSubReddit() - 40");
+            if (typeof postArray === undefined || postArray.length == 0) {
+                console.log("Subreddit does not exist! - SubredditValidator.js - ValidateSubReddit() - 40");
 
-            reject(new Error('Error: Subreddit does not exist!'));
-            return;
+                reject(new Error('Error: Subreddit does not exist!'));
+                return;
+            }
+            else {
+                resolve("Subreddit does exist! - SubredditValidator.js - ValidateSubReddit()");
+                return;
+            }
         }
-        else {
-            resolve("Subreddit does exist! - SubredditValidator.js - ValidateSubReddit()");
+        catch {
+            reject(new Error('There was an issue Getting response data'));
             return;
         }
     });
@@ -65,7 +72,7 @@ module.exports = {
             console.log();
 
             //Get acess token for reddit api
-            await RedditAuthentication.GetAutheticationToken() 
+            await RedditAuthentication.GetAutheticationToken()
                 .then((result) => {
                     Acess_Token = result;
                 })

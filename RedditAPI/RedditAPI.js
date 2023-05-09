@@ -17,16 +17,21 @@ module.exports =
       console.log('===============================================');
       console.log();
 
+      if (session === undefined) {
+        reject("Session was invalid");
+        return;
+      }
+
       let image_links = [];
       SubRedditToScan = subreddit;
       AmountOfPosts = parseInt(amount);
       var today = new Date();
-      var date = today.getHours()+'_'+today.getMinutes()+'_'+today.getSeconds();
-      const ID =  path.join(String(session.userid),String(date));
+      var date = today.getHours() + '_' + today.getMinutes() + '_' + today.getSeconds();
+      const ID = path.join(String(session.userid), String(date));
 
       await SubValidator.ValidateSubreddit(subreddit)
         .then(async function () {
-          image_links = await RedditLinksGatherer.GetImageLinksFromSubreddit(subreddit, AmountOfPosts,postTitleFilters);
+          image_links = await RedditLinksGatherer.GetImageLinksFromSubreddit(subreddit, AmountOfPosts, postTitleFilters);
           return;
         })
         .then(async function () {

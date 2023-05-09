@@ -8,7 +8,7 @@ async function CreateAccount() {
     const errorTextbox = document.getElementById('LogInErrorText');
     if(username.length < 4){
         const text = 'Username has to be more then 4 characters!';
-        errorTextbox.textContent =text ;
+        errorTextbox.value =text ;
         console.log(text);
         return;
     }   

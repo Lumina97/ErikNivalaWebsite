@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Home</title>
+    <link rel='stylesheet' href="./CSS/Home.css">
+    <link rel='stylesheet' href="./CSS/ImageGatherer.css">
+
+    <script src=./JS/Home.js></script>
+    <script src=./JS/ImageGathererHTML.js></script>
+
+</head>
+
+
+
+<body></body>
+<div class="container">
+    <nav class="menu">
+        <ul class="main-menu">
+            <li class="active" onclick="OnHomeClicked()" id="HomeNav"><i class="fa fa-home"></i>Home</li>
+            <li class="with-submenu">
+                <i class="fa fa-briefcase" id="PortfolioNav"></i>Portfolio <i class="fa fa-caret-down"></i>
+                <ul class="submenu">
+                    <li onclick="OnWebsiteClicked()" id="WebsiteNav">Website</li>
+                    <li onclick="OnImageGathererClicked()" id="ImageGathererNav">Image Gatherer</li>
+                </ul>
+            </li>
+            <li id="AboutNav" onclick="OnAboutClicked()"><i class="fa fa-user"></i>About</li>
+        </ul>
+    </nav>
+
+    <article id="Home">
+        <h1>Home</h1>
+        <div class="content">
+            <p>
+                Welcome to my website which serves as a central display of my projects (currently just the website and
+                image gatherer).
+            </p>
+            <p>
+                Check out more about each of my projects in the Portfolio tab.
+                I love creating things but am focused on learning about IT Support so the website is very basic.
+            </p>
+            <p>
+                Short explanation about my Image gatherer! You enter any Reddit that you want to scan for posts with
+                images attached
+                as well as how many posts you want to scan (max is 200) and you can also add some filter which are
+                applied to the title of the posts.
+
+                It then takes the given information, checks if the Reddit is valid, downloads the posts, checks if there
+                is an Image attached to the post,
+                applies filters to the title of the post, then downloads every image that was found, places it in the
+                same folder using the session ID,
+                creates a ZIP file from the folder and sends it to the client to download (it comes up as a pop up).
+            </p>
+
+        </div>
+    </article>
+
+    <article id="About" style="display: none;">
+        <h1>About</h1>
+        <div class="content">
+            <p>
+
+                Hey, my name is Erik and I'm an looking to start my career in IT and recently completed my Google IT Support
+                professional Certificate.
+                I also like to code every once in a while which is why this website exists. But also to show that I am
+                able to configure and host a website online. Check out my project tab to learn more about how I did that.
+            </p>
+        </div>
+    </article>
+
+    <article id="Website" style="display: none;">
+        <h1>Website</h1>
+        <div class="content">
+            <p>
+                Welcome to my website which serves as a central display of my projects (currently just the website and
+                image gatherer).
+            </p>
+            <p>
+                The website is hosted on a VM that is running Ubuntu server on my own computer.
+                In order to protect myself I did not open any ports to the internet but rather I am using
+                a service called cloudflare which acts as a reverse proxy hosting my page online.
+            </p>
+            <p>
+                I bought my own domain from google domains and used that for cloudflare to redirect my traffic.
+                In order for that to work I had to use the cloudflare DNS servers which I simply added to the Google
+                domain for my website to be found online.
+            </p>
+            <p>
+                This website is a single page HTML document and I got the CSS code for the menu items online since my
+                CSS knowledge is very limited.
+                I am using node with a couple npm packages to run the page, using sessionsID's to determine every user
+                in order to send them the right zip file for my image gatherer.
+                Any changes to the page are tested on my local machine before being committed and pushed to github and
+                ultimately being pulled to the server and run using nodemon.
+            </p>
+            <p>
+                I am running apache2 on the server and redirecting any traffic to port 80 over to port 3000 where node
+                is listening.
+                I want to find a way to run the node application in the background but until then this works fine.
+            </p>
+        </div>
+    </article>
+
+
+    <article id="ImageGatherer" style="display: none;">
+        <h1>Image Gatherer</h1>
+        <div class="content">
+            <div class="center" id="InputFields">
+
+                <p id="RedditEntryP" class="center"> Subreddit to search:</p>
+                <input class="rightAlign" id="subredditToSearch" placeholder="Subreddit..." value="">
+
+                <p id="SearchAmountP" class="center">Amount of posts:</p>
+
+                <input class='rightAlign' id="SearchAmount" placeholder="Amount of posts..." value="">
+
+                <p id="TitleFiltersP" class="center">Add Filter:</p>
+
+                <input class='rightAlign TitleFiltersInput' id="TitleFilters" placeholder="Filter...">
+
+                <ul class="rightAlign" id="FilterUnorderedList"></ul>
+
+                <button class="center" id="ClearFilters" onclick="ClearFilters()">Clear filters</button>
+
+                <div class="center">
+                    <div class="loader rightAlign" id="loader"> </div>
+                </div>
+                <button class="rightAlign " id="SendImageRequestButton" onclick="SendImageGatheringRequest()"> Send
+                    Image gather request</button>
+            </div>
+            <div>
+                <p id="ErrorText"></p>
+            </div>
+
+    </article>
+</div>
+</body>
+
+</html>

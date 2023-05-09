@@ -184,42 +184,44 @@ app.post('/ImageLoader', async function (request, response) {
 
     const sessiondata = request.session;
 
-    if (sessiondata != null && session != null && sessiondata.id == session.id) {
-
-        const data = request.body;
-        console.log("ImageLoader Request: " + JSON.stringify(data));
-
-        if (data.subreddit == false) {
-            console.log("Subreddit or amount of posts was empty!");
-            response.json({ "ERROR": "Subreddit or amount of posts was empty!" });
-            return;
-        }
-
-        await RedditAPI.DownloadImagesFromSubreddit(data.subreddit, data.amount, session, data.filters)
-            .then((result) => {
-                console.log("SUCESS Fulfilled request!");
-                var returnData;
-                try {
-                    returnData = JSON.stringify({ 'path': result });
-                    response.json(returnData);
-                }
-                catch (error) {
-                    console.log('Error parsing json! \n' + error);
-                    response.json('There was an error getting your data!');
-                }
-
-                return;
-            })
-            .catch((error) => {
-                console.log("ERROR: " + error);
-                response.json({ "ERROR": "There was an error getting your data!" });
-                return;
-            });
-    }
-    else {
+    if (sessiondata == null || session == null || sessiondata.id != session.id) {
         console.log('Invalid Session!');
-        response.redirect(302, '/');
+        response.json({ "ERROR": "Invalid Session, try reloading the page!" });
+        return;
     }
+
+    const data = request.body;
+    console.log("ImageLoader Request: " + JSON.stringify(data));
+
+    if (data.subreddit == false) {
+        console.log("Subreddit or amount of posts was empty!");
+        response.json({ "ERROR": "Subreddit or amount of posts was empty!" });
+        return;
+    }
+
+    await RedditAPI.DownloadImagesFromSubreddit(data.subreddit, data.amount, session, data.filters)
+        .then((result) => {
+            console.log("SUCESS Fulfilled request!");
+            var returnData;
+            try {
+                returnData = JSON.stringify({ 'path': result });
+                response.json(returnData);
+
+            }
+            catch (error) {
+                console.log('Error parsing json! \n' + error);
+                response.json('There was an error getting your data!');
+                return;            
+            }
+
+            return;
+        })
+        .catch((error) => {
+            console.log("ERROR: " + error);
+            response.json({ "ERROR": "There was an error getting your data!" });
+            return;
+        });
+
 })
 
 
@@ -229,87 +231,19 @@ app.post('/ImageLoader', async function (request, response) {
 app.get('/', (request, response) => {
     const sessiondata = request.session;
 
-    if (sessiondata == null && session == null && sessiondata.id != session.id) {
+    if (sessiondata == null || session == null || sessiondata.id != session.id) {
+        console.log('Session ID: ' + request.session.id);
         session = request.session;
         session.id = request.genid;
         session.userid = request.body.username;
         request.session = session;
     }
-    response.sendFile(path.join(__dirname, '/public/html/About.html'));
+
+    response.sendFile(path.join(__dirname, '/public/html/Home.html'));
 })
 
-app.get('/ImageGatherer', (request, response) => {
-    if (session != null && request.session.id == session.id) {
-        console.log('ImageGatherer');
-        response.sendFile(path.join(__dirname, '/public/html/ImageGatherer.html'));
-    }
-    else {
 
-        session = request.session;
-        session.id = request.genid;
-        session.userid = request.body.username;
-        request.session = session;
-
-    }
-});
-
-app.get('/About', (request, response) => {
-    if (session != null && request.session.id == session.id) {
-        console.log('About');
-        response.sendFile(path.join(__dirname, '/public/html/About.html'));
-    }
-    else {
-        console.log('Invalid Session!');
-        response.redirect('/');
-    }
-});
 
 app.get('/LogIn', (request, response) => {
-    console.log('About');
     response.sendFile(path.join(__dirname, '/public/html/LogIn.html'));
 });
-
-
-
-
-
-
-
-
-
-
-//a get route for adding a cookie
-/*app.get('/setcookie', (req, res) => {
-    res.cookie(`Cookie token name`,`encrypted cookie string Value`,
-    {
-        secure: true,       //A secure attribute ensures that the browser
-                            //will reject cookies unless the connection happens
-                            //over HTTPS.
-
-        httpOnly : false,   //HTTPonly ensures that a cookie is not accessible
-                            // using the JavaScript code. This is the most
-                            //crucial form of protection against
-                            //cross-scripting attacks.
-
-        sameSite: 'lax'     //By default, sameSite was initially set to
-                            //none (sameSite = None). This allowed third
-                            //parties to track users across sites.
-                            //Currently, it is set to Lax (sameSite = Lax)
-                            //meaning a cookie is only set when the domain
-                            //in the URL of the browser matches the domain
-                            //of the cookie, thus eliminating third party’s
-                            //domains. sameSite can also be set to Strict
-                            //(sameSite = Strict). This will restrict
-                            //cross-site sharing even between different
-                            //domains that the same publisher owns.
-    });
-    res.send('Cookie have been saved successfully');
-});
-
-
-app.get('/getcookie',(req,res)=> {
-    console.log(req.cookies)
-    res.send(req.cookies);
-});
-
-*/
