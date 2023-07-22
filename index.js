@@ -247,3 +247,8 @@ app.get('/', (request, response) => {
 app.get('/LogIn', (request, response) => {
     response.sendFile(path.join(__dirname, '/public/html/LogIn.html'));
 });
+
+
+app.get('/Detailing', (request,response) => {
+    response.sendFile(path.join(__dirname,'public/html/detailing/Home.html'));
+});

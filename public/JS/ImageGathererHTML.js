@@ -10,7 +10,7 @@ async function SendImageGatheringRequest() {
     const amount = document.getElementById('SearchAmount').value;
     const filterList = document.getElementById('FilterUnorderedList');
     const errorTextbox = document.getElementById('ErrorText');
-    errorTextbox.value = "";
+    errorTextbox.textContent = " ";
 
     var filters = {};
     for (let i = 0; i < filterList.childElementCount; i++) {
