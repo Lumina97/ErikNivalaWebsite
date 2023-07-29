@@ -1,4 +1,5 @@
 const axios = require('axios').default;
+const { Console } = require('console');
 const fs = require('fs');
 
 const querystring = require('querystring');
@@ -21,34 +22,6 @@ async function MakeAuthenticationRequest(successCallback, errorCallback) {
   console.log("Received Auth Request. - RedditAPI.js -MakeAuthenticationRequest()")
   successCallback(data);
   return;
-
-
-  // const payload = querystring.stringify({
-  //   grant_type: 'authorization_code',
-  //   code: "SK5eGy2lDgUePxEjCnYOOmalx0uzOQ",
-  //   redirect_uri: 'https://www.eriknivala.com'
-  // })
-
-  // const response = await axios.post('https://www.reddit.com/api/v1/access_token', payload, {
-  //   headers: {
-  //     "Authorization": "Basic " + Buffer.from('ZHmLbNUoaVSVdw' + ":" + "W0bNZeU8oYaUxCzqcWuf89JLMnqMVg", "utf8").toString("base64"),
-  //     'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1',
-  //     'Content-Type': 'application/x-www-form-urlencoded',
-  //     'Content-Length': payload.length
-  //   }
-  // });
-
-  // const res_Data = response.data;
-  // console.log(response.status);
-  // console.log(res_Data);
-
-  // if (res_Data.error) {
-  //   console.log("Unable to receive Bearer token: " + res_Data.error);
-  //   errorCallback(false);
-  // }
-  // else {
-  //   successCallback(res_Data);
-  // }
 }
 
 async function RefreshAcessToken(refreshtoken, successCallback, errorCallback) {
@@ -133,33 +106,6 @@ async function RefreshToken(sucessCallback, erroCallback) {
   try {
     console.log("Reading Token File. - RedditAPI.js - RefreshToken()");
     await ReadTokenFile()
-      .then(async function () {
-        //==================================Get refresh token 
-        console.log("Starting AuthRefreshTokenPromise(). - RedditAPI.js - RefreshToken()");
-        await AuthRefreshTokenPromise()        
-          .then(function (result) {
-            //Refresh token sucess 
-            fs.writeFile("Tokens", JSON.stringify(result), function (error) {
-              if (error) {
-                console.log("Error writing refresh token to file! - RedditAPI.js - RefreshToken()");
-                erroCallback(false)
-                return;
-              }
-            });
-
-            console.log("Sucessfully refreshed token - RedditAPI.js - RefreshToken()");
-            sucessCallback(true);
-            return;
-          }) 
-           .catch(() => {
-            //refresh token fail
-            console.log("Could not Refresh Token! - RedditAPI.js - RefreshToken()");
-            erroCallback(false);
-            return;
-          });
-        //================================== 
-        return;
-      })
       .catch(async function () {
         //================================ Read token file FAIL
 
@@ -181,6 +127,32 @@ async function RefreshToken(sucessCallback, erroCallback) {
             await RefreshTokenPromise();
           });
         return;
+      })
+      .then(async function () {
+        //==================================Get refresh token 
+        console.log("Starting AuthRefreshTokenPromise(). - RedditAPI.js - RefreshToken()");
+        await AuthRefreshTokenPromise()
+          .catch(() => {
+            //refresh token fail
+            console.log("Could not Refresh Token! - RedditAPI.js - RefreshToken()");
+            erroCallback(false);
+            return;
+          })
+          .then(function (result) {
+            //Refresh token sucess 
+            fs.writeFile("Tokens", JSON.stringify(result), function (error) {
+              if (error) {
+                console.log("Error writing refresh token to file! - RedditAPI.js - RefreshToken()");
+                erroCallback(false)
+                return; u
+              }
+            });
+            console.log("Sucessfully refreshed token - RedditAPI.js - RefreshToken()");
+            sucessCallback(true);
+            return;
+          });
+        //================================== 
+        return;
       });
   }
   catch (error) {
@@ -195,7 +167,7 @@ async function ReadTokenFile() {
   return new Promise((resolve, reject) => {
     fs.readFile("Tokens", 'utf8', function (err, data) {
       if (err) {
-        console.log(err);
+        console.log("There was an error reading the Token File! = ReadTokenFile()");
         reject(false);
         return;
       }
