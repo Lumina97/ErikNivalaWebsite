@@ -3,60 +3,14 @@ const { Console } = require('console');
 const fs = require('fs');
 
 const querystring = require('querystring');
-
+const path = require('path');
 
 let LastTokenRefreshTime;
 let Refresh_Token;
 let Acess_Token;
+
 //===================AUTHORIZATION=========================
-
-async function MakeAuthenticationRequest(successCallback, errorCallback) {
-  const data = {
-    access_token: '456556608586-8ElYRalY2Wn3EREUW-58Z9601W0meA',
-    token_type: 'bearer',
-    expires_in: 3600,
-    refresh_token: '456556608586-ScaQ_Po6r3spMPpd1apJrleWIczElA',
-    scope: 'edit flair history identity modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread'
-  };
-
-  console.log("Received Auth Request. - RedditAPI.js -MakeAuthenticationRequest()")
-  successCallback(data);
-  return;
-}
-
-async function RefreshAcessToken(refreshtoken, successCallback, errorCallback) {
-
-  const payload = querystring.stringify({
-    grant_type: 'refresh_token',
-    refresh_token: refreshtoken,
-  })
-
-  const response = await axios.post('https://www.reddit.com/api/v1/access_token', payload, {
-    headers: {
-      "Authorization": "Basic " + Buffer.from('ZHmLbNUoaVSVdw' + ":" + "W0bNZeU8oYaUxCzqcWuf89JLMnqMVg", "utf8").toString("base64"),
-      'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1',
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': payload.length
-    }
-  });
-
-  const res_Data = response.data;
-
-  if (res_Data.error) {
-    Console.log("Unable to receive Bearer token: " + res_Data.error)
-    errorCallback(false);
-    return;
-  }
-  else {
-
-    Refresh_Token = res_Data.refresh_token;
-    Acess_Token = res_Data.access_token;
-    LastTokenRefreshTime = Date.now()
-
-    successCallback(res_Data);
-    return;
-  }
-}
+/*
 
 function AuthRequestPromise() {
   return new Promise((resolve, reject) => {
@@ -73,99 +27,125 @@ function AuthRequestPromise() {
   })
 }
 
-function AuthRefreshTokenPromise() {
-  return new Promise((resolve, reject) => {
-    RefreshAcessToken(Refresh_Token, (successCallback) => {
-      console.log("AuthRefreshTokenPromise - resolve");
-      resolve(successCallback);
+async function MakeAuthenticationRequest(successCallback, errorCallback) {
+  const data = {
+    access_token: '456556608586-8ElYRalY2Wn3EREUW-58Z9601W0meA',
+    token_type: 'bearer',
+    expires_in: 3600,
+    refresh_token: '456556608586-ScaQ_Po6r3spMPpd1apJrleWIczElA',
+    scope: 'edit flair history identity modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread'
+  };
+
+  console.log("Received Auth Request. - RedditAPI.js -MakeAuthenticationRequest()")
+  successCallback(data);
+  return;
+}
+*/
+
+async function RefreshAcessToken() {
+  return new Promise(async function (resolve, reject) {
+
+    const payload = querystring.stringify({
+      grant_type: 'refresh_token',
+      refresh_token: Refresh_Token,
+    })
+
+    const response = await axios.post('https://www.reddit.com/api/v1/access_token', payload, {
+      headers: {
+        "Authorization": "Basic " + Buffer.from('ZHmLbNUoaVSVdw' + ":" + "W0bNZeU8oYaUxCzqcWuf89JLMnqMVg", "utf8").toString("base64"),
+        'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': payload.length
+      }
+    });
+
+    const res_Data = response.data;
+
+    if (res_Data.error) {
+      Console.log("Unable to receive Bearer token: " + res_Data.error)
+      reject(false);
       return;
-    },
-      (errorCallback) => {
-        console.log("AuthRefreshTokenPromise - reject");
-        reject(errorCallback);
-        return;
-      });
+    }
+    else {
+
+      Refresh_Token = res_Data.refresh_token;
+      Acess_Token = res_Data.access_token;
+      LastTokenRefreshTime = Date.now()
+
+      console.log("____________________TOKENS____________________");
+      console.log("Refresh: ", Refresh_Token);
+      console.log("Acces: ", Acess_Token);
+      console.log("_____________________END______________________");
+
+      resolve(res_Data);
+      return;
+    }
   })
 }
 
-async function RefreshTokenPromise() {
-  return new Promise((resolve, reject) => {
-    RefreshToken((sucessCallback) => {
-      resolve(sucessCallback);
-      return;
-    },
-      (errorCallback) => {
-        reject(errorCallback);
-        return;
-      })
-  })
-}
 
-async function RefreshToken(sucessCallback, erroCallback) {
+async function RefreshToken() {
+  return new Promise(async function (resolve, reject) {
 
-  try {
     console.log("Reading Token File. - RedditAPI.js - RefreshToken()");
     await ReadTokenFile()
-      .catch(async function () {
-        //================================ Read token file FAIL
-
-        //==================================GET AUTH TOKEN
-        console.log("No acess token - Getting Auth response - RedditAPI.js - RefreshToken() ");
-
-        await AuthRequestPromise()
-          .catch(() => {
-            console.log("Error receiving auth response. RedditAPI.js - RefreshToken()");
-            erroCallback(false);
-            return;
-
-          })
-          .then(async function (result) {
-            fs.writeFile("Tokens", JSON.stringify(result), function (error) {
-              if (error) return console.log(error);
-            });
-            console.log("Received valid AUTH response. RedditAPI.js - RefreshToken()");
-            await RefreshTokenPromise();
-          });
-        return;
-      })
       .then(async function () {
         //==================================Get refresh token 
         console.log("Starting AuthRefreshTokenPromise(). - RedditAPI.js - RefreshToken()");
-        await AuthRefreshTokenPromise()
-          .catch(() => {
-            //refresh token fail
-            console.log("Could not Refresh Token! - RedditAPI.js - RefreshToken()");
-            erroCallback(false);
-            return;
-          })
+
+        await RefreshAcessToken()
           .then(function (result) {
             //Refresh token sucess 
             fs.writeFile("Tokens", JSON.stringify(result), function (error) {
               if (error) {
                 console.log("Error writing refresh token to file! - RedditAPI.js - RefreshToken()");
-                erroCallback(false)
-                return; u
+                reject(false)
+                return;
               }
-            });
+            })
+              .catch(() => {
+                //refresh token fail
+                console.log("Could not Refresh Token! - RedditAPI.js - RefreshToken()");
+                reject(false);
+                return;
+              });
+
+
+
             console.log("Sucessfully refreshed token - RedditAPI.js - RefreshToken()");
-            sucessCallback(true);
+            resolve(true);
             return;
           });
-        //================================== 
-        return;
+      })
+      .catch(async function () {
+        //TODO: Be able to Get tokens from reddit instead of relying on tokens saved to a file
+        console.log("No acess token - RedditAPI.js - RefreshToken() ");
+        reject("No acess token");
+        /*
+                await AuthRequestPromise()
+                  .then(async function (result) {
+                    fs.writeFile("Tokens", JSON.stringify(result), function (error) {
+                      if (error) return console.log(error);
+                    });
+                    console.log("Received valid AUTH response. RedditAPI.js - RefreshToken()");
+                    await RefreshTokenPromise();
+                  })
+                  .catch(() => {
+                    console.log("Error receiving auth response. RedditAPI.js - RefreshToken()");
+                    reject(false);
+                    return;
+                  });
+        
+        */
+
       });
-  }
-  catch (error) {
-    // handle getting accesscode etc 
-    console.log(error);
-    erroCallback(false);
-    return;
-  }
+  })
 }
 
 async function ReadTokenFile() {
-  return new Promise((resolve, reject) => {
-    fs.readFile("Tokens", 'utf8', function (err, data) {
+  return new Promise(async function (resolve, reject) {
+    const tokenPath = path.join(__dirname, "../Tokens");
+    fs.readFile(tokenPath), 'utf8', function (err, data) {
       if (err) {
         console.log("There was an error reading the Token File! = ReadTokenFile()");
         reject(false);
@@ -184,9 +164,8 @@ async function ReadTokenFile() {
         console.log("Issue reading file  - RedditAPI.js - ReadTokenFile()");
         reject(false);
         return;
-
       }
-    });
+    };
   })
 }
 
@@ -195,7 +174,7 @@ async function GetToken() {
 
     if (typeof Acess_Token === 'undefined') {
       console.log('token is undefined');
-      await RefreshTokenPromise()
+      await RefreshToken()
         .then(() => {
           resolve(Acess_Token);
           return;
@@ -275,23 +254,23 @@ module.exports =
       await GetToken()
         .then(() => {
           console.log("Sucesfully retrieved acess token! Token: " + Acess_Token);
-          resolve(Acess_Token);
           console.log();
           console.log('===============================================');
           console.log('=========END GetAutheticationToken=============');
           console.log('===============================================');
           console.log();
-          return;
+          resolve(Acess_Token);
+
         })
         .catch(() => {
           console.log("There was an error refreshing the token! - RedditAuthentication.js");
-          reject(false);
           console.log();
           console.log('===============================================');
           console.log('=========END GetAutheticationToken=============');
           console.log('===============================================');
           console.log();
-          return;
+          reject(false);
+
         });
     })
   }
