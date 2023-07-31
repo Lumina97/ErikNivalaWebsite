@@ -4,7 +4,7 @@ const querystring = require('querystring');
 const RedditAuthentication = require('./RedditAuthentication');
 
 const oAuthURL = "https://oauth.reddit.com"
-let Acess_Token;
+let Access_Token;
 
 async function GetRedditPosts(subreddit, amount, titleFilters) {
 
@@ -25,7 +25,7 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
             method: 'get',
             url: urlink,
             headers: {
-                "Authorization": "BEARER " + Acess_Token,
+                "Authorization": "BEARER " + Access_Token,
                 'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1'
             }
         }
@@ -79,12 +79,11 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
 // Iterates given title and checks if the given filters exist within the title
 async function FilterTitle(Title, Filters) {
     for (let i = 0; i < Filters.length; i++) {
-        console.log('TITLE: \t' +  title);
-        console.log('Filter: \t' +  Filter[i]);
+        console.log('TITLE: \t' + title);
+        console.log('Filter: \t' + Filter[i]);
 
-        if(Title.includes(Filter[i] ) ) 
-        {
-        console.log('title containts filter!');
+        if (Title.includes(Filter[i])) {
+            console.log('title containts filter!');
             return true;
         }
     }
@@ -93,7 +92,7 @@ async function FilterTitle(Title, Filters) {
 
 module.exports = {
 
-    GetImageLinksFromSubreddit: async function (subreddit, amountOfPostsSearched, titleFilters) {
+    GetImageLinksFromSubreddit: async function (subreddit, amountOfPostsSearched, titleFilters, access_token) {
 
         return new Promise(async function (resolve, reject) {
 
@@ -103,21 +102,7 @@ module.exports = {
             console.log('===============================================');
             console.log();
 
-            //Get acess token for reddit api
-            await RedditAuthentication.GetAutheticationToken()
-                .then((result) => {
-                    Acess_Token = result;
-                })
-                .catch(() => {
-                    console.log("There was an error refreshing the token!");
-                    console.log();
-                    console.log('===============================================');
-                    console.log('=============END GetRedditPosts================');
-                    console.log('===============================================');
-                    console.log();
-                    reject(false);
-                    return;
-                });
+            Access_Token = access_token;
 
 
             // validate input
@@ -132,12 +117,12 @@ module.exports = {
                 return;
             }
             if (typeof amountOfPostsSearched === 'undefined' || isNaN(amountOfPostsSearched) == true || typeof amountOfPostsSearched != "number") {
-                console.log("Amount of posts was either not an integer or undefined - Defaulting to 25 - DownloadImagesFromSubreddit()")
+                console.log("Defaulting search amount to 25 posts - DownloadImagesFromSubreddit()")
                 amountOfPostsSearched = 25;
             }
 
             //wait to get links
-            await GetRedditPosts(subreddit, amountOfPostsSearched,titleFilters)
+            await GetRedditPosts(subreddit, amountOfPostsSearched, titleFilters)
                 .then((result) => {
                     console.log();
                     console.log('===============================================');

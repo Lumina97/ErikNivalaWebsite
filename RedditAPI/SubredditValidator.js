@@ -3,7 +3,7 @@ const querystring = require('querystring');
 const RedditAuthentication = require('./RedditAuthentication');
 
 const oAuthURL = "https://oauth.reddit.com"
-let Acess_Token;
+let Access_Token;
 
 async function ValidateSubReddit(subreddit) {
 
@@ -19,7 +19,7 @@ async function ValidateSubReddit(subreddit) {
             method: 'get',
             url: urlink,
             headers: {
-                "Authorization": "BEARER " + Acess_Token,
+                "Authorization": "BEARER " + Access_Token,
                 'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1'
             }
         }
@@ -28,7 +28,7 @@ async function ValidateSubReddit(subreddit) {
             .catch((result) => {
                 console.log("Error getting subreddit! - SubredditValidator.js - ValidateSubReddit() - 29")
                 console.log(result);
-                reject(new Error('Error getting axios response!'));
+                reject('Error getting axios response!');
                 return;
             });
 
@@ -42,7 +42,7 @@ async function ValidateSubReddit(subreddit) {
             if (typeof postArray === undefined || postArray.length == 0) {
                 console.log("Subreddit does not exist! - SubredditValidator.js - ValidateSubReddit() - 40");
 
-                reject(new Error('Error: Subreddit does not exist!'));
+                reject('Error: Subreddit does not exist!');
                 return;
             }
             else {
@@ -51,7 +51,7 @@ async function ValidateSubReddit(subreddit) {
             }
         }
         catch {
-            reject(new Error('There was an issue Getting response data'));
+            reject('There was an issue Getting response data');
             return;
         }
     });
@@ -61,7 +61,7 @@ async function ValidateSubReddit(subreddit) {
 
 module.exports = {
 
-    ValidateSubreddit: async function (subreddit) {
+    ValidateSubreddit: async function (subreddit, access_token) {
 
         return new Promise(async function (resolve, reject) {
 
@@ -71,20 +71,7 @@ module.exports = {
             console.log('===============================================');
             console.log();
 
-            //Get acess token for reddit api
-            await RedditAuthentication.GetAutheticationToken()
-                .then((result) => {
-                    Acess_Token = result;
-                })
-                .catch(() => {
-                    console.log("There was an error refreshing the token!");
-                    console.log();
-                    console.log('===============================================');
-                    console.log('============END ValidateSubreddit==============');
-                    console.log('===============================================');
-                    console.log();
-                    return reject(new Error('Error getting authentication Token!'));
-                });
+            Access_Token = access_token;
 
             // validate input
             if (typeof subreddit === 'undefined') {
@@ -94,7 +81,7 @@ module.exports = {
                 console.log('============END ValidateSubreddit==============');
                 console.log('===============================================');
                 console.log();
-                return reject(new Error('Error: Subreddit was not defined!'));
+                return reject('Error: Subreddit was not defined!');
             }
 
             //wait to get links
@@ -115,7 +102,7 @@ module.exports = {
                     console.log('============END ValidateSubreddit==============');
                     console.log('===============================================');
                     console.log();
-                    reject(new Error('Error: Subreddit does not exist!'));
+                    reject('Error: Subreddit does not exist!');
                     return;
                 })
 

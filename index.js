@@ -5,7 +5,6 @@ const LogInManager = require('./LogIn/LogInManager')
 const { v4: uuidv4 } = require('uuid');
 const sessions = require('express-session');
 const path = require('path');
-const { request } = require('express');
 const session = require('express-session');
 
 const app = express();
@@ -182,9 +181,7 @@ app.get('/download', async function (request, response) {
 
 app.post('/ImageLoader', async function (request, response) {
 
-    const sessiondata = request.session;
-
-    if (sessiondata == null || session == null || sessiondata.id != session.id) {
+    if (DoesSessionExist(request.session.id) === false) {
         console.log('Invalid Session!');
         response.json({ "ERROR": "Invalid Session, try reloading the page!" });
         return;
@@ -194,8 +191,8 @@ app.post('/ImageLoader', async function (request, response) {
     console.log("ImageLoader Request: " + JSON.stringify(data));
 
     if (data.subreddit == false) {
-        console.log("Subreddit or amount of posts was empty!");
-        response.json({ "ERROR": "Subreddit or amount of posts was empty!" });
+        console.log("Subreddit was empty!");
+        response.json({ "ERROR": "Subreddit was empty!" });
         return;
     }
 
@@ -230,13 +227,13 @@ app.post('/ImageLoader', async function (request, response) {
 //-----------------------------------------------------------------------
 
 app.get('/', (request, response) => {
-    if (DoesSessionExist(request.sessionID) == false) {
+    if (DoesSessionExist(request.sessionID) === false) {
         const session = request.session;
         session.id = request.genid;
         session.userid = request.body.username;
         request.session = session;
 
-        sessionArray.push(request.session);
+        sessionArray.push(session);
     }
     response.sendFile(path.join(__dirname, '/public/html/Home.html'));
 })

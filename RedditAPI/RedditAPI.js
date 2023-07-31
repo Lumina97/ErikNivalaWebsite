@@ -3,6 +3,7 @@ const SubValidator = require('./SubredditValidator');
 const FileDownloader = require('./../FileDownloader');
 const FileZipper = require('./../FileZipper');
 const path = require('path');
+const RedditAuthentication = require('./RedditAuthentication');
 
 
 module.exports =
@@ -28,10 +29,21 @@ module.exports =
       var today = new Date();
       var date = today.getHours() + '_' + today.getMinutes() + '_' + today.getSeconds();
       const ID = path.join(String(session.userid), String(date));
+      var access_token;
 
-      await SubValidator.ValidateSubreddit(subreddit)
+      await RedditAuthentication.GetAutheticationToken()
+        .then((result) => {
+          access_token = result;
+        })
+        .catch((err) => {
+          reject("Failed to get access token - RedditAPI.");
+          return;
+        });
+
+
+      await SubValidator.ValidateSubreddit(subreddit, access_token)
         .then(async function () {
-          image_links = await RedditLinksGatherer.GetImageLinksFromSubreddit(subreddit, AmountOfPosts, postTitleFilters);
+          image_links = await RedditLinksGatherer.GetImageLinksFromSubreddit(subreddit, AmountOfPosts, postTitleFilters, access_token);
           return;
         })
         .then(async function () {
@@ -45,41 +57,10 @@ module.exports =
         })
         .catch((err) => {
           console.log("There was an error while gathering subreddit images! ");
-          console.log(new Error(err));
+          console.log(err);
           reject(err);
           return;
         })
-
-
-      // validation.then(async function () {
-      //   image_links = await RedditLinksGatherer.GetImageLinksFromSubreddit(subreddit, AmountOfPosts)
-      //     .catch(() => {
-      //       console.log("There was an error Getting posts!");
-      //       reject(false);
-      //       return;
-      //     });
-      // })
-
-      // image_links.then(async function () {
-      //   const downloader = await FileDownloader.DownloadFilesFromLinks(image_links, ID)
-      //     .catch(() => {
-      //       console.log("There was an error downloading images!");
-      //       reject(false);
-      //       return;
-      //     })
-      // })
-
-      // downloader.then(async function () {
-      //   await FileZipper.CreateZipFromUserID(ID)
-      //     .catch(() => {
-      //       console.log("There was an error zipping images!");
-      //       reject(false);
-      //       return;
-      //     })
-      //     .then((result) => {
-      //       resolve(result);
-      //     });
-      // })
     })
   }
 }
