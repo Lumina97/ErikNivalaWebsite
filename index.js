@@ -6,6 +6,7 @@ const { v4: uuidv4 } = require('uuid');
 const sessions = require('express-session');
 const path = require('path');
 const { request } = require('express');
+const session = require('express-session');
 
 const app = express();
 
@@ -15,7 +16,7 @@ app.use(cookieParser());
 
 const oneDay = 1000 * 60 * 60 * 24;
 const secretKey = uuidv4();
-var session;
+var sessionArray = new Array();
 var downloadRequestDict = {};
 var CreatedAccountDict = {};
 
@@ -59,7 +60,6 @@ app.post('/CreateAccount', async function (request, response) {
             }
         })
 })
-
 
 async function LogIn(username, password, request) {
     return new Promise((async function (resolve, reject) {
@@ -211,7 +211,7 @@ app.post('/ImageLoader', async function (request, response) {
             catch (error) {
                 console.log('Error parsing json! \n' + error);
                 response.json('There was an error getting your data!');
-                return;            
+                return;
             }
 
             return;
@@ -228,27 +228,26 @@ app.post('/ImageLoader', async function (request, response) {
 //-----------------------------------------------------------------------
 //--------------------------File Serving---------------------------------
 //-----------------------------------------------------------------------
-app.get('/', (request, response) => {
-    const sessiondata = request.session;
 
-    if (sessiondata == null || session == null || sessiondata.id != session.id) {
-        console.log('Session ID: ' + request.session.id);
-        session = request.session;
+app.get('/', (request, response) => {
+    if (DoesSessionExist(request.sessionID) == false) {
+        const session = request.session;
         session.id = request.genid;
         session.userid = request.body.username;
         request.session = session;
-    }
 
+        sessionArray.push(request.session);
+    }
     response.sendFile(path.join(__dirname, '/public/html/Home.html'));
 })
 
-
-
-app.get('/LogIn', (request, response) => {
-    response.sendFile(path.join(__dirname, '/public/html/LogIn.html'));
-});
-
-
-app.get('/Detailing', (request,response) => {
-    response.sendFile(path.join(__dirname,'public/html/detailing/Home.html'));
-});
+//Checks if a session is already present 
+//returns a boolean value
+function DoesSessionExist(sessionID) {
+    for (let i = 0; i < sessionArray.length; i++) {
+        if (sessionArray[i].id == sessionID) {
+            return true;
+        }
+    }
+    return false;
+}
