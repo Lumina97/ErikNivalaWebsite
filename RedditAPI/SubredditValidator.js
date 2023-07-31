@@ -27,7 +27,7 @@ async function ValidateSubReddit(subreddit) {
         const response = await axios(config)
             .catch((result) => {
                 console.log("Error getting subreddit! - SubredditValidator.js - ValidateSubReddit() - 29")
-                console.log(result);
+                console.log(result.error);
                 reject('Error getting axios response!');
                 return;
             });

@@ -1,9 +1,7 @@
 const express = require('express');
-const cookieParser = require('cookie-parser');
 const RedditAPI = require('./RedditAPI/RedditAPI');
 const LogInManager = require('./LogIn/LogInManager')
 const { v4: uuidv4 } = require('uuid');
-const sessions = require('express-session');
 const path = require('path');
 const session = require('express-session');
 
@@ -11,7 +9,6 @@ const app = express();
 
 app.use(express.static(__dirname + '/public'));
 app.use(express.json({ limit: '1mb' }));
-app.use(cookieParser());
 
 const oneDay = 1000 * 60 * 60 * 24;
 const secretKey = uuidv4();
@@ -19,7 +16,7 @@ var sessionArray = new Array();
 var downloadRequestDict = {};
 var CreatedAccountDict = {};
 
-app.use(sessions({
+app.use(session({
     name: 'SessionCookie',
     genid: function (req) {
         console.log('session id created');
@@ -100,7 +97,7 @@ app.get('/CreatedAccountLogin', async function (request, response) {
     var foundData = false;
     for (const [key, value] of Object.entries(CreatedAccountDict)) {
         console.log(key, value);
-        if (key == request.session.id) {
+        if (key == request.sessions.id) {
             console.log('Found account creation request!');
             data = JSON.parse(value);
             delete CreatedAccountDict[key];
@@ -149,9 +146,15 @@ app.get('/LogOut', (request, response) => {
 app.post('/download', async function (request, response) {
     console.log('Download POST request');
 
+    if (DoesSessionExist(request.sessionID) === false) {
+        console.log("Seesion ID was invalid - Download request");
+        response({ "Error": "There was an error with your download request!" });
+        return;
+    }
+
     console.log(request.body);
     const path = request.body.path;
-    downloadRequestDict[request.session.id] = path;
+    downloadRequestDict[request.sessionID] = path;
     console.log(downloadRequestDict);
 
     var data;
@@ -169,7 +172,7 @@ app.get('/download', async function (request, response) {
 
     for (const [key, value] of Object.entries(downloadRequestDict)) {
         console.log(key, value);
-        if (key == request.session.id) {
+        if (key == request.sessionID) {
             console.log('Found request!');
             const path = value;
             console.log(path);
@@ -231,6 +234,7 @@ app.get('/', (request, response) => {
         const session = request.session;
         session.id = request.genid;
         session.userid = request.body.username;
+        session.maxAge = oneDay;
         request.session = session;
 
         sessionArray.push(session);
