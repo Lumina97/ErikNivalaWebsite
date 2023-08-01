@@ -1,12 +1,16 @@
 const express = require('express');
 const RedditAPI = require('./RedditAPI/RedditAPI');
-const LogInManager = require('./LogIn/LogInManager')
+const LogInManager = require('./LogIn/LogInManager');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const session = require('express-session');
+const compression = require('compression');
+
+
 
 const app = express();
 
+app.use(compression());
 app.use(express.static(__dirname + '/public'));
 app.use(express.json({ limit: '1mb' }));
 
@@ -14,7 +18,6 @@ const oneDay = 1000 * 60 * 60 * 24;
 const secretKey = uuidv4();
 var sessionArray = new Array();
 var downloadRequestDict = {};
-var CreatedAccountDict = {};
 
 app.use(session({
     name: 'SessionCookie',
@@ -228,6 +231,12 @@ app.post('/ImageLoader', async function (request, response) {
 //-----------------------------------------------------------------------
 //--------------------------File Serving---------------------------------
 //-----------------------------------------------------------------------
+
+app.get('/spacetrace', (request, response) => {
+    console.log("SPACE TRACE!!");
+    response.sendFile(path.join(pth.join(__dirname, '/public/spacetrace/index.html')));
+})
+
 
 app.get('/', (request, response) => {
     if (DoesSessionExist(request.sessionID) === false) {

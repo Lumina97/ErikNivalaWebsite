@@ -4,6 +4,7 @@ function EnableElement(element) {
     const About = document.getElementById("About");
     const Website = document.getElementById("Website");
     const ImageGatherer = document.getElementById("ImageGatherer");
+    const SpaceTrace = document.getElementById("Space Trace");
 
     //nav elements
     const PortfolioNav = document.getElementById("PortfolioNav");
@@ -11,6 +12,8 @@ function EnableElement(element) {
     const ImageGathererNav = document.getElementById("ImageGathererNav")
     const AboutNav = document.getElementById("AboutNav");
     const HomeNav = document.getElementById("HomeNav");
+    const SpaceTraceNav = document.getElementById("SpaceTraceNav");
+
 
     //set nav not active
     HomeNav.classList.remove("active");
@@ -18,6 +21,7 @@ function EnableElement(element) {
     WebsiteNav.classList.remove("active");
     ImageGathererNav.classList.remove("active");
     AboutNav.classList.remove("active");
+    SpaceTraceNav.classList.remove("active");
 
 
     //disable elements
@@ -25,6 +29,7 @@ function EnableElement(element) {
     About.style.display = "none";
     Website.style.display = "none";
     ImageGatherer.style.display = "none";
+    SpaceTrace.style.display = "none";
 
 
     if (element == "home") {
@@ -48,6 +53,13 @@ function EnableElement(element) {
         ImageGathererNav.classList.add("active");
         PortfolioNav.classList.add("active");
     }
+    else if (element == "spacetrace") {
+        SpaceTrace.style.display = "block";
+        SpaceTraceNav.classList.add("active");
+        PortfolioNav.classList.add("active");
+    }
+
+
 }
 
 function OnHomeClicked() {
@@ -64,4 +76,12 @@ function OnWebsiteClicked() {
 
 function OnImageGathererClicked() {
     EnableElement("imagegatherer");
+}
+
+function OnSpaceTraceClicked() {
+    EnableElement("spacetrace");
+}
+
+function OnGithubClicked() {
+    window.open("https://github.com/Lumina97?tab=repositories", '_blank');
 }

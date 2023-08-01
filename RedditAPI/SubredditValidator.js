@@ -1,6 +1,5 @@
 const axios = require('axios');
 const querystring = require('querystring');
-const RedditAuthentication = require('./RedditAuthentication');
 
 const oAuthURL = "https://oauth.reddit.com"
 let Access_Token;

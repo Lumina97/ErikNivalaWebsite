@@ -35,7 +35,7 @@ module.exports =
         .then((result) => {
           access_token = result;
         })
-        .catch((err) => {
+        .catch(() => {
           reject("Failed to get access token - RedditAPI.");
           return;
         });

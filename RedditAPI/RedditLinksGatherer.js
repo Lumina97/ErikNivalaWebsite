@@ -1,7 +1,5 @@
 const axios = require('axios');
-const { title } = require('process');
 const querystring = require('querystring');
-const RedditAuthentication = require('./RedditAuthentication');
 
 const oAuthURL = "https://oauth.reddit.com"
 let Access_Token;
@@ -79,10 +77,10 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
 // Iterates given title and checks if the given filters exist within the title
 async function FilterTitle(Title, Filters) {
     for (let i = 0; i < Filters.length; i++) {
-        console.log('TITLE: \t' + title);
-        console.log('Filter: \t' + Filter[i]);
+        console.log('TITLE: \t' + Title);
+        console.log('Filter: \t' + Filters[i]);
 
-        if (Title.includes(Filter[i])) {
+        if (Title.includes(Filters[i])) {
             console.log('title containts filter!');
             return true;
         }
