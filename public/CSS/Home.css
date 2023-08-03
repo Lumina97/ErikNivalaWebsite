@@ -316,12 +316,7 @@ button:hover {
     .submenu>li:active {
         background: var(--white-color);
     }
-
-
 }
-
-
-
 
 /* ------------------------------------MOBILE------------------------------------*/
 
@@ -363,24 +358,9 @@ button:hover {
         margin-top: 20px;
     }
 
-
-    #PlaySpaceTrace {
-        display: none;
-    }
-
-    #spaceTraceMobileText {
-        color: red;
-        text-align: center;
-        display: block;
-    }
-
     .main-menu {
         flex-wrap: wrap;
         justify-content: center;
         background: var(--dark-blue-color);
-    }
-
-    #PlaySpaceTrace {
-        display: none;
     }
 }
