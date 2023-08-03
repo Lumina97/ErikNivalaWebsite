@@ -1,3 +1,50 @@
+document.addEventListener('DOMContentLoaded', function () {
+    if (window.innerWidth >= 768) return;
+
+    // JavaScript to handle submenu for touch-enabled devices
+    const mainMenuItems = document.querySelectorAll('.main-menu>li.with-submenu');
+
+    mainMenuItems.forEach(item => {
+        const submenu = item.querySelector('.submenu');
+        let submenuOpen = false;
+
+        if (('ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0) && window.innerWidth <= 1024) {
+            // For touch-enabled devices and small screens, add event listener for pointerdown
+            item.addEventListener('click', (event) => {
+                if (!submenuOpen) {
+                    toggleSubmenu(submenu);
+                    event.stopPropagation();
+                }
+            });
+        }
+
+        // Close submenu when clicking outside of it
+        document.addEventListener('click', (event) => {
+            if (submenuOpen && !submenu.contains(event.target) && !item.contains(event.target)) {
+                toggleSubmenu(submenu);
+            }
+        });
+
+
+        // Add event listener to submenu items to close submenu after selection
+        const submenuItems = submenu.querySelectorAll('li');
+        submenuItems.forEach(submenuItem => {
+            submenuItem.addEventListener('click', (event) => {
+                event.stopPropagation();
+                toggleSubmenu(submenu);
+            });
+        });
+
+
+        function toggleSubmenu(submenu) {
+            submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+            submenuOpen = !submenuOpen;
+            console.log("Submenu");
+        }
+    });
+});
+
+
 function EnableElement(element) {
     //Article elements
     const Home = document.getElementById("Home");
@@ -53,25 +100,32 @@ function EnableElement(element) {
         ImageGathererNav.classList.add("active");
         PortfolioNav.classList.add("active");
     }
+
     else if (element == "spacetrace") {
         SpaceTrace.style.display = "block";
         SpaceTraceNav.classList.add("active");
         PortfolioNav.classList.add("active");
     }
+}
 
-
+function OnPortfolioClicked() {
+    EnableElement("portfolio");
+    console.log("portfolio");
 }
 
 function OnHomeClicked() {
     EnableElement("home");
+    console.log("home");
 }
 
 function OnAboutClicked() {
     EnableElement("about");
+    console.log("about");
 }
 
 function OnWebsiteClicked() {
     EnableElement("website");
+    console.log("website");
 }
 
 function OnImageGathererClicked() {

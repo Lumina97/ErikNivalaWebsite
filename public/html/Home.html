@@ -10,164 +10,172 @@
     <script src=./JS/Home.js></script>
     <script src=./JS/ImageGathererHTML.js></script>
     <script src=./JS/SpaceTrace.js></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 
 
-<body></body>
-<div class="container">
-    <nav class="menu">
-        <ul class="main-menu">
-            <li class="active" onclick="OnHomeClicked();StopPlayingSpaceTrace()" id="HomeNav"><i
-                    class="fa fa-home"></i>Home</li>
-            <li class="with-submenu">
-                <i class="fa fa-briefcase" id="PortfolioNav"></i>Portfolio <i class="fa fa-caret-down"></i>
-                <ul class="submenu">
-                    <li onclick="OnWebsiteClicked();StopPlayingSpaceTrace()" id="WebsiteNav">Website</li>
-                    <li onclick="OnImageGathererClicked();StopPlayingSpaceTrace()" id="ImageGathererNav">Image Gatherer
-                    </li>
-                    <li onclick="OnSpaceTraceClicked()" id="SpaceTraceNav">Space Trace</li>
-                </ul>
-            </li>
-            <li id="AboutNav" onclick="OnAboutClicked();StopPlayingSpaceTrace()"><i class="fa fa-user"></i>About</li>
-            <li id="GitHubNav" onclick="OnGithubClicked()"><i class="fa fa-user"></i>Github</li>
-        </ul>
-    </nav>
 
-    <article id="Home">
-        <h1>Home</h1>
-        <div class="content">
-            <p>
-                Welcome to my website which serves as a central display of my projects.
-            </p>
-            <p>
-                Check out more about each of my projects in the Portfolio tab.
-            </p>
-            <p>
-                Short explanation about my Image gatherer! You enter any Reddit that you want to scan for posts with
-                images attached
-                as well as how many posts you want to scan (max is 200) and you can also add some filter which are
-                applied to the title of the posts.
+<body>
+    <div class="container">
+        <nav class="menu">
+            <ul class="main-menu">
+                <li class="active" onclick="OnHomeClicked();StopPlayingSpaceTrace()" id="HomeNav"><i></i>Home</li>
+                <li class="with-submenu">
+                    <i class="fa fa-briefcase" id="PortfolioNav"></i>Portfolio <i class="fa fa-caret-down"></i>
+                    <ul class="submenu">
+                        <li onclick="OnWebsiteClicked();StopPlayingSpaceTrace()" id="WebsiteNav">Website</li>
+                        <li onclick="OnImageGathererClicked();StopPlayingSpaceTrace()" id="ImageGathererNav">Image
+                            Gatherer
+                        </li>
+                        <li onclick="OnSpaceTraceClicked()" id="SpaceTraceNav">Space Trace</li>
+                    </ul>
+                </li>
+                <li id="AboutNav" onclick="OnAboutClicked();StopPlayingSpaceTrace()"><i class="fa fa-user"></i>About
+                </li>
+                <li id="GitHubNav" onclick="OnGithubClicked()"><i class="fa fa-user"></i>Github</li>
+            </ul>
+        </nav>
 
-                It then takes the given information, checks if the Reddit is valid, downloads the posts, checks if there
-                is an Image attached to the post,
-                applies filters to the title of the post, then downloads every image that was found, places it in the
-                same folder using the session ID,
-                creates a ZIP file from the folder and sends it to the client to download (it comes up as a pop up).
-            </p>
+        <article id="Home">
+            <h1>Home</h1>
+            <div class="content">
+                <p>
+                    Welcome to my website which serves as a central display of my projects.
+                </p>
+                <p>
+                    Check out more about each of my projects in the Portfolio tab.
+                </p>
+                <p>
+                    Short explanation about my Image gatherer! You enter any Reddit that you want to scan for posts with
+                    images attached as well as how many posts you want to scan (max is 200) and you can also add some
+                    filter which are
+                    applied to the title of the posts.
+                    <br>
+                    It then takes the given information, checks if the Reddit is valid, downloads the posts, checks if
+                    there is an Image attached to the post,
+                    applies filters to the title of the post, then downloads every image that was found, places it in
+                    the same folder using the session ID, creates a ZIP file from the folder and sends it to the client
+                    to download (it comes up as a pop up).
+                </p>
 
-        </div>
-    </article>
-
-    <article id="About" style="display: none;">
-        <h1>About</h1>
-        <div class="content">
-            <p>
-
-                Hey, my name is Erik and I'm an looking to start my career as a nodeJS developer. I've been coding for a
-                couple years now on and off
-                mostly working on game projects like the one shown in the portfolio tab. <br><br>
-                My exprerience icnludes but is not limited to: <br>
-                - NodeJs <br>
-                - Express <br>
-                - npm package manager <br>
-                - HTML,CSS,JS <br>
-                - Rest APIs <br>
-                - Java <br>
-                - C# <br>
-                - Unity <br>
-                - Some c++ <br>
-                - Some Unreal Engine <br><br>
-
-                I'm currently looking for employment as a developer and can be reached via: <br>
-                - Email: enivala04@gmail.com
-
-            </p>
-        </div>
-    </article>
-
-    <article id="Website" style="display: none;">
-        <h1>Website</h1>
-        <div class="content">
-            <p>
-                The website is hosted on an Orangepi-5 which is running a verion of linux.
-                In order to protect myself I did not open any ports to the internet but rather I am using
-                a service called cloudflare which acts as a reverse proxy hosting my page online.
-            </p>
-            <p>
-                I bought my own domain from google domains and used that for cloudflare to redirect my traffic.
-                In order for that to work I had to use the cloudflare DNS servers which I simply added to the Google
-                domain for my website to be found online.
-            </p>
-            <p>
-                I am using node with a couple npm packages to run the page, using sessionsID's to determine every user
-                in order to send them the right zip file for my image gatherer.
-                Any changes to the page are tested on my local machine before being committed and pushed to github and
-                ultimately being pulled to the server.
-            </p>
-            <p>
-                I am running apache2 on the server and redirecting any traffic to port 80 over to port 3000 where a
-                service running my node server is listening.
-            </p>
-        </div>
-    </article>
-
-    <article id="ImageGatherer" style="display: none;">
-        <h1>Image Gatherer</h1>
-        <div class="content">
-            <div class="center" id="InputFields">
-
-                <p id="RedditEntryP" class="center"> Subreddit to search:</p>
-                <input class="rightAlign" id="subredditToSearch" placeholder="Subreddit..." value="">
-
-                <p id="SearchAmountP" class="center">Amount of posts:</p>
-
-                <input class='rightAlign' id="SearchAmount" placeholder="Amount of posts..." value="">
-
-                <p id="TitleFiltersP" class="center">Add Filter:</p>
-
-                <input class='rightAlign TitleFiltersInput' id="TitleFilters" placeholder="Filter...">
-
-                <ul class="rightAlign" id="FilterUnorderedList"></ul>
-
-                <button class="center" id="ClearFilters" onclick="ClearFilters()">Clear filters</button>
-
-                <div class="center">
-                    <div class="loader rightAlign" id="loader"> </div>
-                </div>
-                <button class="rightAlign " id="SendImageRequestButton" onclick="SendImageGatheringRequest()"> Send
-                    Image gather request</button>
             </div>
-            <div>
-                <p id="ErrorText"></p>
+        </article>
+
+        <article id="About" style="display: none;">
+            <h1>About</h1>
+            <div class="content">
+                <p>
+
+                    Hey, my name is Erik and I'm an looking to start my career as a nodeJS developer. I've been coding
+                    for a
+                    couple years now on and off
+                    mostly working on game projects like the one shown in the portfolio tab. <br><br>
+                    My exprerience icnludes but is not limited to: <br>
+                    - NodeJs <br>
+                    - Express <br>
+                    - npm package manager <br>
+                    - HTML,CSS,JS <br>
+                    - Rest APIs <br>
+                    - Java <br>
+                    - C# <br>
+                    - Unity <br>
+                    - Some c++ <br>
+                    - Some Unreal Engine <br><br>
+
+                    I'm currently looking for employment as a developer and can be reached via: <br>
+                    - Email: enivala04@gmail.com
+
+                </p>
             </div>
+        </article>
 
-    </article>
+        <article id="Website" style="display: none;">
+            <h1>Website</h1>
+            <div class="content">
+                <p>
+                    The website is hosted on an Orangepi-5 which is running a verion of linux.
+                    In order to protect myself I did not open any ports to the internet but rather I am using
+                    a service called cloudflare which acts as a reverse proxy hosting my page online.
+                </p>
+                <p>
+                    I bought my own domain from google domains and used that for cloudflare to redirect my traffic.
+                    In order for that to work I had to use the cloudflare DNS servers which I simply added to the Google
+                    domain for my website to be found online.
+                </p>
+                <p>
+                    I am using node with a couple npm packages to run the page, using sessionsID's to determine every
+                    user
+                    in order to send them the right zip file for my image gatherer.
+                    Any changes to the page are tested on my local machine before being committed and pushed to github
+                    and
+                    ultimately being pulled to the server.
+                </p>
+                <p>
+                    I am running apache2 on the server and redirecting any traffic to port 80 over to port 3000 where a
+                    service running my node server is listening.
+                </p>
+            </div>
+        </article>
 
-    <article id="Space Trace" style="display: none;">
-        <h1>Space Trace</h1>
-        <div class="content center">
+        <article id="ImageGatherer" style="display: none;">
+            <h1>Image Gatherer</h1>
+            <div class="content">
+                <div class="center" id="InputFields">
 
-            <p id="space-trace-text" class="center">A modernized asteroids clone created using the Unity engine and
-                built as a webGL game.
-                My focus was on making the entire game as modular as possible while keeping it fun to play and not over
-                engineering everything.
-                <br>
-                Source code of the project can be found on my github page.
-            </p>
-            <button class="center space-trace-play-button" id="PlaySpaceTrace" onclick="PlaySpaceTrace()">Play</button>
+                    <p id="RedditEntryP" class="center"> Subreddit to search:</p>
+                    <input class="rightAlign" id="subredditToSearch" placeholder="Subreddit..." value="">
 
-            <div id="unity-container" class="unity-desktop">
-                <canvas id="unity-canvas" style="width:0%; height:0%" tabindex="-1"></canvas>
-                <div id="unity-loading-bar">
-                    <div id="unity-logo"></div>
-                    <div id="unity-progress-bar-empty">
-                        <div id="unity-progress-bar-full"></div>
+                    <p id="SearchAmountP" class="center">Amount of posts:</p>
+
+                    <input class='rightAlign' id="SearchAmount" placeholder="Amount of posts..." value="">
+
+                    <p id="TitleFiltersP" class="center">Add Filter:</p>
+
+                    <input class='rightAlign TitleFiltersInput' id="TitleFilters" placeholder="Filter...">
+
+                    <ul class="rightAlign" id="FilterUnorderedList"></ul>
+
+                    <button class="center" id="ClearFilters" onclick="ClearFilters()">Clear filters</button>
+
+
+                    <button class="center " id="SendImageRequestButton" onclick="SendImageGatheringRequest()"> Send
+                        Image gather request</button>
+                    <div class="center">
+                        <div class="loader rightAlign" id="loader"> </div>
                     </div>
+                    <p id="ErrorText"></p>
                 </div>
-                <div id="unity-warning"> </div>
-    </article>
-</div>
+
+        </article>
+
+        <article id="Space Trace" style="display: none;">
+            <h1>Space Trace</h1>
+            <div class="content center">
+
+                <p id="space-trace-text" class="center">A modernized asteroids clone created using the Unity engine and
+                    built as a webGL game.
+                    My focus was on making the entire game as modular as possible while keeping it fun to play and not
+                    over
+                    engineering everything.
+                    <br>
+                    Source code of the project can be found on my github page.
+                </p>
+                <p id="spaceTraceMobileText"> This does NOT work on mobile!</p>
+                <button class="center space-trace-play-button" id="PlaySpaceTrace"
+                    onclick="PlaySpaceTrace()">Play</button>
+
+                <div id="unity-container" class="unity-desktop">
+                    <canvas id="unity-canvas" style="width:0%; height:0%" tabindex="-1"></canvas>
+                    <div id="unity-loading-bar">
+                        <div id="unity-logo"></div>
+                        <div id="unity-progress-bar-empty">
+                            <div id="unity-progress-bar-full"></div>
+                        </div>
+                    </div>
+                    <div id="unity-warning"> </div>
+        </article>
+    </div>
 </body>
 
 </html>
