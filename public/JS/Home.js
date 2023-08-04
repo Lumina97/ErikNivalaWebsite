@@ -1,3 +1,5 @@
+
+///Allows for better mobile interaction with submenus 
 document.addEventListener('DOMContentLoaded', function () {
     if (window.innerWidth >= 768) return;
 
@@ -25,7 +27,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-
         // Add event listener to submenu items to close submenu after selection
         const submenuItems = submenu.querySelectorAll('li');
         submenuItems.forEach(submenuItem => {
@@ -34,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 toggleSubmenu(submenu);
             });
         });
-
 
         function toggleSubmenu(submenu) {
             submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';

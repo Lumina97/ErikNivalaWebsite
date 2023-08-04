@@ -11,7 +11,7 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
         if (amount === 'undifined')
             amount = 25;
 
-        console.log("Getting " + amount + " reddit posts - RedditAPI.js - GetRedditPosts()")
+        console.log("Getting " + amount + " reddit posts - LinksGatherer.js - GetRedditPosts()")
 
         const params = querystring.stringify({
             'limit': amount
@@ -30,14 +30,17 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
 
         const response = await axios(config)
             .catch((result) => {
-                console.log("Error getting reddit posts! - RedditAPI.js - GetRedditPosts()")
                 console.log(result);
                 reject(false);
                 return;
             });
         const postArray = response.data.data.children;
-
         console.log("respons: " + response.status);
+        if (typeof postArray === undefined || postArray.length == 0) {
+            console.log("Subreddit does not exist! - LinksGatherer.js");
+            reject('Error: Subreddit does not exist!');
+            return;
+        }
 
         let image_links = [];
         let amountOfImages = 0;
@@ -63,12 +66,12 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
         }
 
         if (bHasAnyImageLinks == false) {
-            console.log("No image links found! - RedditLinksGatherer.js - GetRedditPosts()")
+            console.log("No image links found! - LinksGatherer.js - GetRedditPosts()")
             reject('No images in specified search!');
             return;
         }
         else {
-            console.log("Found " + amountOfImages + " links! - RedditLinksGatherer.js - GetRedditPosts()")
+            console.log("Found " + amountOfImages + " links! - LinksGatherer.js - GetRedditPosts()")
             resolve(image_links);
         }
     });
@@ -89,28 +92,14 @@ async function FilterTitle(Title, Filters) {
 }
 
 module.exports = {
-
     GetImageLinksFromSubreddit: async function (subreddit, amountOfPostsSearched, titleFilters, access_token) {
 
         return new Promise(async function (resolve, reject) {
-
-            console.log();
-            console.log('===============================================');
-            console.log('=================GetRedditPosts================');
-            console.log('===============================================');
-            console.log();
-
             Access_Token = access_token;
-
 
             // validate input
             if (typeof subreddit === 'undefined') {
                 console.log("Passed in subreddit was undefined! - DownloadImagesFromSubreddit() ")
-                console.log();
-                console.log('===============================================');
-                console.log('=============END GetRedditPosts================');
-                console.log('===============================================');
-                console.log();
                 reject("Unable to find subreddit");
                 return;
             }
@@ -122,21 +111,11 @@ module.exports = {
             //wait to get links
             await GetRedditPosts(subreddit, amountOfPostsSearched, titleFilters)
                 .then((result) => {
-                    console.log();
-                    console.log('===============================================');
-                    console.log('=============END GetRedditPosts================');
-                    console.log('===============================================');
-                    console.log();
                     resolve(result);
                     return;
                 })
                 .catch((err) => {
                     if (err) console.log("Error Getting image links: " + err);
-                    console.log();
-                    console.log('===============================================');
-                    console.log('=============END GetRedditPosts================');
-                    console.log('===============================================');
-                    console.log();
                     reject(err);
                     return;
                 });

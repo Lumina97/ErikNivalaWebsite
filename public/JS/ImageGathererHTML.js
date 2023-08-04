@@ -1,49 +1,58 @@
-// Reddit Server Requests
 window.addEventListener('load', function () {
     const loader = document.getElementById('loader');
     loader.style.opacity = 0;
 })
 
+//get html input fields
+document.addEventListener('DOMContentLoaded', function () {
+    subreddit
+    amount
+    filterList
+    errorTextbox
+});
 
-async function SendImageGatheringRequest() {
-    const subreddit = document.getElementById('subredditToSearch').value;
-    const amount = document.getElementById('SearchAmount').value;
-    const filterList = document.getElementById('FilterUnorderedList');
-    const errorTextbox = document.getElementById('ErrorText');
-    errorTextbox.textContent = " ";
-
+function GetFiltersFromList() {
+    var filterList = document.getElementById('FilterUnorderedList');
     var filters = {};
     for (let i = 0; i < filterList.childElementCount; i++) {
         filters[i] = filterList.childNodes[i].innerText;
     }
+    return filters;
+}
 
+async function SendImageGatheringRequest() {
+    var subreddit = document.getElementById('subredditToSearch').value;
+    var amount = document.getElementById('SearchAmount').value;
+    var errorTextbox = document.getElementById('ErrorText');
+
+    //Get values fr
+    errorTextbox.textContent = " ";
+
+    var filters = GetFiltersFromList();
     loader.style.opacity = 100;
 
     const sendData = { subreddit, amount, filters };
-    console.log("Sending data: " + JSON.stringify(sendData));
     const options = {
         method: 'POST',
         body: JSON.stringify(sendData),
         headers: { 'Content-Type': 'application/json' }
     };
     const response = await fetch('/ImageLoader', options)
-    const data = response.json()
-        .catch((error) => {
-            console.log('ERROR:' + error);
-            errorTextbox.textContent = error;
-            loader.style.opacity = 0;
-            return;
-        })
+    response.json()
         .then(async function (result) {
             console.log(result);
             if (result !== undefined && result.ERROR) {
-                console.log("ERROR:" + result.ERROR);
                 errorTextbox.textContent = result.ERROR;
                 return;
             }
             else {
                 DownloadFile(result);
             }
+        })
+        .catch((error) => {
+            errorTextbox.textContent = error;
+            loader.style.opacity = 0;
+            return;
         });
     loader.style.opacity = 0;
 }
@@ -56,13 +65,10 @@ async function DownloadFile(filepath) {
         headers: { 'Content-Type': 'application/json' }
     };
 
-    console.log('Sent download request to path: ' + filepath);
-    const response = await fetch('/download', options)
+    await fetch('/download', options)
         .then((result) => {
             window.open('/download');
         });
-
-    console.log(response);
 }
 
 async function LogOutBTN() {
@@ -93,10 +99,8 @@ function AddFilterToList() {
     const listElement = document.getElementById("FilterUnorderedList");
     const FilterInputField = document.getElementById("TitleFilters");
 
-
     if (FilterInputField.value == "") return;
 
-    console.log('Adding to list: ' + FilterInputField.value);
     var li = document.createElement("li");
     li.innerText = FilterInputField.value;
     listElement.appendChild(li);

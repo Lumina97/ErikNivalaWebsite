@@ -162,13 +162,6 @@ module.exports = {
     DownloadFilesFromLinks: async function (fileLinks, ID) {
 
         return new Promise(async function (resolve, reject) {
-
-            console.log();
-            console.log('===============================================');
-            console.log('=============DownloadFilesFromLinks============');
-            console.log('===============================================');
-            console.log();
-
             await DownloadFilesFromLinks(fileLinks, ID)
                 .catch((err) => {
                     if (err) console.log("Error downloading file! :" + err);

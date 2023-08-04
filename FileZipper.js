@@ -7,9 +7,9 @@ path.normalize(root);
 
 async function ZipFile(ID) {
     return new Promise(async function (resolve, reject) {
-        var filepath = path.join( root , ID);
+        var filepath = path.join(root, ID);
         path.normalize(filepath);
-        filepath +=  ".zip";
+        filepath += ".zip";
         const output = fs.createWriteStream(filepath);
         const archive = archiver('zip', {
             zlib: { levle: 9 }
@@ -49,7 +49,7 @@ async function ZipFile(ID) {
 
         archive.pipe(output);
 
-        const file = path.join(root , ID);
+        const file = path.join(root, ID);
         path.normalize(file);
         archive.directory(file, 'images');
 
@@ -60,32 +60,13 @@ async function ZipFile(ID) {
 module.exports = {
     CreateZipFromUserID: async function (ID) {
         return new Promise(async function (resolve, reject) {
-
-            console.log();
-            console.log('===============================================');
-            console.log('==============CreateZipFromUserID==============');
-            console.log('===============================================');
-            console.log();
-
-
-
             await ZipFile(ID)
                 .catch((err) => {
                     console.log("Error creating archive! \n " + err + '\n');
-                    console.log();
-                    console.log('===============================================');
-                    console.log('==========END CreateZipFromUserID==============');
-                    console.log('===============================================');
-                    console.log();
                     reject(false);
                     return;
                 }).then((result) => {
                     console.log("Created archive! Returning path: " + result);
-                    console.log();
-                    console.log('===============================================');
-                    console.log('==========END CreateZipFromUserID==============');
-                    console.log('===============================================');
-                    console.log();
                     resolve(result);
                 });
         });
