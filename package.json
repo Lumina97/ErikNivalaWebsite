@@ -1,4 +1,14 @@
 {
+  "name": "erik-nivala-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "archiver": "^5.3.0",
     "axios": "^0.21.1",
@@ -14,6 +24,10 @@
     "nide": "^0.2.0",
     "node": "^15.10.0",
     "nodemon": "^2.0.22",
+    "rewire": "^6.0.0",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "jest": "^29.6.2"
   }
 }

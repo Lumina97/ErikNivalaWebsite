@@ -56,7 +56,6 @@ async function RefreshAcessToken() {
   })
 }
 
-
 async function WriteTokensToFile(tokens) {
   fs.writeFile(tokenPath, JSON.stringify(tokens), function (error) {
     if (error) {
@@ -65,7 +64,6 @@ async function WriteTokensToFile(tokens) {
     }
   })
 }
-
 
 async function RefreshToken() {
   return new Promise(async function (resolve, reject) {
@@ -119,7 +117,7 @@ function ReadTokenFile() {
   })
 }
 
-async function GetToken() {
+async function GetAutheticationToken() {
   return new Promise(async function (resolve, reject) {
 
     if (typeof Acess_Token === 'undefined' || CheckAcessTokenTimeLimitReached()) {
@@ -161,22 +159,7 @@ function CheckAcessTokenTimeLimitReached() {
   }
 }
 
-
 module.exports =
 {
-  GetAutheticationToken: async function () {
-
-    return new Promise(async function (resolve, reject) {
-
-      await GetToken()
-        .then((result) => {
-          console.log("Sucesfully retrieved acess token!");
-          resolve(result);
-        })
-        .catch(() => {
-          console.log("There was an error refreshing the token! - RedditAuthentication.js");
-          reject(false);
-        });
-    })
-  }
+  GetAutheticationToken
 }

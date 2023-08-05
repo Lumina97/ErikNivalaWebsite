@@ -7,10 +7,6 @@ let Access_Token;
 async function GetRedditPosts(subreddit, amount, titleFilters) {
 
     return new Promise(async function (resolve, reject) {
-
-        if (amount === 'undifined')
-            amount = 25;
-
         console.log("Getting " + amount + " reddit posts - LinksGatherer.js - GetRedditPosts()")
 
         const params = querystring.stringify({
@@ -34,6 +30,7 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
                 reject(false);
                 return;
             });
+
         const postArray = response.data.data.children;
         console.log("respons: " + response.status);
         if (typeof postArray === undefined || postArray.length == 0) {

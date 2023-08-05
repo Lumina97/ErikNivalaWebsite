@@ -1,5 +1,5 @@
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
 const https = require('https');
 const http = require('http');
 
@@ -13,7 +13,6 @@ async function DownloadFilesFromLinks(links, ID) {
     return new Promise(async function (resolve, reject) {
 
         if (typeof links !== 'undefined') {
-
             console.log("have image links");
             console.log("Starting download...");
 
@@ -36,14 +35,31 @@ async function DownloadFilesFromLinks(links, ID) {
                         });;
                 }
             }
-            resolve(true);
+            resolve(ID);
         }
         else {
             console.log("Error With image links! - Filedownloader.js - DownloadFilesFromLinks()")
             reject(false);
             return;
         }
+    });
+}
 
+async function CreateDirectory(Destination) {
+    return new Promise(async function (resolve, reject) {
+
+        console.log("Checking file directory...");
+        if (fs.existsSync(Destination) == false) {
+            await fs.mkdir(Destination, { recursive: true }, (error) => {
+                if (error) {
+                    console.log("error creating directory! : " + error);
+                    reject(error);
+                }
+                else
+                    resolve();
+                console.log("Created directory: " + Destination);
+            });
+        }
     });
 }
 
@@ -57,22 +73,12 @@ async function DownloadHTTPSFile(link, ID) {
         const fileLocationarray = link.split("/");
         const fileLocation = fileLocationarray[fileLocationarray.length - 1];
         console.log("file location: " + fileLocation);
-
-        console.log("Checking file directory...");
-
-
-        if (fs.existsSync(baseDest) == false) {
-            await fs.mkdir(baseDest, { recursive: true }, (error) => {
-
-                if (error) {
-                    console.log("error creating directory! : " + error);
-                    reject();
-
-                }
-                else
-                    console.log("Created directory: " + baseDest);
+        CreateDirectory(baseDest)
+            .catch((err) => {
+                reject(err);
             });
-        }
+
+
         let dest = path.join(baseDest, fileLocation);
         path.normalize(dest);
 
@@ -108,7 +114,6 @@ async function DownloadHTTPSFile(link, ID) {
 }
 
 async function DownloadHTTPFile(link, ID) {
-
     return new Promise(async function (resolve, reject) {
         const baseDest = path.join(root, ID, SubRedditToScan);
         path.normalize(baseDest);
@@ -118,18 +123,11 @@ async function DownloadHTTPFile(link, ID) {
 
         let dest = path.join(baseDest, fileLocation);
         path.normalize(dest);
-
-        if (fs.existsSync(baseDest) == false) {
-            await fs.mkdir(baseDest, { recursive: true }, (error) => {
-
-                if (error) {
-                    console.log("error creating directory! : " + error);
-                    reject();
-                }
-                else
-                    console.log("Created directory: " + baseDest);
+        CreateDirectory(baseDest)
+            .catch((err) => {
+                reject(err);
             });
-        }
+
 
         const req = http.get(link, function (res) {
             const filestream = fs.createWriteStream(dest);
