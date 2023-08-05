@@ -1,3 +1,4 @@
-Not much to say.
+Welcome to my repository for my Website!
 
-A web app that searches reddit via the given API. User can enter which subreddit how many posts and add filters to narrow down results.
+I have a few plans for the project which are outlined and constantly updated here: https://trello.com/b/MSz9lxqx/website
+The website servers as a central display of my projects that I have worked on.
