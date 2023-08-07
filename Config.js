@@ -1,16 +1,29 @@
 const pino = require('pino');
 const pinoPretty = require('pino-pretty');
 const path = require('path');
-const rfs = require('rotating-file-stream');
 
 
-const logFilePath = path.join(__dirname, "Log");
-const logStream = rfs.createStream('app.log', {
-    interval: '1d', // Rotate daily
-    path: logFilePath,
+const logPath = path.join(__dirname, "Log", "app.log");
+
+const transport = pino.transport({
+    targets: [
+        {
+            level: 'trace',
+            target: 'pino/file',
+            options: {
+                destination: logPath,
+            },
+        },
+        {
+            level: 'trace',
+            target: 'pino-pretty',
+            options: {},
+        },
+    ],
 });
 
-const log = pino({ level: 'info' }, pinoPretty({ colorize: true }), logStream);
+// Create the Pino logger with pretty-printing for console
+const log = pino(transport);
 
 module.exports = {
     log
