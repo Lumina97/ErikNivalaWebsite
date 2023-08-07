@@ -1,9 +1,15 @@
 const pino = require('pino');
 const pinoPretty = require('pino-pretty');
 const path = require('path');
+const fs = require('fs');
 
+const logDirectory = path.join(__dirname, "Log");
+const logFilePath = path.join(logDirectory, "app.log");
 
-const logPath = path.join(__dirname, "Log", "app.log");
+// Create the log directory if it does not exist
+if (!fs.existsSync(logDirectory)) {
+    fs.mkdirSync(logDirectory);
+}
 
 const transport = pino.transport({
     targets: [
@@ -11,7 +17,7 @@ const transport = pino.transport({
             level: 'trace',
             target: 'pino/file',
             options: {
-                destination: logPath,
+                destination: logFilePath,
             },
         },
         {
@@ -21,6 +27,7 @@ const transport = pino.transport({
         },
     ],
 });
+
 
 // Create the Pino logger with pretty-printing for console
 const log = pino(transport);
