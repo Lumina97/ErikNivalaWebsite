@@ -1,5 +1,7 @@
 const axios = require('axios');
 const querystring = require('querystring');
+const log = require('../Config').log;
+
 
 const oAuthURL = "https://oauth.reddit.com"
 let Access_Token;
@@ -7,7 +9,7 @@ let Access_Token;
 async function GetRedditPosts(subreddit, amount, titleFilters) {
 
     return new Promise(async function (resolve, reject) {
-        console.log("Getting " + amount + " reddit posts - LinksGatherer.js - GetRedditPosts()")
+        log.info("Getting " + amount + " reddit posts - LinksGatherer.js - GetRedditPosts()")
 
         const params = querystring.stringify({
             'limit': amount
@@ -26,15 +28,15 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
 
         const response = await axios(config)
             .catch((result) => {
-                console.log(result);
+                log.info(result);
                 reject(false);
                 return;
             });
 
         const postArray = response.data.data.children;
-        console.log("respons: " + response.status);
+        log.info("respons: " + response.status);
         if (typeof postArray === undefined || postArray.length == 0) {
-            console.log("Subreddit does not exist! - LinksGatherer.js");
+            log.warn("Subreddit does not exist! - LinksGatherer.js");
             reject('Error: Subreddit does not exist!');
             return;
         }
@@ -48,27 +50,27 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
                 || post.data.url.includes(".png"))
             )) {
                 if (FilterTitle(post.data.title, titleFilters) == false) {
-                    console.log('Titel does not meet filter requirements!')
+                    log.info('Titel does not meet filter requirements!')
                     continue;
                 }
 
                 image_links.push(post.data.url);
-                console.log("URL: " + post.data.url);
+                log.info("URL: " + post.data.url);
                 bHasAnyImageLinks = true;
                 amountOfImages++;
             }
             else {
-                console.log("Not an image post");
+                log.info("Not an image post");
             }
         }
 
         if (bHasAnyImageLinks == false) {
-            console.log("No image links found! - LinksGatherer.js - GetRedditPosts()")
+            log.warn("No image links found! - LinksGatherer.js - GetRedditPosts()")
             reject('No images in specified search!');
             return;
         }
         else {
-            console.log("Found " + amountOfImages + " links! - LinksGatherer.js - GetRedditPosts()")
+            log.info("Found " + amountOfImages + " links! - LinksGatherer.js - GetRedditPosts()")
             resolve(image_links);
         }
     });
@@ -77,11 +79,11 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
 // Iterates given title and checks if the given filters exist within the title
 async function FilterTitle(Title, Filters) {
     for (let i = 0; i < Filters.length; i++) {
-        console.log('TITLE: \t' + Title);
-        console.log('Filter: \t' + Filters[i]);
+        log.info('TITLE: \t' + Title);
+        log.info('Filter: \t' + Filters[i]);
 
         if (Title.includes(Filters[i])) {
-            console.log('title containts filter!');
+            log.info('title containts filter!');
             return true;
         }
     }
@@ -96,12 +98,12 @@ module.exports = {
 
             // validate input
             if (typeof subreddit === 'undefined') {
-                console.log("Passed in subreddit was undefined! - DownloadImagesFromSubreddit() ")
+                log.warn("Passed in subreddit was undefined! - DownloadImagesFromSubreddit() ")
                 reject("Unable to find subreddit");
                 return;
             }
             if (typeof amountOfPostsSearched === 'undefined' || isNaN(amountOfPostsSearched) == true || typeof amountOfPostsSearched != "number") {
-                console.log("Defaulting search amount to 25 posts - DownloadImagesFromSubreddit()")
+                log.info("Defaulting search amount to 25 posts - DownloadImagesFromSubreddit()")
                 amountOfPostsSearched = 25;
             }
 

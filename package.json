@@ -24,7 +24,11 @@
     "nide": "^0.2.0",
     "node": "^15.10.0",
     "nodemon": "^2.0.22",
+    "pino": "^8.15.0",
+    "pino-pretty": "^10.2.0",
     "rewire": "^6.0.0",
+    "rfs": "^10.0.0",
+    "rotating-file-stream": "^3.1.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

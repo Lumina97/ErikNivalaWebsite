@@ -2,6 +2,8 @@ const path = require('path');
 const fs = require('fs');
 const https = require('https');
 const http = require('http');
+const log = require('./Config').log;
+
 
 const root = path.join(__dirname, "Images");
 path.normalize(root);
@@ -13,24 +15,24 @@ async function DownloadFilesFromLinks(links, ID) {
     return new Promise(async function (resolve, reject) {
 
         if (typeof links !== 'undefined') {
-            console.log("have image links");
-            console.log("Starting download...");
+            log.info("have image links");
+            log.info("Starting download...");
 
             //======================DOWNLOAD FILES
             for (let i = 0; i < links.length; i++) {
                 if (links[i].includes('https')) {
-                    console.log("Starting HTTPS Download...");
+                    log.info("Starting HTTPS Download...");
                     await DownloadHTTPSFile(links[i], ID)
                         .catch((err) => {
-                            console.log('Error downloading file, \t' + err);
+                            log.warn(); ('Error downloading file, \t' + err);
                             links[i] = null;
                         });
                 }
                 else if (links[i].includes('http')) {
-                    console.log("Starting HTTP Download...");
+                    log.info("Starting HTTP Download...");
                     await DownloadHTTPFile(links[i], ID)
                         .catch((err) => {
-                            console.log('Error downloading file, \t' + err);
+                            log.warn('Error downloading file, \t' + err);
                             links[i] = null;
                         });;
                 }
@@ -38,7 +40,7 @@ async function DownloadFilesFromLinks(links, ID) {
             resolve(ID);
         }
         else {
-            console.log("Error With image links! - Filedownloader.js - DownloadFilesFromLinks()")
+            log.error("Error With image links! - Filedownloader.js - DownloadFilesFromLinks()")
             reject(false);
             return;
         }
@@ -48,16 +50,16 @@ async function DownloadFilesFromLinks(links, ID) {
 async function CreateDirectory(Destination) {
     return new Promise(async function (resolve, reject) {
 
-        console.log("Checking file directory...");
+        log.info("Checking file directory...");
         if (fs.existsSync(Destination) == false) {
             await fs.mkdir(Destination, { recursive: true }, (error) => {
                 if (error) {
-                    console.log("error creating directory! : " + error);
+                    log.error("error creating directory! : " + error);
                     reject(error);
                 }
                 else
                     resolve();
-                console.log("Created directory: " + Destination);
+                log.info("Created directory: " + Destination);
             });
         }
     });
@@ -66,13 +68,13 @@ async function CreateDirectory(Destination) {
 async function DownloadHTTPSFile(link, ID) {
 
     return new Promise(async function (resolve, reject) {
-        console.log("HTTPS DOWNLOAD: " + link);
+        log.info("HTTPS DOWNLOAD: " + link);
         const baseDest = path.join(root, ID, SubRedditToScan);
         path.normalize(baseDest);
 
         const fileLocationarray = link.split("/");
         const fileLocation = fileLocationarray[fileLocationarray.length - 1];
-        console.log("file location: " + fileLocation);
+        log.info("file location: " + fileLocation);
         CreateDirectory(baseDest)
             .catch((err) => {
                 reject(err);
@@ -89,8 +91,8 @@ async function DownloadHTTPSFile(link, ID) {
 
             //handle filestream write errors
             filestream.on("error", function (error) {
-                console.log("Error downloading file: ");
-                console.log(error);
+                log.error("Error downloading file: ");
+                log.error(error);
                 reject();
                 return;
             })
@@ -98,15 +100,15 @@ async function DownloadHTTPSFile(link, ID) {
             // done downloading
             filestream.on("finish", function () {
                 filestream.close();
-                console.log("Downloaded: " + fileLocation);
+                log.info("Downloaded: " + fileLocation);
                 resolve();
                 return;
             })
         })
         //handle https download errors
         req.on("error", function (error) {
-            console.log("Error downloading file");
-            console.log(error);
+            log.error("Error downloading file");
+            log.error(error);
             reject();
             return;
         })
@@ -135,22 +137,22 @@ async function DownloadHTTPFile(link, ID) {
 
             //handle filestream write errors
             filestream.on("error", function (error) {
-                console.log("Error downloading file: ");
-                console.log(error);
+                log.error("Error downloading file: ");
+                log.error(error);
                 reject();
             })
 
             // done downloading
             filestream.on("finish", function () {
                 filestream.close();
-                console.log("Downloaded: " + fileLocation);
+                log.info("Downloaded: " + fileLocation);
                 resolve();
             })
         })
         //handle https download errors
         req.on("error", function (error) {
-            console.log("Error downloading file");
-            console.log(error);
+            log.error("Error downloading file");
+            log.error(error);
             reject();
         })
     })
@@ -162,11 +164,11 @@ module.exports = {
         return new Promise(async function (resolve, reject) {
             await DownloadFilesFromLinks(fileLinks, ID)
                 .catch((err) => {
-                    if (err) console.log("Error downloading file! :" + err);
+                    if (err) log.error("Error downloading file! :" + err);
                     reject(false);
                 })
                 .then(() => {
-                    console.log("Sucessfully downloaded files from links!");
+                    log.info("Sucessfully downloaded files from links!");
                     resolve(ID);
                 })
         })

@@ -3,6 +3,8 @@ const FileDownloader = require('./../FileDownloader');
 const FileZipper = require('./../FileZipper');
 const path = require('path');
 const RedditAuthentication = require('./RedditAuthentication');
+const log = require('../Config').log;
+
 
 async function GetAccessToken() {
   return new Promise(async function (resolve, reject) {
@@ -52,8 +54,8 @@ module.exports =
           resolve(result);
         })
         .catch((err) => {
-          console.log("There was an error while gathering subreddit images!");
-          console.log(err);
+          log.warn(); ("There was an error while gathering subreddit images!");
+          log.warn(err);
           reject(err);
           return;
         })

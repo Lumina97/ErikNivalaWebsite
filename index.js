@@ -1,13 +1,11 @@
 const express = require('express');
 const RedditAPI = require('./RedditAPI/RedditAPI');
-const LogInManager = require('./LogIn/LogInManager');
 const { v4: uuidv4 } = require('uuid');
-const path = require('path');
 const session = require('express-session');
 const compression = require('compression');
-
-
+const log = require('./Config').log;
 const app = express();
+const path = require('path');
 
 app.use(compression());
 app.use(express.static(__dirname + '/public'));
@@ -20,8 +18,8 @@ var downloadRequestDict = {};
 
 app.use(session({
     name: 'SessionCookie',
-    genid: function (req) {
-        console.log('session id created');
+    genid: function () {
+        log.info('session id created');
         return uuidv4();
     },
     secret: secretKey,
@@ -30,25 +28,25 @@ app.use(session({
     cookie: { secure: false, maxAge: oneDay }
 }));
 
-app.listen(3000, () => console.log("listening on 3000")).on('error', console.log);
+app.listen(3000, () => log.info("listening on 3000"));
 
 //-----------------------------------------------------------------------
 //--------------------------Image Gatherer-------------------------------
 //-----------------------------------------------------------------------
 
 app.post('/download', async function (request, response) {
-    console.log('Download POST request');
+    log.info('Download POST request');
 
     if (DoesSessionExist(request.sessionID) === false) {
-        console.log("Seesion ID was invalid - Download request");
+        log.warn("Session ID was invalid - Download request");
         response({ "Error": "There was an error with your download request!" });
         return;
     }
 
-    console.log(request.body);
+    log.info(request.body);
     const path = request.body.path;
     downloadRequestDict[request.sessionID] = path;
-    console.log(downloadRequestDict);
+    log.info(downloadRequestDict);
 
     var data;
     try {
@@ -56,19 +54,19 @@ app.post('/download', async function (request, response) {
         response.json(data);
     }
     catch (e) {
-        console.log('ERROR:\n' + e);
+        log.error('ERROR:\n' + e);
     }
 });
 
 app.get('/download', async function (request, response) {
-    console.log('Download GET request');
+    log.info('Download GET request');
 
     for (const [key, value] of Object.entries(downloadRequestDict)) {
-        console.log(key, value);
+        log.info(key, value);
         if (key == request.sessionID) {
-            console.log('Found request!');
+            log.info('Found request!');
             const path = value;
-            console.log(path);
+            log.info(path);
             response.download(path);
             delete downloadRequestDict[key];
         }
@@ -78,7 +76,7 @@ app.get('/download', async function (request, response) {
 app.post('/ImageLoader', async function (request, response) {
 
     if (DoesSessionExist(request.session.id) === false) {
-        console.log('Invalid Session!');
+        log.warn('Invalid Session!');
         response.json({ "ERROR": "Invalid Session, try reloading the page!" });
         return;
     }
@@ -86,7 +84,7 @@ app.post('/ImageLoader', async function (request, response) {
     const data = request.body;
 
     if (data.subreddit == false) {
-        console.log("Subreddit was empty!");
+        log.warn("Subreddit was empty!");
         response.json({ "ERROR": "Subreddit was empty!" });
         return;
     }
@@ -100,13 +98,13 @@ app.post('/ImageLoader', async function (request, response) {
                 return;
             }
             catch (error) {
-                console.log('Error parsing json! \n' + error);
+                log.warn('Error parsing json! \n' + error);
                 response.json('There was an error getting your data!');
                 return;
             }
         })
         .catch((error) => {
-            console.log("ERROR: " + error);
+            log.error("ERROR: " + error);
             response.json({ "ERROR": "There was an error getting your data!" });
             return;
         });
@@ -116,8 +114,7 @@ app.post('/ImageLoader', async function (request, response) {
 //--------------------------File Serving---------------------------------
 //-----------------------------------------------------------------------
 
-app.get('/spacetrace', (request, response) => {
-    console.log("SPACE TRACE!!");
+app.get('/spacetrace', (response) => {
     response.sendFile(path.join(pth.join(__dirname, '/public/spacetrace/index.html')));
 })
 

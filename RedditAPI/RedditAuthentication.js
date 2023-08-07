@@ -1,5 +1,6 @@
 const axios = require('axios').default;
 const fs = require('fs');
+const log = require('../Config').log;
 
 const querystring = require('querystring');
 const path = require('path');
@@ -27,7 +28,7 @@ async function RefreshAcessToken() {
           'Content-Length': payload.length
         }
       }).catch((err) => {
-        console.log("Error requesting access token:\n" + err);
+        log.error("Error requesting access token:\n" + err);
         reject(false);
         return;
       });
@@ -37,7 +38,7 @@ async function RefreshAcessToken() {
       const res_Data = response.data;
 
       if (res_Data.error) {
-        Console.log("Unable to receive Bearer token: " + res_Data.error)
+        log.fatal("Unable to receive Bearer token: " + res_Data.error)
         reject(false);
         return;
       }
@@ -59,7 +60,7 @@ async function RefreshAcessToken() {
 async function WriteTokensToFile(tokens) {
   fs.writeFile(tokenPath, JSON.stringify(tokens), function (error) {
     if (error) {
-      console.log("Error writing refresh token to file! - RedditAPI.js - RefreshToken()");
+      log.error("Error writing refresh token to file! - RedditAPI.js - RefreshToken()");
       return;
     }
   })
@@ -78,14 +79,14 @@ async function RefreshToken() {
             return;
           })
           .catch(() => {
-            console.log("Could not Refresh Token! - RedditAPI.js - RefreshToken()");
+            log.fatal("Could not Refresh Token! - RedditAPI.js - RefreshToken()");
             reject(false);
             return;
           });
       })
       .catch(async function () {
         //TODO: Be able to Get tokens from reddit instead of relying on tokens saved to a file
-        console.log("No acess token - RedditAPI.js - RefreshToken() ");
+        log.fatal("No acess token - RedditAPI.js - RefreshToken() ");
         reject("No acess token");
       });
   })
@@ -95,8 +96,8 @@ function ReadTokenFile() {
   return new Promise(function (resolve, reject) {
     fs.readFile(tokenPath, 'utf8', function (err, data) {
       if (err) {
-        console.log("There was an error reading the Token File! = ReadTokenFile()");
-        console.log(err);
+        log.error("There was an error reading the Token File! = ReadTokenFile()");
+        log.error(err);
         reject(false);
         return;
       }
@@ -109,7 +110,7 @@ function ReadTokenFile() {
         return;
       }
       else {
-        console.log("Issue reading file  - RedditAPI.js - ReadTokenFile()");
+        log.error("Issue reading file  - RedditAPI.js - ReadTokenFile()");
         reject(false);
         return;
       }
@@ -127,7 +128,7 @@ async function GetAutheticationToken() {
           return;
         })
         .catch(() => {
-          console.log("There was an error refreshing the token! - RedditAuthentication.js");
+          log.fatal("There was an error refreshing the token! - RedditAuthentication.js");
           reject(false);
           return;
         });
@@ -141,7 +142,7 @@ async function GetAutheticationToken() {
 
 function CheckAcessTokenTimeLimitReached() {
   if (typeof LastTokenRefreshTime === 'undefined') {
-    console.log("last token time is undefined! -  CheckAcessTokenTimeLimitReached()");
+    log.info("last token time is undefined! -  CheckAcessTokenTimeLimitReached()");
     return false;
   }
 
@@ -150,11 +151,11 @@ function CheckAcessTokenTimeLimitReached() {
   tokenTime.setHours(tokenTime.getHours() + 1);
 
   if (timePassed > tokenTime) {
-    console.log('new token required!');
+    log.info('new token required!');
     return true;
   }
   else {
-    console.log('token is still viable!');
+    log.info('token is still viable!');
     return false;
   }
 }

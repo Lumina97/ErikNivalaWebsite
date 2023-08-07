@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const archiver = require('archiver');
+const log = require('./Config').log;
+
 
 const root = path.join(__dirname, "Images");
 path.normalize(root);
@@ -16,24 +18,24 @@ async function ZipFile(ID) {
         });
 
         output.on('close', function () {
-            console.log(archive.pointer() + 'total bytes');
-            console.log('archiver has been finalized and the output file  has closed');
+            log.info(archive.pointer() + 'total bytes');
+            log.info('archiver has been finalized and the output file  has closed');
             resolve(filepath);
 
         });
 
         output.on('end', function () {
-            console.log('data has been drained!')
+            log.info('data has been drained!')
         });
 
         archive.on('warning', function (err) {
             if (err.code === 'ENOENT') {
-                console.log("warning while creating archive!");
-                console.log(err);
+                log.warn("warning while creating archive!");
+                log.warn(err);
             }
             else {
-                console.log("Error while creating archive!");
-                console.log(err);
+                log.info("Error while creating archive!");
+                log.error(err);
                 reject(false);
                 return;
 
@@ -41,8 +43,8 @@ async function ZipFile(ID) {
         });
 
         archive.on('error', function (err) {
-            console.log("Error while creating archive!")
-            console.log(err);
+            log.info("Error while creating archive!")
+            log.info(err);
             reject(false);
             return;
         });
@@ -62,11 +64,11 @@ module.exports = {
         return new Promise(async function (resolve, reject) {
             await ZipFile(ID)
                 .catch((err) => {
-                    console.log("Error creating archive! \n " + err + '\n');
+                    log.error("Error creating archive! \n " + err + '\n');
                     reject(false);
                     return;
                 }).then((result) => {
-                    console.log("Created archive! Returning path: " + result);
+                    log.info("Created archive! Returning path: " + result);
                     resolve(result);
                 });
         });
