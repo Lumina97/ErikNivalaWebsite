@@ -48,7 +48,7 @@ app.listen(port, () => log.info("listening on " + port));
 app.post('/download', async function (request, response) {
     log.info('Download POST request');
 
-    if (DoesSessionExist(request.sessionID) === false) {
+    if (!request.session) {
         log.warn("Session ID was invalid - Download request");
         response({ "Error": "There was an error with your download request!" });
         return;
@@ -86,13 +86,14 @@ app.get('/download', async function (request, response) {
 
 app.post('/ImageLoader', async function (request, response) {
 
-    if (DoesSessionExist(request.session.id) === false) {
+    if (!request.session) {
         log.warn('Invalid Session!');
         response.json({ "ERROR": "Invalid Session, try reloading the page!" });
         return;
     }
 
     const data = request.body;
+    log.info("data:" + data.body);
 
     if (data.subreddit == false) {
         log.warn("Subreddit was empty!");
@@ -128,7 +129,8 @@ app.get('/spacetrace', (response) => {
 })
 
 app.get('/', (request, response) => {
-    if (DoesSessionExist(request.sessionID) === false) {
+
+    if (!request.session) {
         const session = request.session;
         session.id = request.genid;
         session.userid = request.body.username;
@@ -140,19 +142,7 @@ app.get('/', (request, response) => {
                 log.error(err);
             }
         });
-        sessionArray.push(session);
     }
     response.sendFile(path.join(__dirname, '/public/html/Home.html'));
 })
-
-//Checks if a session is already present 
-//returns a boolean value
-function DoesSessionExist(sessionID) {
-    for (let i = 0; i < sessionArray.length; i++) {
-        if (sessionArray[i].id == sessionID) {
-            return true;
-        }
-    }
-    return false;
-}
 //#endregion

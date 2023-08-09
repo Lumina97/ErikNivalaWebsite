@@ -3,14 +3,6 @@ window.addEventListener('load', function () {
     loader.style.opacity = 0;
 })
 
-//get html input fields
-document.addEventListener('DOMContentLoaded', function () {
-    subreddit
-    amount
-    filterList
-    errorTextbox
-});
-
 function GetFiltersFromList() {
     var filterList = document.getElementById('FilterUnorderedList');
     var filters = {};
@@ -32,6 +24,7 @@ async function SendImageGatheringRequest() {
     loader.style.opacity = 100;
 
     const sendData = { subreddit, amount, filters };
+    console.log(JSON.stringify(sendData));
     const options = {
         method: 'POST',
         body: JSON.stringify(sendData),
