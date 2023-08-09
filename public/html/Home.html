@@ -14,8 +14,6 @@
 </head>
 
 
-
-
 <body>
     <div class="container">
         <nav class="menu">
@@ -94,6 +92,9 @@
             <h1>Website</h1>
             <div class="content">
                 <p>
+                    Welcome to the more technical explanation of my website!
+                </p>
+                <p>
                     The website is hosted on an Orangepi-5 which is running a verion of linux.
                     In order to protect myself I did not open any ports to the internet but rather I am using
                     a service called cloudflare which acts as a reverse proxy hosting my page online.
@@ -104,16 +105,19 @@
                     domain for my website to be found online.
                 </p>
                 <p>
-                    I am using node with a couple npm packages to run the page, using sessionsID's to determine every
-                    user
-                    in order to send them the right zip file for my image gatherer.
-                    Any changes to the page are tested on my local machine before being committed and pushed to github
-                    and
-                    ultimately being pulled to the server.
+                    The website utilized sessions which are stored in a MongoDB on the same orangepi as the website. I
+                    wanted to have the DB running
+                    on my orangepi-3 but it seems that its running an ARM64 architecture with a lower microarchitecture
+                    then what mongoDB supports.
                 </p>
                 <p>
-                    I am running apache2 on the server and redirecting any traffic to port 80 over to port 3000 where a
-                    service running my node server is listening.
+                    I have the exact same setup on my orangepi-3 as my main website "server" in order to test any
+                    changes to the website on a linux based system
+                    since I do develop on windows and want to make sure everything works on both platforms.
+                </p>
+                <p>
+                    I have more plans for this website which I have outlined on my <a
+                        href="https://trello.com/b/MSz9lxqx/website" target="_blank"> trello board </a>.
                 </p>
             </div>
         </article>
