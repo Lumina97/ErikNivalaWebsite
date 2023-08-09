@@ -93,8 +93,6 @@ app.post('/ImageLoader', async function (request, response) {
     }
 
     const data = request.body;
-    log.info("data:" + data.body);
-
     if (data.subreddit == false) {
         log.warn("Subreddit was empty!");
         response.json({ "ERROR": "Subreddit was empty!" });
