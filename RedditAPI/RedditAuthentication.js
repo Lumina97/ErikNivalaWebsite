@@ -1,4 +1,6 @@
-require('dotenv').config({ path: 'D:/Dev/Website/ErikNivalaWebsite/website.env' });
+const path = require('path');
+const envPath = path.join(__dirname, 'website.env');
+require('dotenv').config({ path: envPath });
 const axios = require('axios').default;
 const log = require('../Config').log;
 

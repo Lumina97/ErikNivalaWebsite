@@ -1,4 +1,7 @@
-require('dotenv').config({ path: 'D:/Dev/Website/ErikNivalaWebsite/website.env' });
+const path = require('path');
+const envPath = path.join(__dirname, 'website.env');
+require('dotenv').config({ path: envPath });
+
 const express = require('express');
 const RedditAPI = require('./RedditAPI/RedditAPI');
 const { v4: uuidv4 } = require('uuid');
@@ -7,7 +10,6 @@ const compression = require('compression');
 const MongoStore = require('connect-mongo');
 const log = require('./Config').log;
 const app = express();
-const path = require('path');
 
 app.use(compression());
 app.use(express.static(__dirname + '/public'));
