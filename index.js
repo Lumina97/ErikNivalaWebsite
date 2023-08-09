@@ -16,8 +16,7 @@ app.use(express.static(__dirname + '/public'));
 app.use(express.json({ limit: '1mb' }));
 
 const oneDay = 1000 * 60 * 60 * 24;
-const secretKey = uuidv4();
-var sessionArray = new Array();
+const secretKey = process.env.SESSION_SECRET;
 var downloadRequestDict = {};
 
 const connectionURL = `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DATABASE}?authSource=admin`;
@@ -48,20 +47,14 @@ app.listen(port, () => log.info("listening on " + port));
 app.post('/download', async function (request, response) {
     log.info('Download POST request');
 
-    if (!request.session) {
-        log.warn("Session ID was invalid - Download request");
-        response({ "Error": "There was an error with your download request!" });
-        return;
-    }
-
     log.info(request.body);
     const path = request.body.path;
-    downloadRequestDict[request.sessionID] = path;
+    downloadRequestDict[request.session.userid] = path;
     log.info(downloadRequestDict);
 
     var data;
     try {
-        data = JSON.stringify("Sucess");
+        data = JSON.stringify(request.session.userid);
         response.json(data);
     }
     catch (e) {
@@ -74,7 +67,7 @@ app.get('/download', async function (request, response) {
 
     for (const [key, value] of Object.entries(downloadRequestDict)) {
         log.info(key, value);
-        if (key == request.sessionID) {
+        if (key == request.session.userid) {
             log.info('Found request!');
             const path = value;
             log.info(path);
@@ -127,19 +120,8 @@ app.get('/spacetrace', (response) => {
 })
 
 app.get('/', (request, response) => {
-
-    if (!request.session) {
-        const session = request.session;
-        session.id = request.genid;
-        session.userid = request.body.username;
-        session.maxAge = oneDay;
-        request.session = session;
-
-        request.session.save(err => {
-            if (err) {
-                log.error(err);
-            }
-        });
+    if (!request.session.userid) {
+        request.session.userid = uuidv4();
     }
     response.sendFile(path.join(__dirname, '/public/html/Home.html'));
 })

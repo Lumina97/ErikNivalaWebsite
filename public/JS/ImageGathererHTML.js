@@ -52,6 +52,7 @@ async function SendImageGatheringRequest() {
 
 async function DownloadFile(filepath) {
 
+    console.log("Sending DL request: " + filepath);
     const options = {
         method: 'POST',
         body: filepath,
