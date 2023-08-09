@@ -1,11 +1,8 @@
+require('dotenv').config({ path: 'D:/Dev/Website/ErikNivalaWebsite/website.env' });
 const axios = require('axios').default;
-const fs = require('fs');
 const log = require('../Config').log;
 
 const querystring = require('querystring');
-const path = require('path');
-
-const tokenPath = path.join(__dirname, "..", "Tokens");
 
 let LastTokenRefreshTime;
 let Refresh_Token;
@@ -57,66 +54,23 @@ async function RefreshAcessToken() {
   })
 }
 
-async function WriteTokensToFile(tokens) {
-  fs.writeFile(tokenPath, JSON.stringify(tokens), function (error) {
-    if (error) {
-      log.error("Error writing refresh token to file! - RedditAPI.js - RefreshToken()");
-      return;
-    }
-  })
-}
-
 async function RefreshToken() {
   return new Promise(async function (resolve, reject) {
-
-    await ReadTokenFile()
-      .then(async function () {
-
-        await RefreshAcessToken()
-          .then(function (result) {
-            WriteTokensToFile(result);
-            resolve(true);
-            return;
-          })
-          .catch(() => {
-            log.fatal("Could not Refresh Token! - RedditAPI.js - RefreshToken()");
-            reject(false);
-            return;
-          });
+    Refresh_Token = process.env.REFRESH_TOKEN;
+    await RefreshAcessToken()
+      .then(function () {
+        resolve(true);
+        return;
       })
-      .catch(async function () {
-        //TODO: Be able to Get tokens from reddit instead of relying on tokens saved to a file
-        log.fatal("No acess token - RedditAPI.js - RefreshToken() ");
-        reject("No acess token");
+      .catch(() => {
+        log.fatal("Could not Refresh Token! - RedditAPI.js - RefreshToken()");
+        reject(false);
+        return;
       });
   })
 }
 
-function ReadTokenFile() {
-  return new Promise(function (resolve, reject) {
-    fs.readFile(tokenPath, 'utf8', function (err, data) {
-      if (err) {
-        log.error("There was an error reading the Token File! = ReadTokenFile()");
-        log.error(err);
-        reject(false);
-        return;
-      }
-      if (data.length > 0) {
-        const obj = JSON.parse(data);
 
-        Refresh_Token = obj.refresh_token;
-        Acess_Token = obj.access_token;
-        resolve(true);
-        return;
-      }
-      else {
-        log.error("Issue reading file  - RedditAPI.js - ReadTokenFile()");
-        reject(false);
-        return;
-      }
-    });
-  })
-}
 
 async function GetAutheticationToken() {
   return new Promise(async function (resolve, reject) {

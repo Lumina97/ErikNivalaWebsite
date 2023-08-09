@@ -37,11 +37,13 @@ module.exports =
       const ID = path.join(String(session.userid), String(date));
 
       var access_token;
-      await GetAccessToken().then((result) => {
+      try {
+        const result = await GetAccessToken();
         access_token = result;
-      }).catch((err) => {
-        reject("Error Getting access token:\n" + err);
-      });
+      } catch (error) {
+        reject("Error Getting access token!");
+        return;
+      }
 
       await RedditLinksGatherer.GetImageLinksFromSubreddit(subreddit, AmountOfPosts, postTitleFilters, access_token)
         .then(async function (result) {

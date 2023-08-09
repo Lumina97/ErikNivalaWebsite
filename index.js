@@ -1,8 +1,10 @@
+require('dotenv').config({ path: 'D:/Dev/Website/ErikNivalaWebsite/website.env' });
 const express = require('express');
 const RedditAPI = require('./RedditAPI/RedditAPI');
 const { v4: uuidv4 } = require('uuid');
 const session = require('express-session');
 const compression = require('compression');
+const MongoStore = require('connect-mongo');
 const log = require('./Config').log;
 const app = express();
 const path = require('path');
@@ -16,6 +18,14 @@ const secretKey = uuidv4();
 var sessionArray = new Array();
 var downloadRequestDict = {};
 
+const connectionURL = `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DATABASE}?authSource=admin`;
+const mongodbStore = MongoStore.create({
+    mongoUrl: connectionURL,
+    ttl: oneDay,
+    autoRemove: 'native',
+    collection: 'sessions'
+});
+
 app.use(session({
     name: 'SessionCookie',
     genid: function () {
@@ -24,16 +34,15 @@ app.use(session({
     },
     secret: secretKey,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    store: mongodbStore,
     cookie: { secure: false, maxAge: oneDay }
 }));
 
-app.listen(3000, () => log.info("listening on 3000"));
+const port = 3000;
+app.listen(port, () => log.info("listening on " + port));
 
-//-----------------------------------------------------------------------
-//--------------------------Image Gatherer-------------------------------
-//-----------------------------------------------------------------------
-
+//#region Image Gatherer
 app.post('/download', async function (request, response) {
     log.info('Download POST request');
 
@@ -109,11 +118,9 @@ app.post('/ImageLoader', async function (request, response) {
             return;
         });
 })
+//#endregion 
 
-//-----------------------------------------------------------------------
-//--------------------------File Serving---------------------------------
-//-----------------------------------------------------------------------
-
+//#region File Serving
 app.get('/spacetrace', (response) => {
     response.sendFile(path.join(pth.join(__dirname, '/public/spacetrace/index.html')));
 })
@@ -126,6 +133,11 @@ app.get('/', (request, response) => {
         session.maxAge = oneDay;
         request.session = session;
 
+        request.session.save(err => {
+            if (err) {
+                log.error(err);
+            }
+        });
         sessionArray.push(session);
     }
     response.sendFile(path.join(__dirname, '/public/html/Home.html'));
@@ -141,3 +153,4 @@ function DoesSessionExist(sessionID) {
     }
     return false;
 }
+//#endregion

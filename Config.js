@@ -1,5 +1,4 @@
 const pino = require('pino');
-const pinoPretty = require('pino-pretty');
 const path = require('path');
 const fs = require('fs');
 
