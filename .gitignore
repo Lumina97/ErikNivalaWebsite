@@ -90,7 +90,6 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
-*.jpg
 *.zip
 Images/
 .vscode/launch.json
