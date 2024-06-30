@@ -60,6 +60,7 @@ function EnableElement(element) {
   const Website = document.getElementById("Website");
   const ImageGatherer = document.getElementById("ImageGatherer");
   const SpaceTrace = document.getElementById("Space Trace");
+  const SaasProject = document.getElementById("Saasproject");
 
   //nav elements
   const PortfolioNav = document.getElementById("PortfolioNav");
@@ -76,6 +77,7 @@ function EnableElement(element) {
   ImageGathererNav.classList.remove("active");
   AboutNav.classList.remove("active");
   SpaceTraceNav.classList.remove("active");
+  SaasProject.classList.remove("active");
 
   //disable elements
   Home.style.display = "none";
@@ -83,6 +85,7 @@ function EnableElement(element) {
   Website.style.display = "none";
   ImageGatherer.style.display = "none";
   SpaceTrace.style.display = "none";
+  SaasProject.style.display = "none";
 
   if (element == "home") {
     Home.style.display = "block";
@@ -102,11 +105,19 @@ function EnableElement(element) {
     SpaceTrace.style.display = "block";
     SpaceTraceNav.classList.add("active");
     PortfolioNav.classList.add("active");
+  } else if (element == "saasproject") {
+    SaasProject.style.display = "block";
+    SaasProject.classList.add("active");
+    PortfolioNav.classList.add("active");
   }
 }
 
-function OnSaaSProjectClicked() {
+function OnSaaSLinkClicked() {
   window.location.href = "/Portfolio/SaaS Website/index.html";
+}
+
+function OnSaaSProjectClicked() {
+  EnableElement("saasproject");
 }
 
 function OnPortfolioClicked() {

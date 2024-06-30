@@ -1,4 +1,4 @@
-@media (max-width: 1023px) {
+@media (max-width: 1024px) {
   .mobile-menu-wrapper {
     display: block;
   }
@@ -151,6 +151,13 @@
     justify-content: center;
   }
 
+  .benefits-card p {
+    min-width: initial;
+    max-width: initial;
+    min-height: initial;
+    max-height: initial;
+  }
+
   .hub-spot-wrapper {
     gap: 7rem;
   }
@@ -190,6 +197,7 @@
   .price-card-benefits {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 3rem;
+    width: 100%;
   }
 
   .hire-us-wrapper {
@@ -347,6 +355,13 @@
     gap: 3rem;
     margin-bottom: 30%;
     justify-content: center;
+  }
+
+  .benefits-card p {
+    min-width: initial;
+    max-width: initial;
+    min-height: initial;
+    max-height: initial;
   }
 
   .why-front-dots {

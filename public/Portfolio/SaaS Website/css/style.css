@@ -181,6 +181,9 @@
   margin-bottom: 1.5rem;
   font-size: 14px;
   line-height: 1.4;
+  max-width: 188px;
+  min-height: 100px;
+  max-height: 100px;
 }
 
 .premium-card-header {
@@ -373,7 +376,7 @@
 }
 
 .main-price-card {
-  width: 50%;
+  width: 75%;
   border: 1px solid transparent;
   box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.1);
   padding: 4rem 2rem;
@@ -414,8 +417,9 @@
 }
 
 .price-card-benefits {
+  width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
 .price-card-benefits > .benefits-card {

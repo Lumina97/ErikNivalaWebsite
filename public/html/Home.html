@@ -3,16 +3,14 @@
 
 <head>
     <title>Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='stylesheet' href="./CSS/Home.css">
     <link rel='stylesheet' href="./CSS/ImageGatherer.css">
 
-    <script src="https://kit.fontawesome.com/88f17612fa.js" crossorigin="anonymous"/></script>
     <script src=./JS/Home.js></script>
     <script src=./JS/ImageGathererHTML.js></script>
     <script src=./JS/SpaceTrace.js></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-
 
 <body>
     <div class="container">
@@ -29,7 +27,7 @@
                         <li onclick="OnSpaceTraceClicked()" id="SpaceTraceNav">Space Trace</li>
                         <li onclick="OnSaaSProjectClicked()" id="SaaSProjectNav">SaaS website</li>
                     </ul>
-                </li>
+                </li> 
                 <li id="AboutNav" onclick="OnAboutClicked();StopPlayingSpaceTrace()">About
                 </li>
                 <li id="GitHubNav" onclick="OnGithubClicked()">Github</li>
@@ -66,11 +64,9 @@
             <div class="content">
                 <p>
 
-                    Hey, my name is Erik and I'm an looking to start my career as a nodeJS developer. I've been coding
-                    for a
-                    couple years now on and off
-                    mostly working on game projects like the one shown in the portfolio tab. <br><br>
-                    My exprerience icnludes but is not limited to: <br>
+                    Hey, my name is Erik and I'm an looking to start my career as a Web developer. I've been coding
+                    for a couple years now on and off mostly working on game projects like the one shown in the portfolio tab. <br><br>
+                    My experience includes but is not limited to: <br>
                     - NodeJs <br>
                     - Express <br>
                     - npm package manager <br>
@@ -82,7 +78,7 @@
                     - Some c++ <br>
                     - Some Unreal Engine <br><br>
 
-                    I'm currently looking for employment as a developer and can be reached via: <br>
+                    I can be reached via: <br>
                     - Email: enivala04@gmail.com
 
                 </p>
@@ -106,25 +102,30 @@
                     domain for my website to be found online.
                 </p>
                 <p>
-                    The website utilized sessions which are stored in a MongoDB on the same orangepi as the website. I
-                    wanted to have the DB running
-                    on my orangepi-3 but it seems that its running an ARM64 architecture with a lower microarchitecture
-                    then what mongoDB supports.
-                </p>
-                <p>
                     I have a linode server that checks uptime for my website response and my ImageGatherer post request.
                     It checks if the website itself is up every 30 seconds and it sends a post request for the
                     ImageGatherer
                     every 60 seconds.
+                </p>               
+            </div>
+        </article>
+
+        <article id="Saasproject" style="display: none;">
+            <h1>SaaS website</h1>
+            <div class="content">
+                <p>
+                    Welcome to the SaaS website explanation
                 </p>
                 <p>
-                    I have the exact same setup on my orangepi-3 as my main website "server" in order to test any
-                    changes to the website on a linux based system
-                    since I do develop on windows and want to make sure everything works on both platforms.
+                    I started the Devslopes academy where I learn everything about Web development and complete multiple projects throughout the course and one of them being this SaaS website.
+
                 </p>
                 <p>
-                    I have more plans for this website which I have outlined on my <a
-                        href="https://trello.com/b/MSz9lxqx/website" target="_blank"> trello board </a>.
+                    The website is non functioning but fully responsive from 1024px all the way down. 
+                    You can get to the website through <a href="javascript:void(0)" onclick="OnSaaSLinkClicked()"> this link</a>. 
+                </p>
+                <p>
+                    In order to return to this page you can click on any button or link on the SaaS website and it will take you right back here.
                 </p>
             </div>
         </article>
