@@ -1,0 +1,466 @@
+@media (max-width: 1023px) {
+  .mobile-menu-wrapper {
+    display: block;
+  }
+
+  .mobile-menu-wrapper i {
+    z-index: 101;
+    position: relative;
+  }
+
+  .mobile-menu *:not(.btn) {
+    color: var(--color-grey);
+    font-weight: 500;
+  }
+
+  .mobile-menu *:hover:not(.btn) {
+    color: var(--color-blue);
+  }
+
+  .nav-list {
+    display: none;
+  }
+
+  .open .mobile-menu {
+    display: block;
+  }
+
+  .mobile-menu > ul {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    align-content: center;
+    justify-items: center;
+    padding: 0 5rem;
+    padding-bottom: 50%;
+  }
+
+  .mobile-menu {
+    padding-top: 7rem;
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: var(--color-white);
+    height: 100%;
+    width: 100%;
+    z-index: 100;
+  }
+
+  .mobile-menu hr {
+    width: 100%;
+    margin-bottom: 2rem;
+    color: var(--color-grey);
+    grid-column: 1/6;
+  }
+
+  .mobile-menu .btn {
+    grid-column: 1/6;
+    margin-top: 5rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1023px) {
+  .container {
+    width: 100%;
+  }
+
+  section {
+    margin-bottom: 4rem;
+  }
+
+  .empowering-wrapper,
+  .banner-wrapper,
+  .hub-spot-wrapper,
+  .pricing-wrapper,
+  .hire-us-wrapper,
+  .benefits-cards-wrapper {
+    flex-wrap: wrap;
+  }
+
+  .empowering-wrapper {
+    justify-content: center;
+    gap: 5rem;
+    text-align: center;
+    margin-bottom: 15rem;
+  }
+
+  .empowering-text-wrapper {
+    width: 100%;
+  }
+
+  .logo-icon-wrapper {
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    flex: 0;
+  }
+
+  .logo-icon-wrapper div:nth-child(1) {
+    position: relative;
+    left: -15%;
+    top: -68%;
+  }
+
+  .logo-icon-wrapper div:nth-child(2) {
+    position: relative;
+    left: -14%;
+    top: 175%;
+  }
+
+  .logo-icon-wrapper div:nth-child(3) {
+    position: relative;
+    left: -1%;
+    top: 18%;
+  }
+
+  .logo-icon-wrapper div:nth-child(4) {
+    position: relative;
+    left: 6%;
+    top: 109%;
+  }
+
+  .logo-icon-wrapper div:nth-child(5) {
+    position: relative;
+    left: 7%;
+    top: -24%;
+  }
+
+  .logo-icon-wrapper div:nth-child(6) {
+    position: relative;
+    left: 26%;
+    top: 150%;
+    scale: 1.3;
+  }
+
+  .logo-icon-wrapper div:nth-child(7) {
+    position: relative;
+    left: 1%;
+    top: -118%;
+    scale: 1.3;
+  }
+
+  .benefits-cards-wrapper *:is(.benefits-card) {
+    flex-wrap: wrap;
+    flex: 1 1 45%;
+  }
+
+  .banner-wrapper {
+    text-align: center;
+    gap: 3rem;
+    margin-bottom: 30%;
+    justify-content: center;
+  }
+
+  .hub-spot-wrapper {
+    gap: 7rem;
+  }
+
+  .hub-spot-wrapper > div:first-child {
+    width: 65%;
+    margin: auto;
+  }
+
+  .dots-background {
+    left: -32%;
+    top: 27%;
+  }
+
+  .hub-spot-text {
+    text-align: center;
+    width: 100%;
+  }
+
+  .hub-spot-text div:nth-child(1) {
+    margin: 1rem auto 1rem auto;
+  }
+
+  .main-price-card {
+    width: 100%;
+    text-align: center;
+  }
+
+  .main-price {
+    text-align: center;
+  }
+
+  .main-price-card p:nth-child(3) {
+    text-align: left;
+  }
+
+  .price-card-benefits {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 3rem;
+  }
+
+  .hire-us-wrapper {
+    gap: 1rem;
+  }
+
+  .hire-us-form {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  .hire-us-text {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 5rem;
+  }
+
+  .hire-us-text h4 {
+    margin-top: 1rem;
+  }
+  .hire-us-text h5 {
+    margin-top: 3rem;
+  }
+  .hire-us-text hr {
+    width: 100%;
+  }
+
+  .hire-us-text > div:nth-child(1) {
+    width: 100%;
+  }
+  .hire-us-text > div:nth-child(2) {
+    width: 75%;
+  }
+
+  .contact-footer-wrapper {
+    display: grid;
+    grid-template-areas:
+      "contact company features"
+      " .  documentation resources";
+  }
+  .contact-footer-wrapper a {
+    padding: 0.25rem 0;
+  }
+
+  .footer-bottom p {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+    padding: 1rem 1rem 0 1rem;
+  }
+
+  section {
+    margin-bottom: 2rem;
+  }
+
+  .mobile-menu > ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .mobile-menu .btn {
+    margin-top: 0;
+  }
+
+  .empowering-wrapper,
+  .banner-wrapper,
+  .hub-spot-wrapper,
+  .pricing-wrapper,
+  .hire-us-wrapper,
+  .benefits-cards-wrapper,
+  .contact-footer-wrapper {
+    flex-wrap: wrap;
+  }
+
+  .empowering-wrapper {
+    justify-content: center;
+    gap: 5rem;
+    text-align: center;
+    margin-bottom: 17rem;
+  }
+
+  .empowering-text-wrapper {
+    width: 100%;
+    margin-top: 6rem;
+  }
+
+  .logo-icon-wrapper {
+    width: auto;
+    display: grid;
+    grid-template-rows: 1px 1px 1px 1px 1px 1px 1px;
+  }
+
+  .logo-icon-wrapper div:nth-child(1) {
+    position: relative;
+    left: -7rem;
+    top: 1rem;
+    scale: 0.8;
+  }
+
+  .logo-icon-wrapper div:nth-child(2) {
+    position: relative;
+    left: -7rem;
+    top: 11rem;
+    scale: 0.8;
+  }
+
+  .logo-icon-wrapper div:nth-child(3) {
+    position: relative;
+    left: 0rem;
+    top: 9rem;
+  }
+
+  .logo-icon-wrapper div:nth-child(4) {
+    position: relative;
+    left: 3rem;
+    top: 0rem;
+  }
+
+  .logo-icon-wrapper div:nth-child(5) {
+    position: relative;
+    left: 7rem;
+    top: 14rem;
+  }
+
+  .logo-icon-wrapper div:nth-child(6) {
+    position: relative;
+    left: 7rem;
+    top: 6rem;
+    scale: 0.8;
+  }
+
+  .logo-icon-wrapper div:nth-child(7) {
+    position: relative;
+    left: -3.5rem;
+    top: 4rem;
+    scale: 0.8;
+  }
+
+  .empowering-text-wrapper *:not(.btn) {
+    padding-right: 0;
+  }
+
+  .banner-wrapper {
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .banner-wrapper:nth-child(1) {
+    padding: 0 1rem 0 1rem;
+    gap: 3rem;
+    margin-bottom: 30%;
+    justify-content: center;
+  }
+
+  .why-front-dots {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+
+  .dot-wrapper {
+    gap: 2rem;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .dot {
+    margin-bottom: 0;
+  }
+
+  .dot-wrapper:not(:last-child)::after {
+    display: none;
+  }
+
+  .dots-background {
+    left: -30%;
+    top: 26%;
+  }
+
+  .hub-spot-wrapper {
+    gap: 4rem;
+  }
+
+  .hub-spot-wrapper > div:first-child {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    width: 100%;
+  }
+
+  .hub-spot-text {
+    width: 100%;
+    text-align: center;
+  }
+
+  .hub-spot-text > div:first-child {
+    margin: 1rem auto 1rem;
+  }
+
+  .company-display-wrapper {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .main-price-card {
+    width: 100%;
+    text-align: center;
+  }
+
+  .main-price-card p:nth-child(3) {
+    text-align: left;
+  }
+
+  .main-price {
+    text-align: center;
+  }
+
+  .price-card-benefits {
+    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+  }
+
+  .hire-us-text * {
+    text-align: center;
+  }
+
+  .hire-us-text hr {
+    width: 100%;
+  }
+
+  .hire-us-people-wrapper {
+    justify-content: center;
+  }
+
+  .hire-us-form {
+    display: flex;
+    flex-direction: column;
+  }
+  .hire-us-form > a:is(.btn) {
+    align-self: center;
+  }
+
+  .hire-us-section {
+    padding-bottom: 2rem;
+  }
+
+  .contact-footer-wrapper {
+    display: block;
+    text-align: center;
+  }
+
+  .socials-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .footer-top-wrapper {
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .footer-bottom * {
+    font-size: 1rem;
+  }
+}

@@ -6,7 +6,7 @@
     <link rel='stylesheet' href="./CSS/Home.css">
     <link rel='stylesheet' href="./CSS/ImageGatherer.css">
 
-
+    <script src="https://kit.fontawesome.com/88f17612fa.js" crossorigin="anonymous"/></script>
     <script src=./JS/Home.js></script>
     <script src=./JS/ImageGathererHTML.js></script>
     <script src=./JS/SpaceTrace.js></script>
@@ -18,20 +18,21 @@
     <div class="container">
         <nav class="menu">
             <ul class="main-menu">
-                <li class="active" onclick="OnHomeClicked();StopPlayingSpaceTrace()" id="HomeNav"><i></i>Home</li>
+                <li class="active" onclick="OnHomeClicked();StopPlayingSpaceTrace()" id="HomeNav">Home</li>
                 <li class="with-submenu">
-                    <i class="fa fa-briefcase" id="PortfolioNav"></i>Portfolio <i class="fa fa-caret-down"></i>
+                    <div id="PortfolioNav">Portfolio </div>
                     <ul class="submenu">
                         <li onclick="OnWebsiteClicked();StopPlayingSpaceTrace()" id="WebsiteNav">Website</li>
                         <li onclick="OnImageGathererClicked();StopPlayingSpaceTrace()" id="ImageGathererNav">Image
                             Gatherer
                         </li>
                         <li onclick="OnSpaceTraceClicked()" id="SpaceTraceNav">Space Trace</li>
+                        <li onclick="OnSaaSProjectClicked()" id="SaaSProjectNav">SaaS website</li>
                     </ul>
                 </li>
-                <li id="AboutNav" onclick="OnAboutClicked();StopPlayingSpaceTrace()"><i class="fa fa-user"></i>About
+                <li id="AboutNav" onclick="OnAboutClicked();StopPlayingSpaceTrace()">About
                 </li>
-                <li id="GitHubNav" onclick="OnGithubClicked()"><i class="fa fa-user"></i>Github</li>
+                <li id="GitHubNav" onclick="OnGithubClicked()">Github</li>
             </ul>
         </nav>
 

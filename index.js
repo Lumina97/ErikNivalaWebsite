@@ -19,13 +19,13 @@ const oneDay = 1000 * 60 * 60 * 24;
 const secretKey = process.env.SESSION_SECRET;
 var downloadRequestDict = {};
 
-const connectionURL = `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DATABASE}?authSource=admin`;
-const mongodbStore = MongoStore.create({
-  mongoUrl: connectionURL,
-  ttl: oneDay,
-  autoRemove: "native",
-  collection: "sessions",
-});
+// const connectionURL = `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DATABASE}?authSource=admin`;
+// const mongodbStore = MongoStore.create({
+//   mongoUrl: connectionURL,
+//   ttl: oneDay,
+//   autoRemove: "native",
+//   collection: "sessions",
+// });
 
 app.use(
   session({
