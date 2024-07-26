@@ -2,17 +2,37 @@
 <html>
 
 <head>
-    <title>Home</title>
+    <title>Erik Nivala</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='stylesheet' href="./CSS/Home.css">
     <link rel='stylesheet' href="./CSS/ImageGatherer.css">
-
-    <script src=./JS/Home.js></script>
-    <script src=./JS/ImageGathererHTML.js></script>
-    <script src=./JS/SpaceTrace.js></script>
+    <link rel='stylesheet' href="./CSS/ImageGathererModal.css">
 </head>
 
 <body>
+    <div id="ImageDisplayModal">
+        <div class="modalHeader">
+            <div>
+                <button id="modalMainCollectionButton" class="activeBtn" onclick="openMainCollection()"><i class="fa-solid fa-grip"></i></button>
+                <button id="modalFavCollectionButton" onclick="openFavoritesCollection()"><i class="fa-solid fa-star"></i></button>
+            </div>
+            <i class="fa-solid fa-x" onclick="closeCollection()"></i>
+        </div>
+
+        <div id="modalContentContainer">
+            
+        </div>
+
+        <div id="itemPreview">
+            <i class="fa-solid fa-x" onclick="closePreview()"></i>
+            <img  src="https://i.redd.it/bfp3yc5jusdd1.jpeg">
+        </div>
+
+    </img>
+
+    </div>
+
+
     <div class="container">
         <nav class="menu">
             <ul class="main-menu">
@@ -144,15 +164,16 @@
 
                     <p id="TitleFiltersP" class="center">Add Filter:</p>
 
-                    <input class='rightAlign TitleFiltersInput' id="TitleFilters" placeholder="Filter...">
+                    <div class="filterInputContainer">
+                        <input class='rightAlign TitleFiltersInput' id="TitleFilters" placeholder="Filter...">
+                        <i class="fa-solid fa-trash"  onclick="clearFilters()"></i>
+                    </div>
 
                     <ul class="rightAlign" id="FilterUnorderedList"></ul>
 
-                    <button class="center" id="ClearFilters" onclick="ClearFilters()">Clear filters</button>
+                    <button class="center " id="SendImageRequestButton" onclick="sendImageGatheringRequest()"> Request images</button>
 
-
-                    <button class="center " id="SendImageRequestButton" onclick="SendImageGatheringRequest()"> Send
-                        Image gather request</button>
+                    <button class="center " id="OpenCollectionButton" onclick="openCollection()"> Collection</button>
                     <div class="center">
                         <div class="loader rightAlign" id="loader"> </div>
                     </div>
@@ -188,6 +209,11 @@
                     <div id="unity-warning"> </div>
         </article>
     </div>
+
+    <script src="https://kit.fontawesome.com/88f17612fa.js" crossorigin="anonymous"></script>
+    <script src=./JS/Home.js></script>
+    <script src=./JS/ImageGathererHTML.js></script>
+    <script src=./JS/SpaceTrace.js></script>
 </body>
 
 </html>

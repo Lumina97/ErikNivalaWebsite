@@ -7,7 +7,6 @@ const session = require("express-session");
 const RedditAPI = require("./RedditAPI/RedditAPI");
 const { v4: uuidv4 } = require("uuid");
 const compression = require("compression");
-const MongoStore = require("connect-mongo");
 const log = require("./Config").log;
 const app = express();
 
@@ -18,14 +17,6 @@ app.use(express.json({ limit: "1mb" }));
 const oneDay = 1000 * 60 * 60 * 24;
 const secretKey = process.env.SESSION_SECRET;
 var downloadRequestDict = {};
-
-// const connectionURL = `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DATABASE}?authSource=admin`;
-// const mongodbStore = MongoStore.create({
-//   mongoUrl: connectionURL,
-//   ttl: oneDay,
-//   autoRemove: "native",
-//   collection: "sessions",
-// });
 
 app.use(
   session({
@@ -101,9 +92,10 @@ app.post("/ImageLoader", async function (request, response) {
     data.filters
   )
     .then((result) => {
-      var returnData;
+      let returnData;
       try {
-        returnData = JSON.stringify({ path: result });
+        console.log(result);
+        returnData = JSON.stringify({ links: result });
         response.json(returnData);
         return;
       } catch (error) {
