@@ -121,19 +121,6 @@ async function sendImageGatheringRequest() {
   loader.style.opacity = 0;
 }
 
-async function DownloadFile(filepath) {
-  console.log("Sending DL request: " + filepath);
-  const options = {
-    method: "POST",
-    body: filepath,
-    headers: { "Content-Type": "application/json" },
-  };
-
-  await fetch("/download", options).then((result) => {
-    window.open("/download");
-  });
-}
-
 async function addLinksToMainCollection(links) {
   collectionData = [];
   return new Promise((res) => {
@@ -178,6 +165,7 @@ function removeItemFromMainCollection(item) {
 }
 
 async function createCollectionHTMLItems(collectionList) {
+  selectedItems.length = 0;
   return new Promise((res) => {
     const collectionItemContainer = document.getElementById(
       "modalContentContainer"
@@ -204,7 +192,7 @@ function createHTMLImageElement(item) {
         <h5 data-size="0x0">Image size</h5>
         <div class="modalItemButtons">
           <i class="fa-regular fa-heart modalItemFav"></i>
-          <i class="fa-regular fa-square modalItemSelect" data-item="none" onclick="itemSelected(this)"></i>
+          <i class="fa-regular fa-square modalItemSelect" data-item="none"></i>
         </div>
   `;
   itemElement.innerHTML = newContent;
@@ -297,11 +285,11 @@ async function clearFilters() {
 async function openCollection() {
   if (!wasFavoritesOpen) {
     await createCollectionHTMLItems(collectionData).then(() => {
-      collectionModal.style.display = "block";
+      collectionModal.style.display = "flex";
     });
   } else {
     await createCollectionHTMLItems(favoriteCollectionData).then(() => {
-      collectionModal.style.display = "block";
+      collectionModal.style.display = "flex";
     });
   }
 }
@@ -329,4 +317,46 @@ function closePreview() {
   imagePreview.style.display = "none";
 }
 
-function itemSelected(element) {}
+function downloadAll() {
+  const links = wasFavoritesOpen
+    ? favoriteCollectionData.map((item) => item[0])
+    : collectionData.map((item) => item[0]);
+  sendLinksToDownload(links);
+}
+
+function downloadSelected() {
+  const links =
+    selectedItems.length > 0 ? selectedItems.map((item) => item[0]) : undefined;
+  links && sendLinksToDownload(links);
+}
+
+function clearFavorites() {
+  favoriteCollectionData = [];
+  localStorage.setItem(favoritesStorageKey, JSON.stringify([]));
+  if (wasFavoritesOpen) openFavoritesCollection();
+}
+
+async function sendLinksToDownload(links) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify({ links: links }),
+    headers: { "Content-Type": "application/json" },
+  };
+
+  await fetch("/downloadFilesFromLinks", options).then((response) => {
+    response.json().then((result) => {
+      DownloadFile(result.id);
+    });
+  });
+}
+
+async function DownloadFile(filepath) {
+  const options = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  };
+
+  await fetch("/download", options).then(() => {
+    window.open("/download");
+  });
+}

@@ -1,7 +1,4 @@
 const RedditLinksGatherer = require("./RedditLinksGatherer");
-const FileDownloader = require("./../FileDownloader");
-const FileZipper = require("./../FileZipper");
-const path = require("path");
 const RedditAuthentication = require("./RedditAuthentication");
 const log = require("../Config").log;
 
@@ -18,7 +15,7 @@ async function GetAccessToken() {
 }
 
 module.exports = {
-  DownloadImagesFromSubreddit: async function (
+  GetAllImageLinks: async function (
     subreddit,
     amount,
     session,
@@ -32,11 +29,6 @@ module.exports = {
 
       SubRedditToScan = subreddit;
       AmountOfPosts = parseInt(amount);
-
-      const today = new Date();
-      const date =
-        today.getHours() + "_" + today.getMinutes() + "_" + today.getSeconds();
-      const ID = path.join(String(session.userid), String(date));
 
       let access_token;
       try {
@@ -54,14 +46,8 @@ module.exports = {
         access_token
       )
         .then(async function (result) {
-          resolve(result); // await FileDownloader.DownloadFilesFromLinks(result, ID);
+          resolve(result);
         })
-        // .then(async function (result) {
-        //   return await FileZipper.CreateZipFromUserID(result);
-        // })
-        // .then((result) => {
-        //   resolve(result);
-        // })
         .catch((err) => {
           log.warn();
           ("There was an error while gathering subreddit images!");

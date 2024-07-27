@@ -5,6 +5,7 @@ require("dotenv").config({ path: envPath });
 const express = require("express");
 const session = require("express-session");
 const RedditAPI = require("./RedditAPI/RedditAPI");
+const FileDownloader = require("./FileDownloader");
 const { v4: uuidv4 } = require("uuid");
 const compression = require("compression");
 const log = require("./Config").log;
@@ -39,26 +40,30 @@ const port = 3000;
 app.listen(port, () => log.info("listening on " + port));
 
 //#region Image Gatherer
-app.post("/download", async function (request, response) {
-  log.info("Download POST request");
+app.post("/downloadFilesFromLinks", async (request, response) => {
+  const links = request.body.links;
 
-  log.info(request.body);
-  const path = request.body.path;
-  downloadRequestDict[request.session.userid] = path;
-  log.info(downloadRequestDict);
-
-  var data;
-  try {
-    data = JSON.stringify(request.session.userid);
-    response.json(data);
-  } catch (e) {
-    log.error("ERROR:\n" + e);
-  }
+  await FileDownloader.DownloadFilesFromLinksAndZip(
+    links,
+    request.session.userid
+  )
+    .then((result) => {
+      downloadRequestDict[request.session.userid] = result;
+      try {
+        let data = JSON.stringify({ id: request.session.userid });
+        log.warn(data);
+        response.json(data);
+      } catch (error) {
+        log.error("ERROR:\n" + error);
+      }
+    })
+    .catch((reason) => {
+      log.error(reason);
+    });
 });
 
-app.get("/download", async function (request, response) {
+app.post("/download", async function (request, response) {
   log.info("Download GET request");
-
   for (const [key, value] of Object.entries(downloadRequestDict)) {
     log.info(key, value);
     if (key == request.session.userid) {
@@ -85,7 +90,7 @@ app.post("/ImageLoader", async function (request, response) {
     return;
   }
 
-  await RedditAPI.DownloadImagesFromSubreddit(
+  await RedditAPI.GetAllImageLinks(
     data.subreddit,
     data.amount,
     session,
@@ -94,7 +99,6 @@ app.post("/ImageLoader", async function (request, response) {
     .then((result) => {
       let returnData;
       try {
-        console.log(result);
         returnData = JSON.stringify({ links: result });
         response.json(returnData);
         return;
