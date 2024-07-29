@@ -124,11 +124,15 @@ async function sendImageGatheringRequest() {
 async function addLinksToMainCollection(links) {
   collectionData = [];
   return new Promise((res) => {
-    links.forEach((link) => {
+    links.forEach((links) => {
       const img = new Image();
-      img.src = link;
+      img.src = links[1]; //full size image
       img.onload = function () {
-        const item = [link, { width: img.width, height: img.height }];
+        const item = [
+          links[0], //thumbnail
+          links[1], //actual image
+          { width: img.width, height: img.height }, //size data
+        ];
         if (!favoriteCollectionData.includes(item)) collectionData.push(item);
       };
     });
@@ -197,8 +201,8 @@ function createHTMLImageElement(item) {
   `;
   itemElement.innerHTML = newContent;
   const h5 = itemElement.querySelector("h5");
-  h5.textContent = `${item[1].width} x ${item[1].height}`;
-  h5.dataset.size = JSON.stringify([item[1].width, item[1].height]);
+  h5.textContent = `${item[2].width} x ${item[2].height}`;
+  h5.dataset.size = JSON.stringify([item[2].width, item[2].height]);
   if (favoriteCollectionData.includes(item)) {
     const favItem = itemElement.querySelector(".modalItemFav");
     favItem.classList.remove("fa-regular");
@@ -213,7 +217,7 @@ function createHTMLImageElement(item) {
 function addCollectionItemOnClick(htmlElement, item) {
   htmlElement.querySelector("img").addEventListener("click", () => {
     if (imagePreview) {
-      imagePreview.querySelector("img").src = item[0];
+      imagePreview.querySelector("img").src = item[1];
       imagePreview.style.display = "block";
     }
   });
@@ -319,14 +323,14 @@ function closePreview() {
 
 function downloadAll() {
   const links = wasFavoritesOpen
-    ? favoriteCollectionData.map((item) => item[0])
-    : collectionData.map((item) => item[0]);
+    ? favoriteCollectionData.map((item) => item[1])
+    : collectionData.map((item) => item[1]);
   sendLinksToDownload(links);
 }
 
 function downloadSelected() {
   const links =
-    selectedItems.length > 0 ? selectedItems.map((item) => item[0]) : undefined;
+    selectedItems.length > 0 ? selectedItems.map((item) => item[1]) : undefined;
   links && sendLinksToDownload(links);
 }
 
@@ -337,6 +341,8 @@ function clearFavorites() {
 }
 
 async function sendLinksToDownload(links) {
+  if (!links || links.length === 0) return;
+
   const options = {
     method: "POST",
     body: JSON.stringify({ links: links }),
@@ -344,19 +350,14 @@ async function sendLinksToDownload(links) {
   };
 
   await fetch("/downloadFilesFromLinks", options).then((response) => {
-    response.json().then((result) => {
-      DownloadFile(result.id);
+    response.json().then(() => {
+      DownloadFile();
     });
   });
 }
 
-async function DownloadFile(filepath) {
-  const options = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-  };
-
-  await fetch("/download", options).then(() => {
-    window.open("/download");
-  });
+async function DownloadFile() {
+  const link = document.createElement("a");
+  link.href = "/download";
+  link.click();
 }

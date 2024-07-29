@@ -15,6 +15,11 @@
             <div>
                 <button id="modalMainCollectionButton" class="activeBtn" onclick="openMainCollection()"><i class="fa-solid fa-grip"></i></button>
                 <button id="modalFavCollectionButton" onclick="openFavoritesCollection()"><i class="fa-solid fa-star"></i></button>
+                <select id="sort">
+                    <option value="" disabled selected>Sort...</option>       
+                    <option value="sizeAscending">Size &#8593; </option>
+                    <option value="sizeDescending">Size &darr;</i> </option>
+                </select>
             </div>
             <i class="fa-solid fa-x" onclick="closeCollection()"></i>
         </div>

@@ -1,4 +1,5 @@
 const axios = require("axios");
+const { url } = require("inspector");
 const querystring = require("querystring");
 const log = require("../Config").log;
 
@@ -17,7 +18,8 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
       limit: amount,
     });
 
-    const urlink = oAuthURL + "/r/" + subreddit + "/new" + "?" + params;
+    let urlink = oAuthURL + "/r/" + subreddit + "/new" + "?" + params;
+    urlink = urlink.replace(/\s+/g, "");
 
     const config = {
       method: "get",
@@ -30,7 +32,7 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
     };
 
     const response = await axios(config).catch((result) => {
-      log.info(result);
+      log.error(result);
       reject(false);
       return;
     });
@@ -59,7 +61,15 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
           continue;
         }
 
-        image_links.push(post.data.url);
+        let thumbnail = "";
+        if (post.data.preview) {
+          const resolutions = post.data.preview.images[0].resolutions;
+          if (resolutions.length > 0) {
+            thumbnail = resolutions[2].url.replace(/&amp;/g, "&");
+          }
+        }
+
+        image_links.push([thumbnail, post.data.url]);
         log.info("URL: " + post.data.url);
         bHasAnyImageLinks = true;
         amountOfImages++;

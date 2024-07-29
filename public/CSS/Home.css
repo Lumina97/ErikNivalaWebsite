@@ -149,6 +149,8 @@ button {
   font-size: 16px;
   color: #585761;
   text-anchor: middle;
+  scale: 1;
+  transition: 0.15s ease-in-out;
 }
 
 .activeBtn {
@@ -175,8 +177,34 @@ button:hover {
   color: white;
 }
 
+button:active {
+  scale: 0.95;
+}
+
 .content {
   font-size: 16px;
+}
+
+select {
+  height: 35px;
+  border-radius: 25px;
+  min-width: 100px;
+  text-align: center;
+  border: 2px solid var(--color-orange);
+}
+
+.custom-select {
+  position: relative;
+  display: inline-block;
+}
+
+.custom-select::after {
+  content: "▼"; /* Custom arrow */
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 
 /* ------------------------------------DESKTOP-----------------------------------*/

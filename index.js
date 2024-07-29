@@ -51,7 +51,6 @@ app.post("/downloadFilesFromLinks", async (request, response) => {
       downloadRequestDict[request.session.userid] = result;
       try {
         let data = JSON.stringify({ id: request.session.userid });
-        log.warn(data);
         response.json(data);
       } catch (error) {
         log.error("ERROR:\n" + error);
@@ -62,7 +61,7 @@ app.post("/downloadFilesFromLinks", async (request, response) => {
     });
 });
 
-app.post("/download", async function (request, response) {
+app.get("/download", async function (request, response) {
   log.info("Download GET request");
   for (const [key, value] of Object.entries(downloadRequestDict)) {
     log.info(key, value);
@@ -70,7 +69,14 @@ app.post("/download", async function (request, response) {
       log.info("Found request!");
       const path = value;
       log.info(path);
-      response.download(path);
+      response.download(path, (err) => {
+        if (err) {
+          log.error("Error occurred while downloading the file:", err);
+          response
+            .status(500)
+            .send("Error occurred while downloading the file");
+        }
+      });
       delete downloadRequestDict[key];
     }
   }
