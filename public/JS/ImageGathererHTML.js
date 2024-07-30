@@ -8,9 +8,13 @@ const modalMainCollectionButton = document.getElementById(
 const modalFavCollectionButton = document.getElementById(
   "modalFavCollectionButton"
 );
+const imageSizeContainer = document.getElementById("imageSizes");
 const collectionStorageKey = "collection";
 const favoritesStorageKey = "favorites";
+const sizeCounterStorageKey = "sizeCounter";
+const favoriteSizeCounterStorageKey = "favoriteSizeCounter";
 const selectedItems = [];
+const sortSelect = document.getElementById("sort");
 
 let collectionData = [];
 let favoriteCollectionData = [];
@@ -20,25 +24,69 @@ loader.style.opacity = 0;
 collectionModal.style.display = "none";
 imagePreview.style.display = "none";
 
+class ImageSizeCounter {
+  constructor() {
+    this.sizeCount = {};
+  }
+
+  setSizeCount(sizeCount) {
+    this.sizeCount = sizeCount;
+  }
+
+  addSize(size) {
+    if (this.sizeCount[size]) {
+      this.sizeCount[size]++;
+    } else {
+      this.sizeCount[size] = 1;
+    }
+  }
+
+  removeSize(size) {
+    if (this.sizeCount[size]) {
+      if (this.sizeCount[size] > 1) {
+        this.sizeCount[size]--;
+      } else {
+        delete this.sizeCount[size];
+      }
+    }
+  }
+
+  getCounts() {
+    return this.sizeCount;
+  }
+}
+let collectionSizeCounter = new ImageSizeCounter();
+let favoriteCollectionSizeCounter = new ImageSizeCounter();
+
 loadLastMainCollection();
 loadFavoritesCollection();
 window.addEventListener("beforeunload", beforeUnload);
 
+window.onload = function () {
+  const node = document.getElementById("TitleFilters");
+  if (node) {
+    node.addEventListener("keyup", function (event) {
+      if (event.key === "Enter") {
+        AddFilterToList();
+      }
+    });
+  }
+};
+
+sortSelect.addEventListener("change", function (event) {
+  const selectedValue = event.target.value;
+  selectedValue === "sizeAscending"
+    ? sortCollection(true)
+    : sortCollection(false);
+});
+
 function beforeUnload() {
   saveFavoritesCollection();
   saveCurrentMainCollection();
+  saveCurrentSizeCounters();
 }
 
-function GetFiltersFromList() {
-  var filterList = document.getElementById("FilterUnorderedList");
-  var filters = {};
-  for (let i = 0; i < filterList.childElementCount; i++) {
-    filters[i] = filterList.childNodes[i].innerText;
-  }
-  return filters;
-}
-
-function delay(ms) {
+async function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
@@ -46,16 +94,24 @@ function setErrorText(message) {
   errorTextBox.textContent = message;
 }
 
+/*------------------------ Collection Saving*/
+
 function saveCurrentMainCollection() {
   if (!collectionData) return;
   localStorage.removeItem(collectionStorageKey);
   localStorage.setItem(collectionStorageKey, JSON.stringify(collectionData));
+  saveCurrentCollectionSizeCounter();
 }
 
 function loadLastMainCollection() {
   try {
     if (localStorage.getItem(collectionStorageKey) !== null) {
       collectionData = JSON.parse(localStorage.getItem(collectionStorageKey));
+    }
+    if (localStorage.getItem(sizeCounterStorageKey) !== null) {
+      collectionSizeCounter.setSizeCount(
+        JSON.parse(localStorage.getItem(sizeCounterStorageKey))
+      );
     }
   } catch (error) {
     console.error(error);
@@ -68,12 +124,16 @@ function saveFavoritesCollection() {
     tempArray.forEach((element) => {
       if (!favoriteCollectionData.some((item) => item[0] === element[0]))
         favoriteCollectionData.push(element);
+      const size = `${element[2].width}x${element[2].height}`;
+      favoriteCollectionSizeCounter.addSize(size);
     });
   }
   localStorage.setItem(
     favoritesStorageKey,
     JSON.stringify(favoriteCollectionData)
   );
+
+  saveCurrentFavoriteCollectionSizeCounter();
 }
 
 function loadFavoritesCollection() {
@@ -82,12 +142,36 @@ function loadFavoritesCollection() {
       favoriteCollectionData = JSON.parse(
         localStorage.getItem(favoritesStorageKey)
       );
+
+      if (localStorage.getItem(favoriteSizeCounterStorageKey) !== null) {
+        favoriteCollectionSizeCounter.setSizeCount(
+          JSON.parse(localStorage.getItem(favoriteSizeCounterStorageKey))
+        );
+      }
     }
   } catch (error) {
     console.error(error);
   }
 }
 
+function saveCurrentCollectionSizeCounter() {
+  if (!collectionSizeCounter.getCounts()) return;
+  localStorage.removeItem(sizeCounterStorageKey);
+  localStorage.setItem(
+    sizeCounterStorageKey,
+    JSON.stringify(collectionSizeCounter.getCounts())
+  );
+}
+function saveCurrentFavoriteCollectionSizeCounter() {
+  if (!favoriteCollectionSizeCounter.getCounts()) return;
+  localStorage.removeItem(favoriteSizeCounterStorageKey);
+  localStorage.setItem(
+    favoriteSizeCounterStorageKey,
+    JSON.stringify(favoriteCollectionSizeCounter.getCounts())
+  );
+}
+
+/*------------------------ Request Title filters*/
 async function sendImageGatheringRequest() {
   const subreddit = document.getElementById("subredditToSearch").value;
   const amount = document.getElementById("SearchAmount").value;
@@ -109,7 +193,7 @@ async function sendImageGatheringRequest() {
     .then(async function (result) {
       const data = JSON.parse(result);
       await addLinksToMainCollection(data.links);
-      await delay(amount);
+      await delay(+amount + 100);
       openCollection();
       saveCurrentMainCollection();
     })
@@ -124,50 +208,51 @@ async function sendImageGatheringRequest() {
 async function addLinksToMainCollection(links) {
   collectionData = [];
   return new Promise((res) => {
-    links.forEach((links) => {
+    links.forEach((link) => {
       const img = new Image();
-      img.src = links[1]; //full size image
+      img.src = link[1]; //full size image
       img.onload = function () {
         const item = [
-          links[0], //thumbnail
-          links[1], //actual image
+          link[0], //thumbnail
+          link[1], //actual image
           { width: img.width, height: img.height }, //size data
         ];
-        if (!favoriteCollectionData.includes(item)) collectionData.push(item);
+        collectionData.push(item);
+        const size = `${img.width}x${img.height}`;
+        collectionSizeCounter.addSize(size);
       };
     });
     res();
   });
 }
 
-function addItemToFavorites(item) {
-  const index = favoriteCollectionData.indexOf(item);
-  if (index === -1) {
-    favoriteCollectionData.push(item);
-  }
+function addFilterToList() {
+  const listElement = document.getElementById("FilterUnorderedList");
+  const FilterInputField = document.getElementById("TitleFilters");
+
+  if (FilterInputField.value == "") return;
+
+  var li = document.createElement("li");
+  li.innerText = FilterInputField.value;
+  listElement.appendChild(li);
+  FilterInputField.value = null;
 }
 
-function removeItemFromFavorites(item) {
-  const index = favoriteCollectionData.indexOf(item);
-  if (index !== -1) {
-    favoriteCollectionData.splice(index, 1);
-  }
+async function clearFilters() {
+  const listElement = document.getElementById("FilterUnorderedList");
+  listElement.innerHTML = "";
 }
 
-function addItemToMainCollection(item) {
-  const index = collectionData.indexOf(item);
-  if (index === -1) {
-    collectionData.push(item);
+function GetFiltersFromList() {
+  var filterList = document.getElementById("FilterUnorderedList");
+  var filters = {};
+  for (let i = 0; i < filterList.childElementCount; i++) {
+    filters[i] = filterList.childNodes[i].innerText;
   }
+  return filters;
 }
 
-function removeItemFromMainCollection(item) {
-  const index = collectionData.indexOf(item);
-  if (index !== -1) {
-    collectionData.splice(index, 1);
-  }
-}
-
+/*------------------------ Collection Management*/
 async function createCollectionHTMLItems(collectionList) {
   selectedItems.length = 0;
   return new Promise((res) => {
@@ -258,44 +343,55 @@ function addCollectionItemOnClick(htmlElement, item) {
     });
 }
 
-window.onload = function () {
-  const node = document.getElementById("TitleFilters");
-  if (node) {
-    node.addEventListener("keyup", function (event) {
-      if (event.key === "Enter") {
-        AddFilterToList();
-      }
-    });
-  }
-};
+function addItemToFavorites(item) {
+  favoriteCollectionData.indexOf(item) === -1 &&
+    favoriteCollectionData.push(item);
 
-function addFilterToList() {
-  const listElement = document.getElementById("FilterUnorderedList");
-  const FilterInputField = document.getElementById("TitleFilters");
-
-  if (FilterInputField.value == "") return;
-
-  var li = document.createElement("li");
-  li.innerText = FilterInputField.value;
-  listElement.appendChild(li);
-  FilterInputField.value = null;
+  const size = `${item[2].width}x${item[2].height}`;
+  favoriteCollectionSizeCounter.addSize(size);
 }
 
-async function clearFilters() {
-  const listElement = document.getElementById("FilterUnorderedList");
-  listElement.innerHTML = "";
+function removeItemFromFavorites(item) {
+  const index = favoriteCollectionData.indexOf(item);
+  index !== -1 && favoriteCollectionData.splice(index, 1);
+
+  const size = `${item[2].width}x${item[2].height}`;
+  favoriteCollectionSizeCounter.removeSize(size);
+}
+
+function addItemToMainCollection(item) {
+  collectionData.indexOf(item) === -1 && collectionData.push(item);
+
+  const size = `${item[2].width}x${item[2].height}`;
+  collectionSizeCounter.push(size);
+}
+
+function removeItemFromMainCollection(item) {
+  const index = collectionData.indexOf(item);
+  index !== -1 && collectionData.splice(index, 1);
+
+  const size = `${item[2].width}x${item[2].height}`;
+  collectionSizeCounter.removeSize(size);
 }
 
 async function openCollection() {
-  if (!wasFavoritesOpen) {
-    await createCollectionHTMLItems(collectionData).then(() => {
-      collectionModal.style.display = "flex";
-    });
-  } else {
-    await createCollectionHTMLItems(favoriteCollectionData).then(() => {
-      collectionModal.style.display = "flex";
-    });
-  }
+  const result = (await wasFavoritesOpen)
+    ? createCollectionHTMLItems(favoriteCollectionData)
+    : createCollectionHTMLItems(collectionData);
+  result.then(() => {
+    imageSizeContainer.innerHTML = " ";
+
+    const collection = wasFavoritesOpen
+      ? favoriteCollectionSizeCounter.getCounts()
+      : collectionSizeCounter.getCounts();
+
+    for (const [size, count] of Object.entries(collection)) {
+      const div = document.createElement("div");
+      div.innerText = `${count} | ${size}`;
+      imageSizeContainer.appendChild(div);
+    }
+    collectionModal.style.display = "flex";
+  });
 }
 
 function openMainCollection() {
@@ -316,6 +412,45 @@ function closeCollection() {
   collectionModal.style.display = "none";
 }
 
+function clearFavorites() {
+  //return items to collection before deleting
+  favoriteCollectionData.forEach((item) => {
+    collectionData.push(item);
+  });
+
+  favoriteCollectionData = [];
+  localStorage.setItem(favoritesStorageKey, JSON.stringify([]));
+  favoriteCollectionSizeCounter = new ImageSizeCounter();
+  localStorage.setItem(favoriteCollectionSizeCounter, JSON.stringify({}));
+
+  if (wasFavoritesOpen) openFavoritesCollection();
+}
+
+/*------------------------SORTING */
+function compareImageSizesAscending(a, b) {
+  const areaA = a[2].width * a[2].height;
+  const areaB = b[2].width * b[2].height;
+  return areaB - areaA;
+}
+
+function compareImageSizesDescending(a, b) {
+  const areaA = a[2].width * a[2].height;
+  const areaB = b[2].width * b[2].height;
+  return areaA - areaB;
+}
+
+function sortCollection(bFilterAscending) {
+  const sortFunction = bFilterAscending
+    ? compareImageSizesAscending
+    : compareImageSizesDescending;
+  wasFavoritesOpen
+    ? favoriteCollectionData.sort(sortFunction)
+    : collectionData.sort(sortFunction);
+
+  openCollection();
+}
+
+/*------------------------Button Functions */
 function closePreview() {
   imagePreview.querySelector("img").src = " ";
   imagePreview.style.display = "none";
@@ -334,12 +469,7 @@ function downloadSelected() {
   links && sendLinksToDownload(links);
 }
 
-function clearFavorites() {
-  favoriteCollectionData = [];
-  localStorage.setItem(favoritesStorageKey, JSON.stringify([]));
-  if (wasFavoritesOpen) openFavoritesCollection();
-}
-
+/*------------------------Download call */
 async function sendLinksToDownload(links) {
   if (!links || links.length === 0) return;
 
