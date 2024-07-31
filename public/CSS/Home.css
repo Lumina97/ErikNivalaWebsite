@@ -132,7 +132,7 @@ article {
 
 h1 {
   font-size: 52px;
-  color: var(--turquoise-color);
+  color: var(--color-turquoise);
   text-shadow: 1px 3px var(--color-orange);
   margin: auto;
   width: 80%;
