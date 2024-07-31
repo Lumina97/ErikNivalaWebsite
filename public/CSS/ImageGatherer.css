@@ -176,6 +176,7 @@
     padding: 10px;
     text-align: center;
     float: center;
+    margin-bottom: 0.5rem;
   }
 
   #ImageGatherer .filterInputContainer i {

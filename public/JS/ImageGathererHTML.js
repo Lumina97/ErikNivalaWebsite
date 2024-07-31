@@ -67,7 +67,7 @@ window.onload = function () {
   if (node) {
     node.addEventListener("keyup", function (event) {
       if (event.key === "Enter") {
-        AddFilterToList();
+        addFilterToList();
       }
     });
   }
@@ -122,10 +122,11 @@ function saveFavoritesCollection() {
   if (localStorage.getItem(favoritesStorageKey) !== null) {
     const tempArray = JSON.parse(localStorage.getItem(favoritesStorageKey));
     tempArray.forEach((element) => {
-      if (!favoriteCollectionData.some((item) => item[0] === element[0]))
+      if (!favoriteCollectionData.some((item) => item[0] === element[0])) {
         favoriteCollectionData.push(element);
-      const size = `${element[2].width}x${element[2].height}`;
-      favoriteCollectionSizeCounter.addSize(size);
+        const size = `${element[2].width}x${element[2].height}`;
+        favoriteCollectionSizeCounter.addSize(size);
+      }
     });
   }
   localStorage.setItem(
@@ -178,7 +179,7 @@ async function sendImageGatheringRequest() {
 
   setErrorText(" ");
 
-  let filters = GetFiltersFromList();
+  let filters = getFiltersFromList();
   loader.style.opacity = 100;
 
   const sendData = { subreddit, amount, filters };
@@ -207,6 +208,7 @@ async function sendImageGatheringRequest() {
 
 async function addLinksToMainCollection(links) {
   collectionData = [];
+  collectionSizeCounter = new ImageSizeCounter();
   return new Promise((res) => {
     links.forEach((link) => {
       const img = new Image();
@@ -243,9 +245,9 @@ async function clearFilters() {
   listElement.innerHTML = "";
 }
 
-function GetFiltersFromList() {
+function getFiltersFromList() {
   var filterList = document.getElementById("FilterUnorderedList");
-  var filters = {};
+  var filters = [];
   for (let i = 0; i < filterList.childElementCount; i++) {
     filters[i] = filterList.childNodes[i].innerText;
   }
@@ -363,7 +365,7 @@ function addItemToMainCollection(item) {
   collectionData.indexOf(item) === -1 && collectionData.push(item);
 
   const size = `${item[2].width}x${item[2].height}`;
-  collectionSizeCounter.push(size);
+  collectionSizeCounter.addSize(size);
 }
 
 function removeItemFromMainCollection(item) {
@@ -415,7 +417,7 @@ function closeCollection() {
 function clearFavorites() {
   //return items to collection before deleting
   favoriteCollectionData.forEach((item) => {
-    collectionData.push(item);
+    addItemToMainCollection(item);
   });
 
   favoriteCollectionData = [];
@@ -424,6 +426,7 @@ function clearFavorites() {
   localStorage.setItem(favoriteCollectionSizeCounter, JSON.stringify({}));
 
   if (wasFavoritesOpen) openFavoritesCollection();
+  else openCollection();
 }
 
 /*------------------------SORTING */

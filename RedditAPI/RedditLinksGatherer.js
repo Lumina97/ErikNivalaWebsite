@@ -56,7 +56,7 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
           post.data.url.includes(".png") ||
           post.data.url.includes(".jpeg"))
       ) {
-        if (FilterTitle(post.data.title, titleFilters) == false) {
+        if (!FilterTitle(post.data.title, titleFilters)) {
           log.info("Title does not meet filter requirements!");
           continue;
         }
@@ -94,7 +94,7 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
 }
 
 // Iterates given title and checks if the given filters exist within the title
-async function FilterTitle(Title, Filters) {
+function FilterTitle(Title, Filters) {
   for (let i = 0; i < Filters.length; i++) {
     log.info("TITLE: \t" + Title);
     log.info("Filter: \t" + Filters[i]);
@@ -103,6 +103,7 @@ async function FilterTitle(Title, Filters) {
       log.info("title contains filter!");
       return true;
     }
+    log.info("title does NOT contains filter!");
   }
   return false;
 }
