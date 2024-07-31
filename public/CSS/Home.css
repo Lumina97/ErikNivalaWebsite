@@ -1,22 +1,38 @@
 @import url("https://fonts.googleapis.com/css?family=Lexend+Deca&display=swap");
 
+:root {
+  --color-orange: #cf7651;
+  --color-turquoise: #2f6568;
+  --color-dark-blue: #162936;
+  --color-green: #329680;
+  --color-blue: #099c95;
+  --color-dark-green: #175b52;
+  --color-white: #fff;
+  --color-gray: #505050;
+}
+
 body {
   margin: 0;
   padding: 0;
-  background: #162936;
+  background: var(--color-dark-blue);
   background: -webkit-linear-gradient(
     bottom,
-    #162936 5%,
-    #244c53 38%,
-    #cf7651 100%
+    var(--color-dark-blue) 5%,
+    var(--color-turquoise) 38%,
+    var(--color-orange) 100%
   );
   background: -moz-linear-gradient(
     bottom,
-    #162936 5%,
-    #244c53 38%,
-    #cf7651 100%
+    var(--color-dark-blue) 5%,
+    var(--color-turquoise) 38%,
+    var(--color-orange) 100%
   );
-  background: linear-gradient(to bottom, #162936 5%, #244c53 38%, #cf7651 100%);
+  background: linear-gradient(
+    to bottom,
+    var(--color-dark-blue) 5%,
+    var(--color-turquoise) 38%,
+    var(--color-orange) 100%
+  );
 
   color: #585761;
   text-shadow: 1px 1px #9494947c;
@@ -26,14 +42,6 @@ body {
   background-attachment: fixed;
 
   --menu-item-size: 50px;
-  --orange-color: #cf7651;
-  --turquoise-color: #2f6568;
-  --dark-blue-color: #162936;
-  --green-color: #329680;
-  --blue-color: #099c95;
-  --dark-green-color: #175b52;
-  --white-color: #fff;
-  --gray-color: #505050;
   --container-width: 700px;
   --container-height: 400px;
   --line-offset: calc(
@@ -62,8 +70,8 @@ body {
   padding: 0 1em;
   margin: 5px;
   transition: 0.5s linear all;
-  background: var(--green-color);
-  color: var(--dark-green-color);
+  background: var(--color-green);
+  color: var(--color-dark-green);
   cursor: pointer;
   font-size: 16px;
   user-select: none;
@@ -74,10 +82,10 @@ body {
 }
 
 .main-menu > li.active {
-  color: var(--white-color);
-  background: var(--blue-color);
+  color: var(--color-white);
+  background: var(--color-blue);
   cursor: default;
-  text-shadow: 1px 1px 1px var(--dark-green-color);
+  text-shadow: 1px 1px 1px var(--color-dark-green);
   font-size: 18px;
 }
 
@@ -93,7 +101,7 @@ body {
   left: 0;
   top: 50px;
   width: 100%;
-  background: var(--gray-color);
+  background: var(--color-gray);
   box-shadow: 5px 5px 5px #ccc;
   border-radius: 5px;
   padding: 0;
@@ -102,7 +110,7 @@ body {
 
 .submenu > li {
   background: #dedede;
-  border-bottom: 1px solid var(--gray-color);
+  border-bottom: 1px solid var(--color-gray);
   color: #777;
   padding: 1em;
   transition: 0.3s all linear;
@@ -111,12 +119,12 @@ body {
 }
 
 .submenu > li:active {
-  background: var(--white-color);
+  background: var(--color-white);
   font-size: 100%;
 }
 
 article {
-  background: var(--white-color);
+  background: var(--color-white);
   padding: 1em;
   border-radius: 5px;
   box-shadow: 5px 5px 5px #ccc;
@@ -125,7 +133,7 @@ article {
 h1 {
   font-size: 52px;
   color: var(--turquoise-color);
-  text-shadow: 1px 3px var(--orange-color);
+  text-shadow: 1px 3px var(--color-orange);
   margin: auto;
   width: 80%;
   padding: 10px;
@@ -134,13 +142,23 @@ h1 {
 
 button {
   background: none;
-  border: solid var(--orange-color) 2px;
+  border: solid var(--color-orange) 2px;
   border-radius: 25px;
   min-width: 220px;
   height: 35px;
   font-size: 16px;
   color: #585761;
   text-anchor: middle;
+  scale: 1;
+  transition: 0.15s ease-in-out;
+  margin-bottom: 0.5rem;
+}
+
+.activeBtn {
+  background-color: var(--color-orange);
+  border: solid var(--color-orange) 2px;
+  border-radius: 25px;
+  color: white;
 }
 
 .center {
@@ -154,14 +172,40 @@ button.rightAlign {
 }
 
 button:hover {
-  background-color: var(--orange-color);
-  border: solid var(--orange-color) 2px;
+  background-color: var(--color-orange);
+  border: solid var(--color-orange) 2px;
   border-radius: 25px;
   color: white;
 }
 
+button:active {
+  scale: 0.95;
+}
+
 .content {
   font-size: 16px;
+}
+
+select {
+  height: 35px;
+  border-radius: 25px;
+  min-width: 100px;
+  text-align: center;
+  border: 2px solid var(--color-orange);
+}
+
+.custom-select {
+  position: relative;
+  display: inline-block;
+}
+
+.custom-select::after {
+  content: "▼"; /* Custom arrow */
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 
 /* ------------------------------------DESKTOP-----------------------------------*/
@@ -172,8 +216,8 @@ button:hover {
   }
 
   .submenu > li:hover {
-    background: var(--gray-color);
-    color: var(--white-color);
+    background: var(--color-gray);
+    color: var(--color-white);
   }
 
   .main-menu > li.active:hover .submenu {
@@ -205,7 +249,7 @@ button:hover {
     width: var(--container-width);
     height: var(--container-height);
     position: absolute;
-    top: 50%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1;
@@ -226,8 +270,8 @@ button:hover {
     padding: 0 2em;
     margin: 1px;
     transition: 0.5s linear all;
-    background: var(--green-color);
-    color: var(--dark-green-color);
+    background: var(--color-green);
+    color: var(--color-dark-green);
     cursor: pointer;
     font-size: 16px;
     user-select: none;
@@ -257,16 +301,16 @@ button:hover {
   .main-menu > li:hover:not(.active) {
     background: linear-gradient(
       to right,
-      var(--green-color),
-      var(--blue-color)
+      var(--color-green),
+      var(--color-blue)
     );
-    color: var(--white-color);
+    color: var(--color-white);
   }
 
   .main-menu > li:active:not(.active),
   .main-menu > li:active:not(.with-submenu) {
-    background: var(--blue-color);
-    color: var(--white-color);
+    background: var(--color-blue);
+    color: var(--color-white);
   }
 
   .main-menu > li:hover i:not(li.active) {
@@ -274,10 +318,10 @@ button:hover {
   }
 
   .main-menu .active {
-    color: var(--white-color);
-    background: var(--blue-color);
+    color: var(--color-white);
+    background: var(--color-blue);
     cursor: default;
-    text-shadow: 1px 1px 1px var(--dark-green-color);
+    text-shadow: 1px 1px 1px var(--color-dark-green);
     font-size: 100%;
   }
 
@@ -318,7 +362,7 @@ button:hover {
 
   .submenu > li {
     background: #dedede;
-    border-bottom: 1px solid var(--gray-color);
+    border-bottom: 1px solid var(--color-gray);
     color: #777;
     padding: 1.2em 1em;
     transition: 0.3s all linear;
@@ -331,7 +375,7 @@ button:hover {
   }
 
   .submenu > li:active {
-    background: var(--white-color);
+    background: var(--color-white);
   }
 }
 
@@ -354,15 +398,15 @@ button:hover {
   }
 
   button:active {
-    background-color: var(--orange-color);
-    border: solid var(--orange-color) 2px;
+    background-color: var(--color-orange);
+    border: solid var(--color-orange) 2px;
     border-radius: 25px;
     color: white;
   }
 
   button {
     background: none;
-    border: solid var(--orange-color) 2px;
+    border: solid var(--color-orange) 2px;
     border-radius: 25px;
     color: #585761;
   }
@@ -376,6 +420,6 @@ button:hover {
   .main-menu {
     flex-wrap: wrap;
     justify-content: center;
-    background: var(--dark-blue-color);
+    background: var(--color-dark-blue);
   }
 }

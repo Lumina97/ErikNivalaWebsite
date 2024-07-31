@@ -5,9 +5,9 @@ require("dotenv").config({ path: envPath });
 const express = require("express");
 const session = require("express-session");
 const RedditAPI = require("./RedditAPI/RedditAPI");
+const FileDownloader = require("./FileDownloader");
 const { v4: uuidv4 } = require("uuid");
 const compression = require("compression");
-const MongoStore = require("connect-mongo");
 const log = require("./Config").log;
 const app = express();
 
@@ -18,14 +18,6 @@ app.use(express.json({ limit: "1mb" }));
 const oneDay = 1000 * 60 * 60 * 24;
 const secretKey = process.env.SESSION_SECRET;
 var downloadRequestDict = {};
-
-// const connectionURL = `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DATABASE}?authSource=admin`;
-// const mongodbStore = MongoStore.create({
-//   mongoUrl: connectionURL,
-//   ttl: oneDay,
-//   autoRemove: "native",
-//   collection: "sessions",
-// });
 
 app.use(
   session({
@@ -48,33 +40,43 @@ const port = 3000;
 app.listen(port, () => log.info("listening on " + port));
 
 //#region Image Gatherer
-app.post("/download", async function (request, response) {
-  log.info("Download POST request");
+app.post("/downloadFilesFromLinks", async (request, response) => {
+  const links = request.body.links;
 
-  log.info(request.body);
-  const path = request.body.path;
-  downloadRequestDict[request.session.userid] = path;
-  log.info(downloadRequestDict);
-
-  var data;
-  try {
-    data = JSON.stringify(request.session.userid);
-    response.json(data);
-  } catch (e) {
-    log.error("ERROR:\n" + e);
-  }
+  await FileDownloader.DownloadFilesFromLinksAndZip(
+    links,
+    request.session.userid
+  )
+    .then((result) => {
+      downloadRequestDict[request.session.userid] = result;
+      try {
+        let data = JSON.stringify({ id: request.session.userid });
+        response.json(data);
+      } catch (error) {
+        log.error("ERROR:\n" + error);
+      }
+    })
+    .catch((reason) => {
+      log.error(reason);
+    });
 });
 
 app.get("/download", async function (request, response) {
   log.info("Download GET request");
-
   for (const [key, value] of Object.entries(downloadRequestDict)) {
     log.info(key, value);
     if (key == request.session.userid) {
       log.info("Found request!");
       const path = value;
       log.info(path);
-      response.download(path);
+      response.download(path, (err) => {
+        if (err) {
+          log.error("Error occurred while downloading the file:", err);
+          response
+            .status(500)
+            .send("Error occurred while downloading the file");
+        }
+      });
       delete downloadRequestDict[key];
     }
   }
@@ -94,16 +96,16 @@ app.post("/ImageLoader", async function (request, response) {
     return;
   }
 
-  await RedditAPI.DownloadImagesFromSubreddit(
+  await RedditAPI.GetAllImageLinks(
     data.subreddit,
     data.amount,
     session,
     data.filters
   )
     .then((result) => {
-      var returnData;
+      let returnData;
       try {
-        returnData = JSON.stringify({ path: result });
+        returnData = JSON.stringify({ links: result });
         response.json(returnData);
         return;
       } catch (error) {

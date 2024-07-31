@@ -1,10 +1,6 @@
-const RedditLinksGatherer = require('./RedditLinksGatherer');
-const FileDownloader = require('./../FileDownloader');
-const FileZipper = require('./../FileZipper');
-const path = require('path');
-const RedditAuthentication = require('./RedditAuthentication');
-const log = require('../Config').log;
-
+const RedditLinksGatherer = require("./RedditLinksGatherer");
+const RedditAuthentication = require("./RedditAuthentication");
+const log = require("../Config").log;
 
 async function GetAccessToken() {
   return new Promise(async function (resolve, reject) {
@@ -18,12 +14,14 @@ async function GetAccessToken() {
   });
 }
 
-module.exports =
-{
-  DownloadImagesFromSubreddit: async function (subreddit, amount, session, postTitleFilters) {
-
+module.exports = {
+  GetAllImageLinks: async function (
+    subreddit,
+    amount,
+    session,
+    postTitleFilters
+  ) {
     return new Promise(async function (resolve, reject) {
-
       if (session === undefined) {
         reject("Session was invalid");
         return;
@@ -32,11 +30,7 @@ module.exports =
       SubRedditToScan = subreddit;
       AmountOfPosts = parseInt(amount);
 
-      var today = new Date();
-      var date = today.getHours() + '_' + today.getMinutes() + '_' + today.getSeconds();
-      const ID = path.join(String(session.userid), String(date));
-
-      var access_token;
+      let access_token;
       try {
         const result = await GetAccessToken();
         access_token = result;
@@ -45,22 +39,22 @@ module.exports =
         return;
       }
 
-      await RedditLinksGatherer.GetImageLinksFromSubreddit(subreddit, AmountOfPosts, postTitleFilters, access_token)
+      await RedditLinksGatherer.GetImageLinksFromSubreddit(
+        subreddit,
+        AmountOfPosts,
+        postTitleFilters,
+        access_token
+      )
         .then(async function (result) {
-          return await FileDownloader.DownloadFilesFromLinks(result, ID);
-        })
-        .then(async function (result) {
-          return await FileZipper.CreateZipFromUserID(result);
-        })
-        .then((result) => {
           resolve(result);
         })
         .catch((err) => {
-          log.warn(); ("There was an error while gathering subreddit images!");
+          log.warn();
+          ("There was an error while gathering subreddit images!");
           log.warn(err);
           reject(err);
           return;
-        })
-    })
-  }
-}
+        });
+    });
+  },
+};

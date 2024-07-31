@@ -357,6 +357,10 @@
     justify-content: center;
   }
 
+  .benefits-card {
+    width: 100%;
+  }
+
   .benefits-card p {
     min-width: initial;
     max-width: initial;
