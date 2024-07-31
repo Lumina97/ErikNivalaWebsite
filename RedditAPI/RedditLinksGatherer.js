@@ -56,7 +56,10 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
           post.data.url.includes(".png") ||
           post.data.url.includes(".jpeg"))
       ) {
-        if (!FilterTitle(post.data.title, titleFilters)) {
+        if (
+          titleFilters.length > 0 &&
+          !FilterTitle(post.data.title, titleFilters)
+        ) {
           log.info("Title does not meet filter requirements!");
           continue;
         }
@@ -78,7 +81,7 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
       }
     }
 
-    if (bHasAnyImageLinks == false) {
+    if (bHasAnyImageLinks === false) {
       log.warn("No image links found! - LinksGatherer.js - GetRedditPosts()");
       reject("No images in specified search!");
       return;
