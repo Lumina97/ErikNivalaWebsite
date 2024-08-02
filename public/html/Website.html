@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Erik Nivala</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./CSS/Global.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <nav class="menu">
+        <ul class="main-menu">
+            <li  onclick="OnHomeClicked()" id="HomeNav">Home</li>
+            <li class="active with-submenu">
+                <div id="PortfolioNav">Portfolio </div>
+                <ul class="submenu">
+                    <li class="active"  onclick="OnWebsiteClicked()" id="WebsiteNav">Website</li>
+                    <li onclick="OnImageGathererClicked()" id="ImageGathererNav">Image
+                        Gatherer
+                    </li>
+                    <li onclick="OnSpaceTraceClicked()" id="SpaceTraceNav">Space Trace</li>
+                    <li onclick="OnSaaSProjectClicked()" id="SaaSProjectNav">SaaS website</li>
+                </ul>
+            </li> 
+            <li id="AboutNav" onclick="OnAboutClicked()">About
+            </li>
+            <li id="GitHubNav" onclick="OnGithubClicked()">Github</li>
+        </ul>
+    </nav>
+      <article id="Website">
+        <h1>Website</h1>
+        <div class="content">
+            <p>
+                Welcome to the more technical explanation of my website!
+            </p>
+            <p>
+                The website is hosted on an OrangePi-5 which is running a version of linux.
+                In order to protect myself I did not open any ports to the internet but rather I am using
+                a service called cloudflare which acts as a reverse proxy hosting my page online.
+            </p>
+            <p>
+                I bought my own domain from google domains and used that for cloudflare to redirect my traffic.
+                In order for that to work I had to use the cloudflare DNS servers which I simply added to the Google
+                domain for my website to be found online.
+            </p>
+            <p>
+                I have a linode server that checks uptime for my website response and my ImageGatherer post request.
+                It checks if the website itself is up every 30 seconds and it sends a post request for the
+                ImageGatherer
+                every 60 seconds.
+            </p>               
+        </div>
+    </article>
+    </div>
+    <script src=./JS/Global.js></script>
+    <script src="https://kit.fontawesome.com/88f17612fa.js" crossorigin="anonymous"></script>
+
+  </body>
+</html>

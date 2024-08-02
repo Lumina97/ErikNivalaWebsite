@@ -122,17 +122,36 @@ app.post("/ImageLoader", async function (request, response) {
 });
 //#endregion
 
+function checkRequestUserID(request) {
+  request.session.userid || (request.session.userid = uuidv4());
+}
 //#region File Serving
-app.get("/spacetrace", (response) => {
-  response.sendFile(
-    path.join(pth.join(__dirname, "/public/spacetrace/index.html"))
-  );
+app.get("/spaceTracePage", (request, response) => {
+  checkRequestUserID(request);
+  response.sendFile(path.join(__dirname, "/public/html/SpaceTrace.html"));
 });
-
+app.get("/about", (request, response) => {
+  checkRequestUserID(request);
+  response.sendFile(path.join(__dirname, "/public/html/About.html"));
+});
+app.get("/imageGatherer", (request, response) => {
+  checkRequestUserID(request);
+  response.sendFile(path.join(__dirname, "/public/html/ImageGatherer.html"));
+});
+app.get("/website", (request, response) => {
+  checkRequestUserID(request);
+  response.sendFile(path.join(__dirname, "/public/html/Website.html"));
+});
+app.get("/saas", (request, response) => {
+  checkRequestUserID(request);
+  response.sendFile(path.join(__dirname, "/public/html/Saas.html"));
+});
+app.get("/home", (request, response) => {
+  checkRequestUserID(request);
+  response.sendFile(path.join(__dirname, "/public/html/Home.html"));
+});
 app.get("/", (request, response) => {
-  if (!request.session.userid) {
-    request.session.userid = uuidv4();
-  }
+  checkRequestUserID(request);
   response.sendFile(path.join(__dirname, "/public/html/Home.html"));
 });
 //#endregion

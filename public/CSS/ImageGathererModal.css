@@ -47,6 +47,7 @@
   gap: 0.75rem;
   flex: 1;
   overflow: auto;
+  min-width: 220px;
 }
 
 #modalContentContainer {
@@ -147,4 +148,16 @@
   justify-content: space-around;
   align-items: center;
   flex-wrap: wrap;
+  gap: 0.15rem;
+}
+
+@media (max-width: 450px) {
+  #ImageDisplayModal {
+    height: 99vh;
+    top: 1%;
+    border: 1px solid black;
+  }
+  #imageSizes {
+    display: none;
+  }
 }
