@@ -8,11 +8,8 @@ const modalMainCollectionButton = document.getElementById(
 const modalFavCollectionButton = document.getElementById(
   "modalFavCollectionButton"
 );
-const imageSizeContainer = document.getElementById("imageSizes");
 const collectionStorageKey = "collection";
 const favoritesStorageKey = "favorites";
-const sizeCounterStorageKey = "sizeCounter";
-const favoriteSizeCounterStorageKey = "favoriteSizeCounter";
 const selectedItems = [];
 const sortSelect = document.getElementById("sort");
 
@@ -23,40 +20,6 @@ let wasFavoritesOpen = false;
 loader.style.opacity = 0;
 collectionModal.style.display = "none";
 imagePreview.style.display = "none";
-
-class ImageSizeCounter {
-  constructor() {
-    this.sizeCount = {};
-  }
-
-  setSizeCount(sizeCount) {
-    this.sizeCount = sizeCount;
-  }
-
-  addSize(size) {
-    if (this.sizeCount[size]) {
-      this.sizeCount[size]++;
-    } else {
-      this.sizeCount[size] = 1;
-    }
-  }
-
-  removeSize(size) {
-    if (this.sizeCount[size]) {
-      if (this.sizeCount[size] > 1) {
-        this.sizeCount[size]--;
-      } else {
-        delete this.sizeCount[size];
-      }
-    }
-  }
-
-  getCounts() {
-    return this.sizeCount;
-  }
-}
-let collectionSizeCounter = new ImageSizeCounter();
-let favoriteCollectionSizeCounter = new ImageSizeCounter();
 
 loadLastMainCollection();
 loadFavoritesCollection();
@@ -108,11 +71,6 @@ function loadLastMainCollection() {
     if (localStorage.getItem(collectionStorageKey) !== null) {
       collectionData = JSON.parse(localStorage.getItem(collectionStorageKey));
     }
-    if (localStorage.getItem(sizeCounterStorageKey) !== null) {
-      collectionSizeCounter.setSizeCount(
-        JSON.parse(localStorage.getItem(sizeCounterStorageKey))
-      );
-    }
   } catch (error) {
     console.error(error);
   }
@@ -124,17 +82,9 @@ function saveFavoritesCollection() {
     tempArray.forEach((element) => {
       if (!favoriteCollectionData.some((item) => item[0] === element[0])) {
         favoriteCollectionData.push(element);
-        const size = `${element[2].width}x${element[2].height}`;
-        favoriteCollectionSizeCounter.addSize(size);
       }
     });
   }
-  localStorage.setItem(
-    favoritesStorageKey,
-    JSON.stringify(favoriteCollectionData)
-  );
-
-  saveCurrentFavoriteCollectionSizeCounter();
 }
 
 function loadFavoritesCollection() {
@@ -143,33 +93,10 @@ function loadFavoritesCollection() {
       favoriteCollectionData = JSON.parse(
         localStorage.getItem(favoritesStorageKey)
       );
-
-      if (localStorage.getItem(favoriteSizeCounterStorageKey) !== null) {
-        favoriteCollectionSizeCounter.setSizeCount(
-          JSON.parse(localStorage.getItem(favoriteSizeCounterStorageKey))
-        );
-      }
     }
   } catch (error) {
     console.error(error);
   }
-}
-
-function saveCurrentCollectionSizeCounter() {
-  if (!collectionSizeCounter.getCounts()) return;
-  localStorage.removeItem(sizeCounterStorageKey);
-  localStorage.setItem(
-    sizeCounterStorageKey,
-    JSON.stringify(collectionSizeCounter.getCounts())
-  );
-}
-function saveCurrentFavoriteCollectionSizeCounter() {
-  if (!favoriteCollectionSizeCounter.getCounts()) return;
-  localStorage.removeItem(favoriteSizeCounterStorageKey);
-  localStorage.setItem(
-    favoriteSizeCounterStorageKey,
-    JSON.stringify(favoriteCollectionSizeCounter.getCounts())
-  );
 }
 
 /*------------------------ Request Title filters*/
@@ -208,7 +135,6 @@ async function sendImageGatheringRequest() {
 
 async function addLinksToMainCollection(links) {
   collectionData = [];
-  collectionSizeCounter = new ImageSizeCounter();
   return new Promise((res) => {
     links.forEach((link) => {
       const img = new Image();
@@ -220,8 +146,6 @@ async function addLinksToMainCollection(links) {
           { width: img.width, height: img.height }, //size data
         ];
         collectionData.push(item);
-        const size = `${img.width}x${img.height}`;
-        collectionSizeCounter.addSize(size);
       };
     });
     res();
@@ -348,32 +272,20 @@ function addCollectionItemOnClick(htmlElement, item) {
 function addItemToFavorites(item) {
   favoriteCollectionData.indexOf(item) === -1 &&
     favoriteCollectionData.push(item);
-
-  const size = `${item[2].width}x${item[2].height}`;
-  favoriteCollectionSizeCounter.addSize(size);
 }
 
 function removeItemFromFavorites(item) {
   const index = favoriteCollectionData.indexOf(item);
   index !== -1 && favoriteCollectionData.splice(index, 1);
-
-  const size = `${item[2].width}x${item[2].height}`;
-  favoriteCollectionSizeCounter.removeSize(size);
 }
 
 function addItemToMainCollection(item) {
   collectionData.indexOf(item) === -1 && collectionData.push(item);
-
-  const size = `${item[2].width}x${item[2].height}`;
-  collectionSizeCounter.addSize(size);
 }
 
 function removeItemFromMainCollection(item) {
   const index = collectionData.indexOf(item);
   index !== -1 && collectionData.splice(index, 1);
-
-  const size = `${item[2].width}x${item[2].height}`;
-  collectionSizeCounter.removeSize(size);
 }
 
 async function openCollection() {
@@ -381,17 +293,6 @@ async function openCollection() {
     ? createCollectionHTMLItems(favoriteCollectionData)
     : createCollectionHTMLItems(collectionData);
   result.then(() => {
-    imageSizeContainer.innerHTML = " ";
-
-    const collection = wasFavoritesOpen
-      ? favoriteCollectionSizeCounter.getCounts()
-      : collectionSizeCounter.getCounts();
-
-    for (const [size, count] of Object.entries(collection)) {
-      const div = document.createElement("div");
-      div.innerText = `${count} | ${size}`;
-      imageSizeContainer.appendChild(div);
-    }
     collectionModal.style.display = "flex";
   });
 }
@@ -422,9 +323,6 @@ function clearFavorites() {
 
   favoriteCollectionData = [];
   localStorage.setItem(favoritesStorageKey, JSON.stringify([]));
-  favoriteCollectionSizeCounter = new ImageSizeCounter();
-  localStorage.setItem(favoriteCollectionSizeCounter, JSON.stringify({}));
-
   if (wasFavoritesOpen) openFavoritesCollection();
   else openCollection();
 }
