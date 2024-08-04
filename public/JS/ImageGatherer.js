@@ -63,7 +63,6 @@ function saveCurrentMainCollection() {
   if (!collectionData) return;
   localStorage.removeItem(collectionStorageKey);
   localStorage.setItem(collectionStorageKey, JSON.stringify(collectionData));
-  saveCurrentCollectionSizeCounter();
 }
 
 function loadLastMainCollection() {
