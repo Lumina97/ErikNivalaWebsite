@@ -463,6 +463,11 @@
     text-align: center;
   }
 
+  .contact-footer-wrapper h3 {
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
   .socials-container {
     display: flex;
     flex-wrap: wrap;
