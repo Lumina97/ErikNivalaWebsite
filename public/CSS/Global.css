@@ -9,6 +9,13 @@
   --color-dark-green: #175b52;
   --color-white: #fff;
   --color-gray: #505050;
+
+  --favPositionX: 0;
+  --favPositionY: 0;
+  --collectionPositionX: 0;
+  --collectionPositionY: 0;
+  --modalItemInitialPositionX: 0;
+  --modalItemInitialPositionY: 0;
 }
 
 body {
@@ -104,6 +111,13 @@ select {
   min-width: 100px;
   text-align: center;
   border: 2px solid var(--color-orange);
+}
+
+.activeBtn {
+  background-color: var(--color-orange);
+  border: solid var(--color-orange) 2px;
+  border-radius: 25px;
+  color: white;
 }
 
 .custom-select {

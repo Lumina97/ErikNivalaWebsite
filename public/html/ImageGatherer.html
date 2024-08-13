@@ -6,10 +6,10 @@
     <link rel="stylesheet" href="./CSS/Global.css" />
     <link rel="stylesheet" href="./CSS/ImageGatherer.css" />
     <link rel="stylesheet" href="./CSS/ImageGathererModal.css" />
+    <link rel="stylesheet" href="./CSS/animations.css" />
   </head>
 
   <body>
-
     <div id="ImageDisplayModal">
         <div class="modalHeader">
             <div>
@@ -21,7 +21,7 @@
                     <option value="sizeDescending">Size &darr;</i> </option>
                 </select>              
             </div>
-            <i class="fa-solid fa-x" onclick="closeCollection()"></i>
+            <i class="fa-solid fa-x" onclick="closeCollection()">          </i>
         </div>
 
         <div id="modalContentContainer">
@@ -33,7 +33,7 @@
             <button onclick="clearFavorites()">Clear All favorites</button>
         </div>
 
-        <div id="itemPreview">
+        <div id="itemPreview" onclick="closePreview()">
             <i class="fa-solid fa-x" onclick="closePreview()"></i>
             <img  src="https://i.redd.it/bfp3yc5jusdd1.jpeg">
         </div>
@@ -89,7 +89,10 @@
     </article>
     </div>
     <script src=./JS/Global.js></script>
-    <script src=./JS/ImageGatherer.js></script>
+    <script src=./JS/ImageGatherer/ImageGatherer.js></script>
+    <script src=./JS/ImageGatherer/CssVariableManager.js></script>
+    <script src=./JS/ImageGatherer/CollectionManager.js></script>
+    <script src=./JS/ImageGatherer/ItemSorting.js></script>
     <script src="https://kit.fontawesome.com/88f17612fa.js" crossorigin="anonymous"></script>
   </body>
 </html>
