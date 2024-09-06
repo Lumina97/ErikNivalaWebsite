@@ -1,0 +1,151 @@
+#ImageGatherer .loader {
+  border: 6px solid var(--color-dark-blue);
+  border-top: 6px solid var(--color-orange);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 2s linear infinite;
+  display: inline-block;
+}
+
+#ImageGatherer #ErrorText {
+  font-size: 20px;
+  color: #ff0000;
+  overflow-wrap: break-word;
+}
+
+#ImageGatherer input {
+  background-color: transparent;
+  color: #585761;
+  border: solid 2px #e57e5e;
+  border-radius: 25px;
+  width: 90%;
+  height: 20px;
+  text-align: center;
+}
+
+#ImageGatherer input::placeholder {
+  color: grey;
+}
+
+#ImageGatherer input:hover::placeholder {
+  color: #585761;
+}
+
+#ImageGatherer .inputFields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  margin: auto;
+}
+
+#ImageGatherer #FilterUnorderedList {
+  list-style: none;
+  overflow: overlay;
+  width: 100%;
+  min-height: 16px;
+  max-height: 200px;
+  padding: 0;
+  text-align: center;
+  color: #585761;
+  height: 100%;
+}
+
+#ImageGatherer .filterInputContainer {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  height: 100%;
+  margin: auto;
+}
+#ImageGatherer .filterInputContainer > input {
+  width: 100%;
+}
+
+#ImageGatherer .filterInputContainer i {
+  font-weight: 900;
+  position: absolute;
+  font-size: 0.75rem;
+  left: 95%;
+}
+
+.imageGathererButtons {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-evenly;
+}
+
+.loaderContainer {
+  flex: 1 1 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* ------------------------------------DESKTOP-----------------------------------*/
+
+@media (min-width: 1024px) {
+  #ImageGatherer input:hover {
+    background-color: #e57e5e;
+    border: solid #e57e5e 2px;
+    border-radius: 25px;
+    color: white;
+  }
+
+  #ImageGatherer #OpenCollectionButton,
+  #ImageGatherer #SendImageRequestButton {
+    max-height: 30px;
+    text-align: center;
+    padding: 0;
+    padding-top: 2px;
+    margin-top: 0.75rem;
+  }
+}
+
+/* ------------------------------------MOBILE-----------------------------------*/
+@media (max-width: 1024px) {
+  #ImageGatherer #SendImageRequestButton {
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  #ImageGatherer h1 {
+    font-size: 36px;
+  }
+
+  #ImageGatherer .center {
+    padding: 0;
+  }
+
+  #ImageGatherer .filterInputContainer i {
+    left: 95%;
+  }
+
+  .modalFooter button,
+  #ImageGatherer button {
+    background: none;
+    border: solid #e57e5e 2px;
+    border-radius: 25px;
+    color: #585761;
+    padding-left: 2%;
+    padding-right: 2%;
+  }
+}
+
+@media (max-width: 570px) {
+  #ImageGatherer .filterInputContainer i {
+    left: 90%;
+  }
+
+  #ImageGatherer .imageGathererButtons {
+    flex-wrap: wrap;
+  }
+  #ImageGatherer button {
+    padding: 0;
+  }
+}
