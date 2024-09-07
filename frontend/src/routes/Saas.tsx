@@ -1,4 +1,4 @@
-import MainSection from "../mainSection";
+import MainSection from "../Components/mainSection";
 import { useMainContainer } from "../Providers/MainContainerProvider";
 import { useNavigate } from "react-router-dom";
 

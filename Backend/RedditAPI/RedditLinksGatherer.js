@@ -131,7 +131,7 @@ module.exports = {
       }
       if (
         typeof amountOfPostsSearched === "undefined" ||
-        isNaN(amountOfPostsSearched) == true ||
+        isNaN(amountOfPostsSearched) === true ||
         typeof amountOfPostsSearched != "number"
       ) {
         log.info(

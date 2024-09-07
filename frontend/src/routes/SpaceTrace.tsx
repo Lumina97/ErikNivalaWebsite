@@ -1,4 +1,4 @@
-import MainSection from "../mainSection";
+import MainSection from "../Components/mainSection";
 import { PlaySpaceTrace } from "../JS/SpaceTrace";
 
 const SpaceTrace = () => {

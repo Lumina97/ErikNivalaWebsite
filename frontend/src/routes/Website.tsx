@@ -1,4 +1,4 @@
-import MainSection from "../mainSection";
+import MainSection from "../Components/mainSection";
 
 const Website = () => {
   return (

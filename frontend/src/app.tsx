@@ -6,7 +6,7 @@ import Website from "./routes/Website";
 import SpaceTrace from "./routes/SpaceTrace";
 import Saas from "./routes/Saas";
 import SaasProject from "./routes/SaasProject";
-import ImageGatherer from "./routes/ImageGatherer";
+import ImageGathererWrapper from "./routes/ImageGathererWrapper";
 
 //add new routes here
 const router = createBrowserRouter([
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/ImageGatherer",
-    element: <ImageGatherer />,
+    element: <ImageGathererWrapper />,
   },
   {
     path: "/about",

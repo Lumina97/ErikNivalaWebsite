@@ -2,11 +2,10 @@ import { ReactNode } from "react";
 import {
   useMainContainer,
   EActiveTab,
-} from "./Providers/MainContainerProvider";
-import "./css/Global.css";
+} from "../Providers/MainContainerProvider";
 import { useNavigate } from "react-router-dom";
 
-import "./css/Global.css";
+import "../css/Global.css";
 
 const MainSection = ({
   children,
