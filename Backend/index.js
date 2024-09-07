@@ -18,6 +18,8 @@ const oneDay = 1000 * 60 * 60 * 24;
 const secretKey = process.env.SESSION_SECRET;
 var downloadRequestDict = {};
 
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
 app.use((req, res, next) => {
   if (/(.ico|.js|.css|.jpg|.png|.map)$/i.test(req.path)) {
     next();
@@ -25,11 +27,9 @@ app.use((req, res, next) => {
     res.header("Cache-Control", "private, no-cache, no-store, must-revalidate");
     res.header("Expires", "-1");
     res.header("Pragma", "no-cache");
-    res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
+    res.sendFile(path.join(__dirname, "../frontend/dist", "index.html")); // React index.html
   }
 });
-
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
 // app.use((req, res, next) => {
 //   if (/(.ico|.js|.css|.jpg|.png|.map)$/i.test(req.path)) {

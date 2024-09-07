@@ -1,4 +1,9 @@
 {
+  "compilerOptions": {
+    "allowJs": true, // Allow JavaScript files to be imported
+    "checkJs": false, // Optionally disable JS type-checking (if needed)
+    "noImplicitAny": false // Prevent errors from implicit `any` type
+  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },

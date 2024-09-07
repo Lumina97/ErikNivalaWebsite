@@ -1,37 +1,95 @@
 import { ReactNode } from "react";
+import {
+  useMainContainer,
+  EActiveTab,
+} from "./Providers/MainContainerProvider";
+import "./css/Global.css";
+import { useNavigate } from "react-router-dom";
 
-const MainSection = ({ children }: { children: ReactNode }) => {
+import "./css/Global.css";
+
+const MainSection = ({
+  children,
+  title,
+}: {
+  children: ReactNode;
+  title: string;
+}) => {
+  const {
+    activeTab,
+    OnHomeClicked,
+    OnImageGathererClicked,
+    OnWebsiteClicked,
+    OnSpaceTraceClicked,
+    OnSaasClicked,
+    OnAboutClicked,
+    OnGitHubClicked,
+  } = useMainContainer();
+
+  const navigate = useNavigate();
+
   return (
     <div className="container">
       <nav className="menu">
         <ul className="main-menu">
-          <li /* onclick="OnHomeClicked()" */ id="HomeNav">Home</li>
+          <li
+            className={activeTab === EActiveTab.Home ? "active" : ""}
+            onClick={() => OnHomeClicked(navigate)}
+            id="HomeNav"
+          >
+            Home
+          </li>
           <li className="with-submenu">
             <div id="PortfolioNav">Portfolio </div>
             <ul className="submenu">
-              <li /* onclick="OnWebsiteClicked()" */ id="WebsiteNav">
+              <li
+                className={activeTab === EActiveTab.Website ? "active" : ""}
+                onClick={() => OnWebsiteClicked(navigate)}
+                id="WebsiteNav"
+              >
                 Website
               </li>
               <li
-                /* onclick="OnImageGathererClicked()" */ id="ImageGathererNav"
+                className={
+                  activeTab === EActiveTab.ImageGatherer ? "active" : ""
+                }
+                onClick={() => OnImageGathererClicked(navigate)}
+                id="ImageGathererNav"
               >
                 Image Gatherer
               </li>
-              <li /* onclick="OnSpaceTraceClicked()" */ id="SpaceTraceNav">
+              <li
+                className={activeTab === EActiveTab.SpaceTrace ? "active" : ""}
+                onClick={() => OnSpaceTraceClicked(navigate)}
+                id="SpaceTraceNav"
+              >
                 Space Trace
               </li>
-              <li /* onclick="OnSaaSProjectClicked()" */ id="SaaSProjectNav">
+              <li
+                className={activeTab === EActiveTab.Saas ? "active" : ""}
+                onClick={() => OnSaasClicked(navigate)}
+                id="SaaSProjectNav"
+              >
                 SaaS website
               </li>
             </ul>
           </li>
-          <li className="active" id="AboutNav" /* onclick="OnAboutClicked()" */>
+          <li
+            className={activeTab === EActiveTab.About ? "active" : ""}
+            id="AboutNav"
+            onClick={() => OnAboutClicked(navigate)}
+          >
             About
           </li>
-          <li id="GitHubNav" /* onclick="OnGithubClicked()" */>Github</li>
+          <li id="GitHubNav" onClick={OnGitHubClicked}>
+            Github
+          </li>
         </ul>
       </nav>
-      {children}
+      <div className="content" id={title}>
+        <h1>{title}</h1>
+        <div> {children}</div>
+      </div>
     </div>
   );
 };

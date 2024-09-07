@@ -20,7 +20,7 @@ function TogglePlayButtonAndCanvas(play) {
   }
 }
 
-function PlaySpaceTrace() {
+export function PlaySpaceTrace() {
   container = document.querySelector("#unity-container");
   canvas = document.querySelector("#unity-canvas");
   loadingBar = document.querySelector("#unity-loading-bar");
@@ -97,7 +97,7 @@ function PlaySpaceTrace() {
   document.body.appendChild(scriptElement);
 }
 
-function StopPlayingSpaceTrace() {
+export function StopPlayingSpaceTrace() {
   if (myGameInstance === undefined || myGameInstance === null) {
     return;
   }
