@@ -26,9 +26,11 @@ const ImageGathererModal = () => {
   const favoriteButtonRef = useRef<HTMLButtonElement>(null);
   const mainButtonRef = useRef<HTMLButtonElement>(null);
   const toggleButtonAnimation = () => {
-    (showFavorites ? favoriteButtonRef : mainButtonRef).current?.classList.add(
-      "buttonWiggleAnimation"
-    );
+    const ref = !showFavorites ? favoriteButtonRef : mainButtonRef;
+    if (ref.current) {
+      console.log("changing ref");
+      ref.current.classList.toggle("buttonWiggleAnimation");
+    }
   };
 
   return (
@@ -40,7 +42,6 @@ const ImageGathererModal = () => {
             id="modalMainCollectionButton"
             className={showFavorites ? " " : "activeBtn"}
             onClick={() => {
-              toggleButtonAnimation();
               setShowFavorites(false);
             }}
           >
@@ -51,7 +52,6 @@ const ImageGathererModal = () => {
             className={showFavorites ? "activeBtn" : ""}
             id="modalFavCollectionButton"
             onClick={() => {
-              toggleButtonAnimation();
               setShowFavorites(true);
             }}
           >
@@ -85,6 +85,7 @@ const ImageGathererModal = () => {
           return (
             <ImageListItemComponent
               imageItem={item}
+              toggleFavoriteAnimation={toggleButtonAnimation}
               setPreviewImage={setPreviewImageLink}
             />
           );
