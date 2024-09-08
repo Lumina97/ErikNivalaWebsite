@@ -15,9 +15,11 @@ import { Dispatch, SetStateAction } from "react";
 
 const ImageListItemComponent = ({
   imageItem,
+  toggleFavoriteAnimation,
   setPreviewImage,
 }: {
   imageItem: TImageListItem;
+  toggleFavoriteAnimation: () => void;
   setPreviewImage: Dispatch<SetStateAction<string>>;
 }) => {
   const { toggleFavoriteItem, toggleSelectedItem, setIsPreviewActive } =
@@ -39,7 +41,10 @@ const ImageListItemComponent = ({
         <FontAwesomeIcon
           icon={imageItem.isFavorited ? faSolidHeart : faRegularHeart}
           className="modalItemFav"
-          onClick={() => toggleFavoriteItem(imageItem)}
+          onClick={() => {
+            toggleFavoriteAnimation();
+            toggleFavoriteItem(imageItem);
+          }}
         />
         <FontAwesomeIcon
           icon={imageItem.isSelected ? faSquareCheck : faSquare}
