@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Erik Nivala</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./CSS/Global.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <nav class="menu">
+        <ul class="main-menu">
+            <li  onclick="OnHomeClicked()" id="HomeNav">Home</li>
+            <li class="active with-submenu">
+                <div id="PortfolioNav">Portfolio </div>
+                <ul class="submenu">
+                    <li onclick="OnWebsiteClicked()" id="WebsiteNav">Website</li>
+                    <li onclick="OnImageGathererClicked()" id="ImageGathererNav">Image
+                        Gatherer
+                    </li>
+                    <li class="active" onclick="OnSpaceTraceClicked()" id="SpaceTraceNav">Space Trace</li>
+                    <li onclick="OnSaaSProjectClicked()" id="SaaSProjectNav">SaaS website</li>
+                </ul>
+            </li> 
+            <li id="AboutNav" onclick="OnAboutClicked()">About
+            </li>
+            <li id="GitHubNav" onclick="OnGithubClicked()">Github</li>
+        </ul>
+    </nav>
+      <article id="Space Trace">
+        <h1>Space Trace</h1>
+        <div class="content SpaceTrace">
+            <p id="space-trace-text" >A modernized asteroids clone created using the Unity engine and
+                built as a webGL game.
+                My focus was on making the entire game as modular as possible while keeping it fun to play and not
+                over
+                engineering everything.
+                <br />
+                Source code of the project can be found on my github page.
+            </p>
+            <p id="spaceTraceMobileText"> This does NOT work on mobile!</p>
+            <button class="space-trace-play-button" id="PlaySpaceTrace"
+                onclick="PlaySpaceTrace()">Play</button>
+
+            <div id="unity-container" class="unity-desktop">
+                <canvas id="unity-canvas" style="width:0%; height:0%" tabindex="-1"></canvas>
+                <div id="unity-loading-bar">
+                    <div id="unity-logo"></div>
+                    <div id="unity-progress-bar-empty">
+                        <div id="unity-progress-bar-full"></div>
+                    </div>
+                </div>
+                <div id="unity-warning"> </div>
+    </article>
+    </div>
+    <script src=./JS/Global.js></script>
+    <script src=./JS/SpaceTrace.js></script>
+    <script src="https://kit.fontawesome.com/88f17612fa.js" crossorigin="anonymous"></script>
+
+  </body>
+</html>

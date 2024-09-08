@@ -1,0 +1,724 @@
+.Saas-Page .mobile-menu-wrapper {
+  display: none;
+}
+
+.Saas-Page .header-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.Saas-Page .company-logo {
+  margin-right: auto;
+  width: 200px;
+  z-index: 101;
+}
+
+.Saas-Page .nav-list {
+  display: flex;
+  gap: 30px;
+  padding-right: 30px;
+  align-items: center;
+}
+
+.Saas-Page .nav-list li a {
+  font-weight: 600;
+  color: var(--color-grey);
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Saas-Page .nav-list li a:hover {
+  color: var(--color-blue);
+}
+
+.Saas-Page .empowering-wrapper {
+  display: flex;
+  justify-content: space-between;
+  background-image: url(../../../public/Saas_assets/backgrounds/);
+  margin-top: -6rem;
+  padding-top: 8rem;
+}
+
+.Saas-Page .empowering-text-wrapper {
+  margin-top: 3rem;
+}
+
+.Saas-Page .empowering-text-wrapper h1 {
+  text-align: left;
+  font-weight: 600;
+  font-size: 35px;
+  line-height: 1.2;
+}
+
+.Saas-Page .empowering-text-wrapper h1,
+.Saas-Page .empowering-text-wrapper p {
+  margin-top: 1rem;
+  margin-right: 1rem;
+}
+
+.Saas-Page .empowering-text-wrapper > a.btn-primary {
+  margin-right: 2rem;
+}
+
+.Saas-Page .empowering-text-wrapper p {
+  margin-bottom: 3rem;
+  color: var(--color-grey);
+}
+
+.Saas-Page .logo-icon img {
+  padding: 1rem;
+  width: 70px;
+  height: 70px;
+}
+
+.Saas-Page .logo-icon-wrapper {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.Saas-Page .logo-icon-wrapper div:nth-child(1) {
+  position: relative;
+  left: -3%;
+  top: -45%;
+}
+
+.Saas-Page .logo-icon-wrapper div:nth-child(2) {
+  position: relative;
+  left: -30%;
+  top: 30%;
+}
+
+.Saas-Page .logo-icon-wrapper div:nth-child(3) {
+  position: relative;
+  left: 0%;
+  top: 50%;
+}
+
+.Saas-Page .logo-icon-wrapper div:nth-child(4) {
+  position: relative;
+  left: -2%;
+  top: -24%;
+}
+
+.Saas-Page .logo-icon-wrapper div:nth-child(5) {
+  position: relative;
+  left: 2%;
+  top: 16%;
+}
+
+.Saas-Page .logo-icon-wrapper div:nth-child(6) {
+  position: relative;
+  left: -58%;
+  top: 4%;
+  scale: 1.3;
+}
+
+.Saas-Page .logo-icon-wrapper div:nth-child(7) {
+  position: relative;
+  left: -6%;
+  top: -34%;
+  scale: 1.3;
+}
+
+.Saas-Page .logo-icon {
+  background-color: var(--color-white);
+  border-radius: 50%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.Saas-Page .benefits-wrapper > h2,
+.Saas-Page .benefits-wrapper > h4 {
+  text-align: center;
+}
+
+.Saas-Page .benefits-wrapper > h2 {
+  font-size: 32px;
+  text-transform: capitalize;
+  margin-bottom: 1rem;
+}
+
+.Saas-Page .benefits-wrapper > h4 {
+  color: var(--color-grey);
+  font-weight: 400;
+  font-size: 20px;
+  margin-bottom: 4rem;
+}
+
+.Saas-Page .benefits-cards-wrapper {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.Saas-Page .benefits-card {
+  border: 1px solid transparent;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.09);
+  padding: 1rem;
+  transition: 0.2s;
+}
+
+.Saas-Page .benefits-card:hover {
+  transition: 0.2s;
+  scale: 1.1;
+}
+
+.Saas-Page .benefits-card > .card-img-wrapper {
+  width: 50px;
+  height: 50px;
+}
+
+.Saas-Page .benefits-card h4 {
+  margin: 1.5rem 0;
+  font-size: 20px;
+  text-transform: capitalize;
+}
+
+.Saas-Page .benefits-card p {
+  color: var(--color-grey);
+  margin-bottom: 1.5rem;
+  font-size: 14px;
+  line-height: 1.4;
+  max-width: 188px;
+  min-height: 100px;
+  max-height: 100px;
+}
+
+.Saas-Page .premium-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.Saas-Page #sketch {
+  background-color: var(--color-lightgreen);
+  color: var(--color-white);
+  font-size: 14px;
+  padding: 0.15rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 50px;
+  text-transform: lowercase;
+}
+
+.Saas-Page .banner-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 25rem;
+  background-color: var(--color-contrast);
+}
+
+.Saas-Page .banner-wrapper h2 {
+  font-size: 28px;
+  font-weight: 500;
+  margin-bottom: 3rem;
+}
+.Saas-Page .banner-wrapper:nth-child(1) {
+  padding-left: 4rem;
+}
+
+.Saas-Page .why-front-wrapper {
+  position: relative;
+}
+
+.Saas-Page .why-front-wrapper > h2,
+.Saas-Page .why-front-wrapper > p {
+  text-align: center;
+}
+
+.Saas-Page .why-front-wrapper > h2 {
+  margin: 1.5rem 0;
+}
+
+.Saas-Page .why-front-wrapper > p {
+  color: var(--color-grey);
+  margin-bottom: 2rem;
+}
+
+.Saas-Page .why-front-dots {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.Saas-Page .dot-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+}
+
+.Saas-Page .dot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-blue);
+  width: 50px;
+  height: 50px;
+  background-color: #ecf2ff;
+  border-radius: 50%;
+  flex-grow: 1;
+  margin-bottom: 2rem;
+}
+
+.Saas-Page .dot i {
+  font-size: 6px;
+}
+
+.Saas-Page .dot-wrapper:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 23%;
+  left: 62%;
+  width: 76%;
+  height: 2px;
+  background: #e0e0e0;
+  z-index: 100;
+}
+
+.Saas-Page .dot-wrapper > h4 {
+  font-weight: 500;
+  color: var(--color-black);
+}
+
+.Saas-Page .hub-spot-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.Saas-Page .hub-spot-wrapper .hub-spot-main-img {
+  z-index: 1;
+  position: inherit;
+}
+
+.Saas-Page .background {
+  display: inline;
+}
+
+.Saas-Page .hub-spot-wrapper > div:first-child {
+  position: relative;
+  width: 40%;
+  padding-left: 2rem;
+}
+
+.Saas-Page .hub-spot-text {
+  width: 50%;
+}
+
+.Saas-Page .hub-spot-text > div:first-child {
+  width: 30%;
+  margin-bottom: 2rem;
+}
+
+.Saas-Page .dots-background {
+  display: inline;
+  position: absolute;
+  left: -7.188rem;
+  top: 6.5rem;
+  z-index: 0;
+  height: 85%;
+}
+
+.Saas-Page .hub-spot-text > h3 {
+  font-weight: 500;
+  margin-bottom: 3rem;
+  font-size: 24px;
+}
+
+.Saas-Page .hub-spot-text > h5 {
+  color: var(--color-grey);
+}
+
+.Saas-Page .trusted-by-wrapper {
+  text-align: center;
+}
+
+.Saas-Page .company-display-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Saas-Page .trusted-by-wrapper > h2 {
+  margin-bottom: 4rem;
+  color: var(--color-grey);
+  font-weight: 500;
+}
+
+.Saas-Page .company {
+  width: 100px;
+  transition: 0.2s;
+}
+
+.Saas-Page .company:hover {
+  scale: 1.4;
+  transition: 0.2s;
+}
+
+.Saas-Page .pricing-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.Saas-Page .pricing-header * {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.Saas-Page .pricing-header h2 {
+  font-size: 36px;
+}
+.Saas-Page .pricing-header p {
+  color: var(--color-grey);
+}
+
+.Saas-Page .pricing-header {
+  margin-bottom: 3rem;
+}
+
+.Saas-Page .main-price-card {
+  width: 75%;
+  border: 1px solid transparent;
+  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.1);
+  padding: 4rem 2rem;
+}
+
+.Saas-Page .main-price-card hr {
+  color: black;
+  margin: 2rem 0;
+}
+
+.Saas-Page .main-price {
+  text-align: left;
+}
+
+.Saas-Page .main-price > h2 {
+  font-size: 44px;
+  display: inline;
+  margin: 0 auto;
+  font-weight: 500;
+}
+
+.Saas-Page .main-price-card p {
+  color: var(--color-grey);
+  margin-bottom: 2rem;
+  font-size: 18px;
+  margin-top: 2rem;
+}
+
+.Saas-Page .main-price-card a i {
+  margin: 2rem 0;
+}
+
+.Saas-Page .main-price-card > a {
+  margin-top: 2rem;
+}
+
+.Saas-Page .price-card-footer-text {
+  font-size: 0.85rem;
+}
+
+.Saas-Page .price-card-benefits {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.Saas-Page .price-card-benefits > .benefits-card {
+  box-shadow: none;
+}
+
+.Saas-Page .price-card-benefits > .benefits-card h4 {
+  font-size: 16px;
+  margin: 7px 0;
+}
+
+/* Hire us section */
+
+.Saas-Page .hire-us-section {
+  background-color: var(--color-darkblue);
+}
+
+.Saas-Page .hire-us-wrapper {
+  display: flex;
+  gap: 8rem;
+}
+
+.Saas-Page .hire-us-text {
+  width: 100%;
+}
+
+.Saas-Page .hire-us-text h4,
+.Saas-Page .hire-us-text p:nth-child(4) {
+  color: white;
+  margin: 2rem 0;
+  font-size: 13px;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.Saas-Page .hire-us-text h4 {
+  font-size: 30px;
+  font-weight: 500;
+  font-style: normal;
+  margin-top: 6rem;
+  margin-bottom: 0;
+}
+
+.Saas-Page .hire-us-text hr {
+  width: 40%;
+}
+
+.Saas-Page .hire-us-text p:nth-child(2) {
+  color: var(--color-grey);
+  margin: 1rem 0 2rem 0;
+}
+
+.Saas-Page .hire-us-text h5 {
+  color: var(--color-white);
+  font-size: 18px;
+  font-weight: 400;
+  margin-top: 4rem;
+}
+
+.Saas-Page .hire-us-text p:nth-child(6) {
+  color: var(--color-grey);
+  font-size: 12px;
+  margin-bottom: 2rem;
+}
+
+.Saas-Page .hire-us-people-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.Saas-Page .hire-us-people-wrapper img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.Saas-Page .hire-us-people-wrapper img:nth-child(3) {
+  width: 60px;
+  height: 60px;
+}
+
+.Saas-Page .hire-us-from-wrapper {
+  background-color: var(--color-white);
+  padding: 2rem;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.Saas-Page .hire-us-from-wrapper > h4 {
+  font-size: 14px;
+  margin-bottom: 1rem;
+}
+
+.Saas-Page .hire-us-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 2rem;
+}
+
+.Saas-Page .hire-us-form > input,
+.Saas-Page .hire-us-form > select,
+.Saas-Page .hire-us-form > textarea {
+  height: 2rem;
+  border: 1px solid var(--color-grey);
+  border-radius: 3px;
+  outline: none;
+}
+
+.Saas-Page .hire-us-form > input::placeholder,
+.Saas-Page .hire-us-form > select::placeholder,
+.Saas-Page .hire-us-form > textarea::placeholder {
+  padding: 10px 10px;
+}
+
+.Saas-Page .hire-us-form > textarea {
+  grid-column: 1 /3;
+  height: 6rem;
+}
+
+.Saas-Page .hire-us-form input[type="checkbox"] {
+  height: 1.5rem;
+  width: 1.5rem;
+  max-height: 1.5rem;
+  border-radius: 4px;
+  outline: none;
+  appearance: none;
+  border: 1px solid var(--color-grey);
+  flex-shrink: 0;
+}
+
+.Saas-Page .newsletter-checkbox {
+  grid-column: 1 / 3;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.Saas-Page .newsletter-checkbox > label {
+  font-size: 14px;
+  color: var(--color-grey);
+}
+
+.Saas-Page .hire-us-form > a:not(.btn) {
+  color: var(--color-blue);
+  text-decoration: dotted;
+  text-decoration-line: underline;
+  text-underline-offset: 0.5rem;
+}
+
+.Saas-Page .hire-us-form > a:is(.btn) {
+  grid-column: 1/3;
+  justify-self: center;
+}
+
+/* Contact Footer */
+
+.Saas-Page .contact-footer-wrapper {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.Saas-Page .contact-footer-wrapper a,
+.Saas-Page .contact-footer-wrapper a i {
+  color: var(--color-grey);
+  font-weight: 500;
+  padding: 0.65rem 0;
+}
+
+.Saas-Page .contact-footer-wrapper a i {
+  font-weight: 600;
+  padding: 0 0.5rem 0 0;
+}
+
+.Saas-Page .contact-footer-wrapper h3 {
+  color: var(--color-black);
+  font-weight: 800;
+  font-size: 22px;
+  margin-bottom: 1.5rem;
+}
+
+.Saas-Page .contact-footer-wrapper a:hover {
+  color: var(--color-blue);
+}
+
+.Saas-Page .contact-footer,
+.Saas-Page .company-footer,
+.Saas-Page .features-footer,
+.Saas-Page .documentation-footer,
+.Saas-Page .resources-footer {
+  display: flex;
+  flex-direction: column;
+}
+
+.Saas-Page .contact-footer {
+  grid-area: contact;
+}
+.Saas-Page .company-footer {
+  grid-area: company;
+}
+.Saas-Page .features-footer {
+  grid-area: features;
+}
+.Saas-Page .documentation-footer {
+  grid-area: documentation;
+}
+.Saas-Page .resources-footer {
+  grid-area: resources;
+}
+
+.Saas-Page .contact-footer-image-wrapper {
+  width: 8rem;
+  margin-bottom: 1.5rem;
+}
+
+.Saas-Page .hiring-span {
+  margin-left: 0.5rem;
+  font-size: 12px;
+  font-weight: 400;
+  padding: 0.1rem 0.1rem;
+  background-color: var(--color-blue);
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: var(--color-white);
+}
+
+.Saas-Page footer hr {
+  margin: 3rem 0;
+}
+
+/* Footer */
+
+.Saas-Page .footer-top-wrapper * {
+  color: var(--color-grey);
+}
+
+.Saas-Page .footer-top-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.Saas-Page .footer-top-wrapper > span > a:nth-child(2) {
+  color: var(--color-blue);
+}
+
+.Saas-Page .footer-top-wrapper a {
+  font-weight: 500;
+}
+
+.Saas-Page .socials-container a,
+.Saas-Page .socials-container a i {
+  font-size: 18px;
+  text-align: center;
+  vertical-align: middle;
+  margin-right: 1rem;
+}
+
+.Saas-Page .socials-container a i:hover {
+  background-color: var(--color-grey);
+  color: var(--color-lightblue);
+}
+
+.Saas-Page .language {
+  height: 2rem;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  background-color: var(--color-lightblue);
+  outline: none;
+  border: 1px solid transparent;
+  user-select: none;
+}
+
+.Saas-Page .language select {
+  height: 2rem;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  background-color: var(--color-lightblue);
+  outline: none;
+  border: 1px solid transparent;
+}
+
+.Saas-Page .footer-bottom {
+  margin-top: 3rem;
+  text-align: center;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.Saas-Page .footer-bottom p {
+  color: var(--color-grey);
+  margin-top: 2rem;
+}
