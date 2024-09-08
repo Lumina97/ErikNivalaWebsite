@@ -15,10 +15,11 @@ const ImageGatherer = () => {
     isModalActive,
     setIsModalActive,
     isLoading,
+    responseError,
   } = useImageGatherer();
 
-  const [subreddit, setSubreddit] = useState<string>("wallpaper");
-  const [amountOfPosts, setAmountOfPosts] = useState<number>(10);
+  const [subreddit, setSubreddit] = useState<string>("");
+  const [amountOfPosts, setAmountOfPosts] = useState<number>(0);
   const [titleFilter, setTitleFilter] = useState<string>("");
   const [titleFiltersArray, setTitleFilterArray] = useState<string[]>([]);
 
@@ -104,7 +105,9 @@ const ImageGatherer = () => {
                   </div>
                 </>
               )}
-              <p id="ErrorText"></p>
+              {responseError.length > 0 && (
+                <p id="ErrorText">{responseError}</p>
+              )}
             </div>
           </>
         )}

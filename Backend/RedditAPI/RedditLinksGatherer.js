@@ -9,9 +9,7 @@ let Access_Token;
 async function GetRedditPosts(subreddit, amount, titleFilters) {
   return new Promise(async function (resolve, reject) {
     log.info(
-      "Getting " +
-        amount +
-        " reddit posts - LinksGatherer.js - GetRedditPosts()"
+      `Getting ${amount} posts from ${subreddit} - LinksGatherer.js - GetRedditPosts()`
     );
 
     const params = querystring.stringify({
@@ -37,61 +35,66 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
       return;
     });
 
-    const postArray = response.data.data.children;
-    log.info("response: " + response.status);
-    if (typeof postArray === undefined || postArray.length == 0) {
-      log.warn("Subreddit does not exist! - LinksGatherer.js");
-      reject("Error: Subreddit does not exist!");
-      return;
-    }
-
-    const image_links = [];
-    let amountOfImages = 0;
-
-    let bHasAnyImageLinks = false;
-    for (post of postArray) {
-      if (
-        post.kind == "t3" &&
-        (post.data.url.includes(".jpg") ||
-          post.data.url.includes(".png") ||
-          post.data.url.includes(".jpeg"))
-      ) {
-        if (
-          titleFilters.length > 0 &&
-          !FilterTitle(post.data.title, titleFilters)
-        ) {
-          log.info("Title does not meet filter requirements!");
-          continue;
-        }
-
-        let thumbnail = "";
-        if (post.data.preview) {
-          const resolutions = post.data.preview.images[0].resolutions;
-          if (resolutions.length > 0) {
-            thumbnail = resolutions[2].url.replace(/&amp;/g, "&");
-          }
-        }
-
-        image_links.push([thumbnail, post.data.url]);
-        log.info("URL: " + post.data.url);
-        bHasAnyImageLinks = true;
-        amountOfImages++;
-      } else {
-        log.info("Not an image post");
+    try {
+      const postArray = response.data.data.children;
+      if (typeof postArray === undefined || postArray.length === 0) {
+        log.warn("Subreddit does not exist! - LinksGatherer.js");
+        reject("Error: Subreddit does not exist!");
+        return;
       }
-    }
 
-    if (bHasAnyImageLinks === false) {
-      log.warn("No image links found! - LinksGatherer.js - GetRedditPosts()");
-      reject("No images in specified search!");
+      const image_links = [];
+      let amountOfImages = 0;
+
+      let bHasAnyImageLinks = false;
+      for (post of postArray) {
+        if (
+          post.kind == "t3" &&
+          (post.data.url.includes(".jpg") ||
+            post.data.url.includes(".png") ||
+            post.data.url.includes(".jpeg"))
+        ) {
+          if (
+            titleFilters.length > 0 &&
+            !FilterTitle(post.data.title, titleFilters)
+          ) {
+            log.info("Title does not meet filter requirements!");
+            continue;
+          }
+
+          let thumbnail = "";
+          if (post.data.preview) {
+            const resolutions = post.data.preview.images[0].resolutions;
+            if (resolutions.length > 0) {
+              thumbnail = resolutions[2].url.replace(/&amp;/g, "&");
+            }
+          }
+
+          image_links.push([thumbnail, post.data.url]);
+          log.info("URL: " + post.data.url);
+          bHasAnyImageLinks = true;
+          amountOfImages++;
+        } else {
+          log.info("Not an image post");
+        }
+      }
+
+      if (bHasAnyImageLinks === false) {
+        log.warn("No image links found! - LinksGatherer.js - GetRedditPosts()");
+        reject("No images in specified search!");
+        return;
+      } else {
+        log.info(
+          "Found " +
+            amountOfImages +
+            " links! - LinksGatherer.js - GetRedditPosts()"
+        );
+        resolve(image_links);
+      }
+    } catch (error) {
+      log.error(error);
+      reject("There was an issue getting images.");
       return;
-    } else {
-      log.info(
-        "Found " +
-          amountOfImages +
-          " links! - LinksGatherer.js - GetRedditPosts()"
-      );
-      resolve(image_links);
     }
   });
 }

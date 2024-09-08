@@ -4,7 +4,8 @@
   flex-direction: column;
   gap: 0.5rem;
   top: 5%;
-  left: 5%;
+  left: 50%;
+  transform: translateX(-50%);
   width: 90vw;
   max-width: 1200px;
   height: 90vh;
@@ -20,7 +21,7 @@
   vertical-align: middle;
   font-weight: 600;
   color: var(--color-orange);
-  text-shadow: 2px 2px 8px var(--color-turquoise);
+  text-shadow: 2px 2px 25px var(--color-turquoise);
   text-align: center;
 }
 
@@ -164,8 +165,8 @@
 
 @media (max-width: 450px) {
   #ImageDisplayModal {
-    height: 99vh;
-    top: 1%;
+    height: 94vh;
+    top: 2%;
     border: 1px solid black;
   }
   #imageSizes {

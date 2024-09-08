@@ -149,6 +149,13 @@
 }
 
 @media (max-width: 570px) {
+  button {
+    min-width: 150px;
+  }
+  #ImageGatherer h1 {
+    font-size: 125%;
+  }
+
   #ImageGatherer .filterInputContainer i {
     left: 98%;
   }

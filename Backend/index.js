@@ -20,17 +20,6 @@ var downloadRequestDict = {};
 
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-// app.use((req, res, next) => {
-//   if (/(.ico|.js|.css|.jpg|.png|.map)$/i.test(req.path)) {
-//     next();
-//   } else {
-//     res.header("Cache-Control", "private, no-cache, no-store, must-revalidate");
-//     res.header("Expires", "-1");
-//     res.header("Pragma", "no-cache");
-//     res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
-//   }
-// });
-
 app.use(
   session({
     name: "SessionCookie",
@@ -42,7 +31,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: new session.MemoryStore({
-      checkPeriod: 86400000, //prune expired entries every 24h (in ms)
+      checkPeriod: 86400000,
     }),
     cookie: { secure: false, maxAge: oneDay },
   })
@@ -119,13 +108,13 @@ app.post("/api/ImageLoader", async function (request, response) {
         return;
       } catch (error) {
         log.warn("Error parsing json! \n" + error);
-        response.json("There was an error getting your data!");
+        response.json({ error: "There was an error getting your data!" });
         return;
       }
     })
     .catch((error) => {
-      log.error("ERROR: " + error);
-      response.json({ ERROR: "There was an error getting your data!" });
+      log.error(`${error} | index.js`);
+      response.status(400).send();
       return;
     });
 });
@@ -134,36 +123,6 @@ app.post("/api/ImageLoader", async function (request, response) {
 const checkRequestUserID = (request) => {
   request.session.userid || (request.session.userid = uuidv4());
 };
-// //#region File Serving
-// app.get("/spaceTracePage", (request, response) => {
-//   checkRequestUserID(request);
-//   response.sendFile(path.join(__dirname, "/public/html/SpaceTrace.html"));
-// });
-// app.get("/about", (request, response) => {
-//   checkRequestUserID(request);
-//   response.sendFile(path.join(__dirname, "/public/html/About.html"));
-// });
-// app.get("/imageGatherer", (request, response) => {
-//   checkRequestUserID(request);
-//   response.sendFile(path.join(__dirname, "/public/html/ImageGatherer.html"));
-// });
-// app.get("/website", (request, response) => {
-//   checkRequestUserID(request);
-//   response.sendFile(path.join(__dirname, "/public/html/Website.html"));
-// });
-// app.get("/saas", (request, response) => {
-//   checkRequestUserID(request);
-//   response.sendFile(path.join(__dirname, "/public/html/Saas.html"));
-// });
-// app.get("/home", (request, response) => {
-//   checkRequestUserID(request);
-//   response.sendFile(path.join(__dirname, "/public/html/Home.html"));
-// });
-// // app.get("/", (request, response) => {
-// //   checkRequestUserID(request);
-// //   response.sendFile(path.join(__dirname, "/public/html/Home.html"));
-// // });
-// //#endregion
 
 app.use((req, res, next) => {
   if (/(.ico|.js|.css|.jpg|.png|.map)$/i.test(req.path)) {

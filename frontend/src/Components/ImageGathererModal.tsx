@@ -1,11 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGrip, faStar, faX } from "@fortawesome/free-solid-svg-icons";
 import { useImageGatherer } from "../Providers/ImageGathererProvider";
-
-import "../css/ImageGathererModal.css";
 import ImageListItemComponent from "./ImageListItemComponent";
 import ImageGathererPreview from "./ImageGathererPreview";
-import { useState } from "react";
+import { useRef, useState } from "react";
+
+import "../css/ImageGathererModal.css";
 
 const ImageGathererModal = () => {
   const {
@@ -23,23 +23,35 @@ const ImageGathererModal = () => {
 
   const [previewImageLink, setPreviewImageLink] = useState<string>("");
   const imageList = showFavorites ? favoriteImageList : mainImageList;
+  const favoriteButtonRef = useRef<HTMLButtonElement>(null);
+  const mainButtonRef = useRef<HTMLButtonElement>(null);
+  const toggleButtonAnimation = () => {
+    (showFavorites ? favoriteButtonRef : mainButtonRef).current?.classList.add(
+      "buttonWiggleAnimation"
+    );
+  };
+
   return (
     <div id="ImageDisplayModal">
       <div className="modalHeader">
         <div>
           <button
+            ref={mainButtonRef}
             id="modalMainCollectionButton"
             className={showFavorites ? " " : "activeBtn"}
             onClick={() => {
+              toggleButtonAnimation();
               setShowFavorites(false);
             }}
           >
             <FontAwesomeIcon className="FontAwesome" icon={faGrip} />
           </button>
           <button
+            ref={favoriteButtonRef}
             className={showFavorites ? "activeBtn" : ""}
             id="modalFavCollectionButton"
             onClick={() => {
+              toggleButtonAnimation();
               setShowFavorites(true);
             }}
           >
