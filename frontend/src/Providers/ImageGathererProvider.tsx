@@ -71,6 +71,7 @@ export const ImageGathererProvider = ({
     amount: number,
     filters: string[]
   ) => {
+    setResponseError("");
     setIsLoading(true);
     const sendData = { subreddit, amount, filters };
     const options = {
@@ -78,20 +79,24 @@ export const ImageGathererProvider = ({
       body: JSON.stringify(sendData),
       headers: { "Content-Type": "application/json" },
     };
-    const response = await fetch("/api/ImageLoader", options);
-    return response
-      .json()
-      .then(async function (result) {
-        const data = JSON.parse(result);
-        setMainImageList([]);
-        addImageLinksToCollection(data.links)
-          .then(() => setIsModalActive(true))
-          .catch((e) => {
-            throw new Error(e);
-          });
+    return await fetch("/api/ImageLoader", options)
+      .then((result) => {
+        if (!result.ok) {
+          setResponseError("There was an error getting your data.");
+          return;
+        }
+        result.json().then(async function (result) {
+          const data = JSON.parse(result);
+          setMainImageList([]);
+          addImageLinksToCollection(data.links)
+            .then(() => setIsModalActive(true))
+            .catch((e) => {
+              throw new Error(e);
+            });
+        });
       })
-      .catch((error) => {
-        setResponseError(error);
+      .catch(() => {
+        setResponseError("There was an error getting your data!");
       })
       .finally(() => {
         setIsLoading(false);

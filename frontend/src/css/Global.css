@@ -61,6 +61,8 @@ body {
   padding: 1em;
   border-radius: 5px;
   box-shadow: 5px 5px 5px #ccc;
+  max-height: 90vh;
+  overflow: auto;
 }
 
 a {
@@ -234,14 +236,9 @@ select {
   background: var(--color-turquoise);
   color: var(--color-white);
 }
-.main-menu > li:active:not(.active)
-/* .main-menu > li:active:not(.with-submenu) */ {
+.main-menu > li:active:not(.active) {
   background: var(--color-blue);
   color: var(--color-white);
-}
-
-#Saasproject a {
-  color: var(--color-orange);
 }
 
 /* Desktop */
@@ -309,7 +306,18 @@ select {
   }
 
   .container {
+    margin: unset;
+    transform: unset;
+    top: unset;
+    left: unset;
+    position: relative;
     width: 90%;
+    display: flex;
+    flex-direction: column;
+    max-height: 96vh;
+    height: auto;
+    margin: auto;
+    margin-top: 1rem;
   }
 
   #PlaySpaceTrace {
@@ -322,22 +330,14 @@ select {
     display: block;
   }
 }
+@media (max-width: 570px) {
+  .main-menu li {
+    min-width: 130px;
+  }
+}
 
 @media (max-width: 450px) {
-  .main-menu li {
-    font-size: 14px;
-  }
-
-  .main-menu li.active {
-    font-size: 16px;
-  }
-
-  .container {
-    height: 100%;
-    position: absolute;
-    top: 0%;
-    left: 5%;
-    transform: translate(0, 0);
-    margin-top: 1rem;
+  .submenu li {
+    font-size: 79%;
   }
 }

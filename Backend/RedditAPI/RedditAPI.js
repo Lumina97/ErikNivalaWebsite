@@ -45,12 +45,11 @@ module.exports = {
         postTitleFilters,
         access_token
       )
-        .then(async function (result) {
+        .then((result) => {
           resolve(result);
         })
         .catch((err) => {
-          log.warn();
-          ("There was an error while gathering subreddit images!");
+          log.warn("There was an error while gathering subreddit images!");
           log.warn(err);
           reject(err);
           return;
