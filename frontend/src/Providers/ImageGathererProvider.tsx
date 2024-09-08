@@ -28,6 +28,7 @@ type TImageGathererProvider = {
   downloadAll: () => void;
   downloadSelected: () => void;
   clearFavorites: () => void;
+  sortCollection: (bSortAscending: boolean) => void;
 };
 
 export type TImageSize = {
@@ -82,6 +83,7 @@ export const ImageGathererProvider = ({
       .json()
       .then(async function (result) {
         const data = JSON.parse(result);
+        setMainImageList([]);
         addImageLinksToCollection(data.links)
           .then(() => setIsModalActive(true))
           .catch((e) => {
@@ -100,7 +102,7 @@ export const ImageGathererProvider = ({
     const list = (showFavorites ? favoriteImageList : mainImageList).map(
       (item) => item.url.main
     );
-    await downloadFromLinks(list); //.then((result) => console.log(result));
+    await downloadFromLinks(list);
   };
 
   const downloadSelected = async () => {
@@ -216,6 +218,21 @@ export const ImageGathererProvider = ({
     setFavoriteImageList([]);
   };
 
+  const sortCollection = (bSortAscending: boolean) => {
+    const sortFunction = (a: TImageListItem, b: TImageListItem) => {
+      const areaA = a.size.width * a.size.height;
+      const areaB = b.size.width * b.size.height;
+      return bSortAscending ? areaB - areaA : areaA - areaB;
+    };
+
+    let mainCopy = [...mainImageList];
+    mainCopy = mainCopy.sort(sortFunction);
+    let favCopy = [...favoriteImageList];
+    favCopy = favCopy.sort(sortFunction);
+    setFavoriteImageList(favCopy);
+    setMainImageList(mainCopy);
+  };
+
   return (
     <ImageGathererContext.Provider
       value={{
@@ -235,6 +252,7 @@ export const ImageGathererProvider = ({
         downloadAll,
         downloadSelected,
         clearFavorites,
+        sortCollection,
       }}
     >
       {children}

@@ -6,11 +6,22 @@
   top: 5%;
   left: 5%;
   width: 90vw;
+  max-width: 1200px;
   height: 90vh;
   background: white;
   z-index: 100;
   border-radius: 0.75rem;
   padding-bottom: 0.5rem;
+}
+
+.ModalErrorText {
+  margin-top: 10%;
+  font-size: 1.75rem;
+  vertical-align: middle;
+  font-weight: 600;
+  color: var(--color-orange);
+  text-shadow: 2px 2px 8px var(--color-turquoise);
+  text-align: center;
 }
 
 .modalHeader {
@@ -33,7 +44,7 @@
   min-width: 4rem;
 }
 
-.modalHeader i {
+.modalHeader .FontAwesome {
   scale: 1;
   transition: linear 0.15s;
   align-self: flex-start;
@@ -109,7 +120,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: none;
+  display: fixed;
   background-color: white;
   border: 1px solid var(--color-turquoise);
   border-radius: 10px;
@@ -129,7 +140,7 @@
   left: 0;
 }
 
-#itemPreview i {
+#itemPreview .FontAwesome {
   position: relative;
   z-index: 100;
   color: var(--color-orange);
@@ -138,8 +149,8 @@
   scale: 1;
 }
 
-.modalHeader i:hover,
-#itemPreview i:hover {
+.modalHeader .FontAwesome:hover,
+#itemPreview .FontAwesome:hover {
   scale: 1.4;
 }
 

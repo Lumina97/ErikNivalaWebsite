@@ -21,7 +21,7 @@
   border-radius: 25px;
   width: 90%;
   height: 20px;
-  text-align: center;
+  padding-left: 1rem;
 }
 
 #ImageGatherer input::placeholder {
@@ -32,12 +32,17 @@
   color: #585761;
 }
 
+#ImageGatherer .inputFieldContainer {
+  display: flex;
+  flex-direction: column;
+}
+
 #ImageGatherer .inputFields {
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   width: 90%;
   margin: auto;
 }
@@ -57,21 +62,20 @@
 #ImageGatherer .filterInputContainer {
   display: flex;
   position: relative;
-  align-items: center;
   justify-content: center;
   width: 90%;
   height: 100%;
-  margin: auto;
 }
 #ImageGatherer .filterInputContainer > input {
   width: 100%;
 }
 
-#ImageGatherer .filterInputContainer i {
+#ImageGatherer .filterInputContainer .fontAwesome {
   font-weight: 900;
   position: absolute;
   font-size: 0.75rem;
-  left: 95%;
+  left: 98%;
+  top: 63%;
 }
 
 .imageGathererButtons {
@@ -122,7 +126,7 @@
     padding: 0;
   }
 
-  #ImageGatherer .filterInputContainer i {
+  #ImageGatherer .filterInputContainer .fontAwesome {
     left: 95%;
   }
 
@@ -136,15 +140,19 @@
     padding-right: 2%;
   }
 }
+@media (max-width: 600px) {
+  #ImageGatherer .imageGathererButtons {
+    flex-direction: column;
+    width: 90%;
+    margin: auto;
+  }
+}
 
 @media (max-width: 570px) {
   #ImageGatherer .filterInputContainer i {
-    left: 90%;
+    left: 98%;
   }
 
-  #ImageGatherer .imageGathererButtons {
-    flex-wrap: wrap;
-  }
   #ImageGatherer button {
     padding: 0;
   }

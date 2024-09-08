@@ -11,22 +11,30 @@ import {
   faSquareCheck,
   faHeart as faSolidHeart,
 } from "@fortawesome/free-solid-svg-icons";
+import { Dispatch, SetStateAction } from "react";
 
 const ImageListItemComponent = ({
   imageItem,
+  setPreviewImage,
 }: {
   imageItem: TImageListItem;
+  setPreviewImage: Dispatch<SetStateAction<string>>;
 }) => {
-  const { toggleFavoriteItem, toggleSelectedItem } = useImageGatherer();
+  const { toggleFavoriteItem, toggleSelectedItem, setIsPreviewActive } =
+    useImageGatherer();
 
   return (
     <div className="modalItem">
-      <div className="imageContainer">
+      <div
+        className="imageContainer"
+        onClick={() => {
+          setPreviewImage(imageItem.url.main);
+          setIsPreviewActive(true);
+        }}
+      >
         <img src={imageItem.url.preview} />
       </div>
-      <h5 data-size={imageItem.size.width + "x" + imageItem.size.height}>
-        Image size
-      </h5>
+      <h5>{imageItem.size.width + "x" + imageItem.size.height}</h5>
       <div className="modalItemButtons">
         <FontAwesomeIcon
           icon={imageItem.isFavorited ? faSolidHeart : faRegularHeart}

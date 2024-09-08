@@ -4,6 +4,8 @@ import { useImageGatherer } from "../Providers/ImageGathererProvider";
 
 import "../css/ImageGathererModal.css";
 import ImageListItemComponent from "./ImageListItemComponent";
+import ImageGathererPreview from "./ImageGathererPreview";
+import { useState } from "react";
 
 const ImageGathererModal = () => {
   const {
@@ -15,7 +17,12 @@ const ImageGathererModal = () => {
     downloadAll,
     downloadSelected,
     clearFavorites,
+    isPreviewActive,
+    sortCollection,
   } = useImageGatherer();
+
+  const [previewImageLink, setPreviewImageLink] = useState<string>("");
+  const imageList = showFavorites ? favoriteImageList : mainImageList;
   return (
     <div id="ImageDisplayModal">
       <div className="modalHeader">
@@ -27,7 +34,7 @@ const ImageGathererModal = () => {
               setShowFavorites(false);
             }}
           >
-            <FontAwesomeIcon icon={faGrip} />
+            <FontAwesomeIcon className="FontAwesome" icon={faGrip} />
           </button>
           <button
             className={showFavorites ? "activeBtn" : ""}
@@ -36,22 +43,39 @@ const ImageGathererModal = () => {
               setShowFavorites(true);
             }}
           >
-            <FontAwesomeIcon icon={faStar} />
+            <FontAwesomeIcon className="FontAwesome" icon={faStar} />
           </button>
-          <select id="sort">
+          <select
+            id="sort"
+            onChange={(e) => sortCollection(e.target.value === "true")}
+          >
             <option value="" disabled selected>
               Sort...
             </option>
-            <option value="sizeAscending">Size &#8593; </option>
-            <option value="sizeDescending">Size &darr; </option>
+            <option value={"true"}>Size &#8593; </option>
+            <option value={"false"}>Size &darr; </option>
           </select>
         </div>
-        <FontAwesomeIcon icon={faX} onClick={() => setIsModalActive(false)} />
+        <FontAwesomeIcon
+          className="FontAwesome"
+          icon={faX}
+          onClick={() => setIsModalActive(false)}
+        />
       </div>
 
       <div id="modalContentContainer">
-        {(showFavorites ? favoriteImageList : mainImageList).map((item) => {
-          return <ImageListItemComponent imageItem={item} />;
+        {imageList.length === 0 && (
+          <p className="ModalErrorText">
+            No images gathered yet, try sending a request!
+          </p>
+        )}
+        {imageList.map((item) => {
+          return (
+            <ImageListItemComponent
+              imageItem={item}
+              setPreviewImage={setPreviewImageLink}
+            />
+          );
         })}
       </div>
       <div className="modalFooter">
@@ -59,11 +83,7 @@ const ImageGathererModal = () => {
         <button onClick={downloadSelected}>Download selected</button>
         <button onClick={clearFavorites}>Clear All favorites</button>
       </div>
-
-      {/* <div id="itemPreview" onclick="closePreview()">
-        <i className="fa-solid fa-x" onclick="closePreview()"></i>
-        <img src="https://i.redd.it/bfp3yc5jusdd1.jpeg" />
-      </div>  */}
+      {isPreviewActive && <ImageGathererPreview imageLink={previewImageLink} />}
     </div>
   );
 };

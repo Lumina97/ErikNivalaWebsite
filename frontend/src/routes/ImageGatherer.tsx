@@ -6,6 +6,9 @@ import InputFieldComponent from "../Components/InputFieldComponent";
 import { useImageGatherer } from "../Providers/ImageGathererProvider";
 import ImageGathererModal from "../Components/ImageGathererModal";
 
+import "../css/ImageGatherer.css";
+import "../css/animations.css";
+
 const ImageGatherer = () => {
   const {
     sendImageGatheringRequest,
@@ -34,37 +37,40 @@ const ImageGatherer = () => {
       <MainSection title="ImageGatherer">
         {!isModalActive && (
           <>
-            <div>
-              <div className="inputFields" id="InputFields">
-                <InputFieldComponent
-                  Title="Subreddit to search"
-                  props={{
-                    placeholder: "Subreddit...",
-                    value: subreddit,
-                    onChange: (e) => setSubreddit(e.target.value),
-                  }}
-                />
-                <InputFieldComponent
-                  Title="Amount of posts:"
-                  props={{
-                    placeholder: "Amount of posts...",
-                    value: amountOfPosts,
-                    onChange: (e) => setAmountOfPosts(+e.target.value),
-                  }}
-                />
+            <div className="inputFields" id="InputFields">
+              <InputFieldComponent
+                Title="Subreddit to search"
+                props={{
+                  placeholder: "Subreddit...",
+                  value: subreddit,
+                  onChange: (e) => setSubreddit(e.target.value),
+                }}
+              />
+              <InputFieldComponent
+                Title="Amount of posts:"
+                props={{
+                  placeholder: "Amount of posts...",
+                  value: amountOfPosts,
+                  onChange: (e) => setAmountOfPosts(+e.target.value),
+                }}
+              />
+              <div>
                 <InputFieldComponent
                   Title="Title filters:"
+                  classname="filterInputContainer"
                   props={{
                     placeholder: "Filter...",
                     value: titleFilter,
                     onChange: (e) => setTitleFilter(e.target.value),
                     onKeyDown: (e) => addNewFilter(e),
                   }}
-                />
-                <FontAwesomeIcon
-                  icon={faTrash}
-                  onClick={() => setTitleFilterArray([])}
-                />
+                >
+                  <FontAwesomeIcon
+                    className="fontAwesome"
+                    icon={faTrash}
+                    onClick={() => setTitleFilterArray([])}
+                  />
+                </InputFieldComponent>
               </div>
             </div>
             <div className="imageGathererButtons">
