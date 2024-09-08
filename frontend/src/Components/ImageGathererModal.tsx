@@ -26,11 +26,10 @@ const ImageGathererModal = () => {
   const favoriteButtonRef = useRef<HTMLButtonElement>(null);
   const mainButtonRef = useRef<HTMLButtonElement>(null);
   const toggleButtonAnimation = () => {
-    const ref = !showFavorites ? favoriteButtonRef : mainButtonRef;
-    if (ref.current) {
-      console.log("changing ref");
-      ref.current.classList.toggle("buttonWiggleAnimation");
-    }
+    (!showFavorites
+      ? favoriteButtonRef
+      : mainButtonRef
+    ).current?.classList.toggle("buttonWiggleAnimation");
   };
 
   return (
