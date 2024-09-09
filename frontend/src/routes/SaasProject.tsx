@@ -40,6 +40,12 @@ const SaasProject = () => {
     menu.classList.toggle("open");
   };
 
+  /*
+DISCLAIMER:
+This was a pure HTML,CSS front end project and was not intended to be moved to React
+This is simply here as a display piece for my portfolio and should not be regarded as a React display.
+*/
+
   return (
     <div className="Saas-Page">
       <header>
