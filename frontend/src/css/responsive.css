@@ -1,0 +1,5 @@
+@media (prefers-reduced-motion) {
+  .backgroundAnimation {
+    animation: none 25s linear infinite;
+  }
+}

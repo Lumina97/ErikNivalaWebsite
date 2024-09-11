@@ -85,6 +85,66 @@
   }
 }
 
+@keyframes textTransition {
+  0% {
+    content: inherit;
+    opacity: 1;
+  }
+  45% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  55% {
+    content: inherit;
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    content: "Erik Nivala";
+  }
+}
+
+@keyframes imageTransition {
+  0% {
+    opacity: 1;
+  }
+  35% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 5%;
+  }
+  49% {
+    content: initial;
+    opacity: 5%;
+  }
+  50% {
+    opacity: 5%;
+    content: url("assets/IMG_0068.png");
+  }
+  55% {
+    opacity: 5%;
+  }
+  100% {
+    opacity: 1;
+    content: url("assets/IMG_0068.png");
+  }
+}
+
+@keyframes snowy {
+  0% {
+    background-position: 0px 0px, 0px 0px, 0px 0px;
+  }
+  75% {
+    background-position: 325px 750px, 275px 600px, -5px 150px;
+  }
+  100% {
+    background-position: 500px 1000px, 400px 800px, 0px 300px;
+  }
+}
+
 .addToFavoriteAnimation {
   animation-name: moveToFavoriteButton;
   animation-duration: 1s;

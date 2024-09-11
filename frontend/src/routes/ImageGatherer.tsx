@@ -40,7 +40,7 @@ const ImageGatherer = () => {
           <>
             <div className="inputFields" id="InputFields">
               <InputFieldComponent
-                Title="Subreddit to search"
+                labelTitle="Subreddit to search"
                 props={{
                   placeholder: "Subreddit...",
                   value: subreddit,
@@ -48,7 +48,7 @@ const ImageGatherer = () => {
                 }}
               />
               <InputFieldComponent
-                Title="Amount of posts:"
+                labelTitle="Amount of posts:"
                 props={{
                   placeholder: "Amount of posts...",
                   value: amountOfPosts,
@@ -57,8 +57,8 @@ const ImageGatherer = () => {
               />
               <div>
                 <InputFieldComponent
-                  Title="Title filters:"
-                  classname="filterInputContainer"
+                  labelTitle="Title filters:"
+                  wrapperProps={{ className: "filterInputContainer" }}
                   props={{
                     placeholder: "Filter...",
                     value: titleFilter,

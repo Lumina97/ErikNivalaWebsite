@@ -16,13 +16,13 @@ const MainSection = ({
 }) => {
   const {
     activeTab,
-    OnHomeClicked,
-    OnImageGathererClicked,
-    OnWebsiteClicked,
-    OnSpaceTraceClicked,
-    OnSaasClicked,
-    OnAboutClicked,
-    OnGitHubClicked,
+    onHomeClicked: OnHomeClicked,
+    onImageGathererClicked: OnImageGathererClicked,
+    onWebsiteClicked: OnWebsiteClicked,
+    onSpaceTraceClicked: OnSpaceTraceClicked,
+    onSaasClicked: OnSaasClicked,
+    onAboutClicked: OnAboutClicked,
+    onGitHubClicked: OnGitHubClicked,
   } = useMainContainer();
 
   const navigate = useNavigate();

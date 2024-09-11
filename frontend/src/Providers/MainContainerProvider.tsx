@@ -17,14 +17,14 @@ type TActiveTab = keyof typeof EActiveTab;
 
 type TMainContainerProvider = {
   activeTab: TActiveTab;
-  OnHomeClicked: (navigate: NavigateFunction) => void;
-  OnImageGathererClicked: (navigate: NavigateFunction) => void;
-  OnWebsiteClicked: (navigate: NavigateFunction) => void;
-  OnSpaceTraceClicked: (navigate: NavigateFunction) => void;
-  OnSaasClicked: (navigate: NavigateFunction) => void;
-  OnSaasProjectClicked: (navigate: NavigateFunction) => void;
-  OnAboutClicked: (navigate: NavigateFunction) => void;
-  OnGitHubClicked: () => void;
+  onHomeClicked: (navigate: NavigateFunction) => void;
+  onImageGathererClicked: (navigate: NavigateFunction) => void;
+  onWebsiteClicked: (navigate: NavigateFunction) => void;
+  onSpaceTraceClicked: (navigate: NavigateFunction) => void;
+  onSaasClicked: (navigate: NavigateFunction) => void;
+  onSaasProjectClicked: (navigate: NavigateFunction) => void;
+  onAboutClicked: (navigate: NavigateFunction) => void;
+  onGitHubClicked: () => void;
 };
 
 const MainContainerContext = createContext<TMainContainerProvider>(
@@ -37,35 +37,35 @@ export const MainContainerProvider = ({
 }) => {
   const [activeTab, setActiveTab] = useState<TActiveTab>(EActiveTab.Github);
 
-  const OnHomeClicked = (navigate: NavigateFunction) => {
+  const onHomeClicked = (navigate: NavigateFunction) => {
     setActiveTab(EActiveTab.Home);
     if (navigate) navigate("/Home");
   };
-  const OnWebsiteClicked = (navigate: NavigateFunction) => {
+  const onWebsiteClicked = (navigate: NavigateFunction) => {
     setActiveTab(EActiveTab.Website);
     if (navigate) navigate("/Website");
   };
-  const OnImageGathererClicked = (navigate: NavigateFunction) => {
+  const onImageGathererClicked = (navigate: NavigateFunction) => {
     setActiveTab(EActiveTab.ImageGatherer);
     if (navigate) navigate("/ImageGatherer");
   };
-  const OnSpaceTraceClicked = (navigate: NavigateFunction) => {
+  const onSpaceTraceClicked = (navigate: NavigateFunction) => {
     setActiveTab(EActiveTab.SpaceTrace);
     if (navigate) navigate("/SpaceTrace");
   };
-  const OnSaasClicked = (navigate: NavigateFunction) => {
+  const onSaasClicked = (navigate: NavigateFunction) => {
     setActiveTab(EActiveTab.Saas);
     if (navigate) navigate("/Saas");
   };
-  const OnSaasProjectClicked = (navigate: NavigateFunction) => {
+  const onSaasProjectClicked = (navigate: NavigateFunction) => {
     setActiveTab(EActiveTab.Saas);
     if (navigate) navigate("/SaaSProject");
   };
-  const OnAboutClicked = (navigate: NavigateFunction) => {
+  const onAboutClicked = (navigate: NavigateFunction) => {
     setActiveTab(EActiveTab.About);
     if (navigate) navigate("/About");
   };
-  const OnGitHubClicked = () => {
+  const onGitHubClicked = () => {
     window.open(githubLink, "_blank");
   };
 
@@ -73,14 +73,14 @@ export const MainContainerProvider = ({
     <MainContainerContext.Provider
       value={{
         activeTab,
-        OnHomeClicked,
-        OnImageGathererClicked,
-        OnWebsiteClicked,
-        OnSpaceTraceClicked,
-        OnSaasClicked,
-        OnSaasProjectClicked,
-        OnAboutClicked,
-        OnGitHubClicked,
+        onHomeClicked,
+        onImageGathererClicked,
+        onWebsiteClicked,
+        onSpaceTraceClicked,
+        onSaasClicked,
+        onSaasProjectClicked,
+        onAboutClicked,
+        onGitHubClicked,
       }}
     >
       {children}

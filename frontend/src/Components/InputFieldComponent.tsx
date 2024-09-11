@@ -1,19 +1,19 @@
 import React, { ReactNode } from "react";
 
 const InputFieldComponent = ({
-  Title,
-  classname,
+  labelTitle,
+  wrapperProps,
   props,
   children,
 }: {
-  Title: string;
-  classname?: string;
+  labelTitle: string;
+  wrapperProps?: React.InputHTMLAttributes<HTMLInputElement>;
   props: React.InputHTMLAttributes<HTMLInputElement>;
   children?: ReactNode;
 }) => {
   return (
-    <div className={`inputFieldContainer ${classname}`}>
-      <label>{Title}</label>
+    <div {...wrapperProps}>
+      <label className="inputLabel">{labelTitle}</label>
       <input {...props} />
       {children}
     </div>
