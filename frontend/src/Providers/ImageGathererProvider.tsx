@@ -13,11 +13,8 @@ type TImageGathererProvider = {
   isPreviewActive: boolean;
   setIsPreviewActive: Dispatch<SetStateAction<boolean>>;
   isLoading: boolean;
-  sendImageGatheringRequest: (
-    subreddit: string,
-    amount: number,
-    filters: string[]
-  ) => Promise<void>;
+  hasImages: boolean;
+  sendImageGatheringRequest: (subreddit: string) => Promise<void>;
   responseError: string;
   mainImageList: TImageListItem[];
   favoriteImageList: TImageListItem[];
@@ -66,14 +63,10 @@ export const ImageGathererProvider = ({
   );
   const [showFavorites, setShowFavorites] = useState<boolean>(false);
 
-  const sendImageGatheringRequest = async (
-    subreddit: string,
-    amount: number,
-    filters: string[]
-  ) => {
+  const sendImageGatheringRequest = async (subreddit: string) => {
     setResponseError("");
     setIsLoading(true);
-    const sendData = { subreddit, amount, filters };
+    const sendData = { subreddit };
     const options = {
       method: "POST",
       body: JSON.stringify(sendData),
@@ -156,7 +149,7 @@ export const ImageGathererProvider = ({
         a.download = "images";
         document.body.appendChild(a);
         a.click();
-        a.remove(); // Clean up after download
+        a.remove();
       })
       .catch((error) => {
         console.error("There was an error with the download:", error);
@@ -246,6 +239,7 @@ export const ImageGathererProvider = ({
         isPreviewActive,
         setIsPreviewActive,
         isLoading,
+        hasImages: mainImageList.length > 0,
         sendImageGatheringRequest,
         responseError,
         mainImageList,

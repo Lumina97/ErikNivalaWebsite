@@ -5,6 +5,7 @@ import App from "./app";
 
 import "../src/css/newGlobal.css";
 import "../src/css/animations.css";
+import { ProjectProvider } from "./Providers/ProjectProvider";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -12,7 +13,9 @@ createRoot(document.getElementById("root")!).render(
       <div className="backgroundContainer">
         <div className="backgroundAnimation">
           <Toaster />
-          <App />
+          <ProjectProvider>
+            <App />
+          </ProjectProvider>
         </div>
       </div>
     </div>

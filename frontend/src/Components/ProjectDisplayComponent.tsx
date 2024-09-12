@@ -1,7 +1,9 @@
-import { projectImagePath } from "../settings";
+import { EActiveTab, useProject } from "../Providers/ProjectProvider";
+import { githubLink, projectImagePath } from "../settings";
 import ProjectComponent from "./ProjectComponent";
 
 const ProjectDisplayComponent = () => {
+  const { setActiveTab } = useProject();
   return (
     <div className="projectCardDisplayWrapper">
       <h2>Projects</h2>
@@ -12,6 +14,11 @@ const ProjectDisplayComponent = () => {
           description="Modern asteroids game"
         />
         <ProjectComponent
+          wrapperProps={{
+            onClick: () => {
+              setActiveTab(EActiveTab.ImageGatherer);
+            },
+          }}
           imagePath={`${projectImagePath}ImageGatherer.png`}
           title="Image gatherer"
           description="Reddit app that lets you download images from reddit posts"
@@ -22,6 +29,11 @@ const ProjectDisplayComponent = () => {
           description="Fully responsive saas website"
         />
         <ProjectComponent
+          wrapperProps={{
+            onClick: () => {
+              window.open(githubLink, "_blank");
+            },
+          }}
           imagePath={`${projectImagePath}GitHub.svg`}
           title="Github"
           description="My github account"

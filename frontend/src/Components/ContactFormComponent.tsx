@@ -19,6 +19,7 @@ const messageError = `Message has to be at least ${messageMinimumLength} charact
 
 const ContactFormComponent = () => {
   const [wasSubmitted, setWasSubmitted] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
@@ -28,6 +29,7 @@ const ContactFormComponent = () => {
   const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setWasSubmitted(true);
+    setIsLoading(true);
     if (
       isFirstNameValid(firstName) &&
       isLastNameValid(lastName) &&
@@ -49,7 +51,10 @@ const ContactFormComponent = () => {
           setMessage("");
         })
         .catch(() => {
-          toast.error("There was an error submitting your data");
+          toast.error("There was an error sending your message!");
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     }
   };
@@ -65,6 +70,7 @@ const ContactFormComponent = () => {
             onChange: (e) => setFirstName(e.target.value),
             type: "text",
             value: firstName,
+            disabled: isLoading,
           }}
         />
         {wasSubmitted && !isFirstNameValid(firstName) && (
@@ -76,6 +82,7 @@ const ContactFormComponent = () => {
             onChange: (e) => setLastName(e.target.value),
             type: "text",
             value: lastName,
+            disabled: isLoading,
           }}
         />
         {wasSubmitted && !isLastNameValid(lastName) && (
@@ -87,6 +94,7 @@ const ContactFormComponent = () => {
             onChange: (e) => setEmail(e.target.value),
             type: "email",
             value: email,
+            disabled: isLoading,
           }}
         ></InputFieldComponent>
         {wasSubmitted && !isEmailValid(email) && (
@@ -99,6 +107,7 @@ const ContactFormComponent = () => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             maxLength={600}
+            disabled={isLoading}
           >
             &#10;
           </textarea>
@@ -110,7 +119,7 @@ const ContactFormComponent = () => {
         <InputFieldComponent
           labelTitle=""
           wrapperProps={{ id: "contactFormSubmit" }}
-          props={{ type: "submit" }}
+          props={{ type: "submit", disabled: isLoading }}
         ></InputFieldComponent>
       </form>
     </div>

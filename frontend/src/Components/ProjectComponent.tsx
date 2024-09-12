@@ -18,6 +18,7 @@ const ProjectComponent = ({
         <div className="projectCardInformationWrapper">
           <h2>{title}</h2>
           <p>{description}</p>
+          <p>click me!</p>
         </div>
       </div>
     </div>

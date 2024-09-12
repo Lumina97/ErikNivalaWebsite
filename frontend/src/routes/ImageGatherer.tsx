@@ -1,7 +1,4 @@
 import { useState } from "react";
-import MainSection from "../Components/mainSection";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import InputFieldComponent from "../Components/InputFieldComponent";
 import { useImageGatherer } from "../Providers/ImageGathererProvider";
 import ImageGathererModal from "../Components/ImageGathererModal";
@@ -15,103 +12,92 @@ const ImageGatherer = () => {
     isModalActive,
     setIsModalActive,
     isLoading,
+    hasImages,
     responseError,
   } = useImageGatherer();
 
   const [subreddit, setSubreddit] = useState<string>("");
-  const [amountOfPosts, setAmountOfPosts] = useState<number>(0);
-  const [titleFilter, setTitleFilter] = useState<string>("");
-  const [titleFiltersArray, setTitleFilterArray] = useState<string[]>([]);
+  const [wasSubmitted, setWasSubmitted] = useState<boolean>(false);
 
-  const addNewFilter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      if (titleFilter !== "") {
-        setTitleFilterArray([...titleFiltersArray, titleFilter]);
-        setTitleFilter("");
-      }
-    }
+  const subredditError = "Subreddit cannot be empty!";
+
+  const isSubredditValid = () => {
+    return subreddit.length > 0;
+  };
+
+  const submitGatherRequest = () => {
+    setWasSubmitted(true);
+    if (isSubredditValid()) sendImageGatheringRequest(subreddit);
   };
 
   return (
     <>
       {isModalActive && <ImageGathererModal />}
-      <MainSection title="ImageGatherer">
-        {!isModalActive && (
-          <>
-            <div className="inputFields" id="InputFields">
-              <InputFieldComponent
-                labelTitle="Subreddit to search"
-                props={{
-                  placeholder: "Subreddit...",
-                  value: subreddit,
-                  onChange: (e) => setSubreddit(e.target.value),
-                }}
-              />
-              <InputFieldComponent
-                labelTitle="Amount of posts:"
-                props={{
-                  placeholder: "Amount of posts...",
-                  value: amountOfPosts,
-                  onChange: (e) => setAmountOfPosts(+e.target.value),
-                }}
-              />
-              <div>
+      {!isModalActive && (
+        <div id="ImageGatherer">
+          {!isModalActive && (
+            <>
+              <div className="inputFields" id="InputFields">
                 <InputFieldComponent
-                  labelTitle="Title filters:"
-                  wrapperProps={{ className: "filterInputContainer" }}
+                  labelTitle="Subreddit: "
+                  wrapperProps={{ className: "inputWrapper" }}
                   props={{
-                    placeholder: "Filter...",
-                    value: titleFilter,
-                    onChange: (e) => setTitleFilter(e.target.value),
-                    onKeyDown: (e) => addNewFilter(e),
+                    disabled: isLoading,
+                    value: subreddit,
+                    onChange: (e) => setSubreddit(e.target.value),
                   }}
-                >
-                  <FontAwesomeIcon
-                    className="fontAwesome"
-                    icon={faTrash}
-                    onClick={() => setTitleFilterArray([])}
-                  />
-                </InputFieldComponent>
+                />
+                {wasSubmitted && !isSubredditValid() && (
+                  <div className="inputFieldErrorText">{subredditError}</div>
+                )}
+                <div className="imageGathererButtons">
+                  <button
+                    disabled={isLoading}
+                    className="btnPrimary"
+                    onClick={submitGatherRequest}
+                  >
+                    Request images
+                  </button>
+                  <button
+                    disabled={isLoading || !hasImages}
+                    className="btnPrimary"
+                    onClick={() => setIsModalActive(true)}
+                  >
+                    Collection
+                  </button>
+                </div>
+                {isLoading && (
+                  <>
+                    <div className="loaderContainer">
+                      <div className="loader" id="loader"></div>
+                    </div>
+                  </>
+                )}
+                {responseError?.length > 0 && (
+                  <p id="ErrorText">{responseError}</p>
+                )}
               </div>
-            </div>
-            <div className="imageGathererButtons">
-              <ul id="FilterUnorderedList">
-                {titleFiltersArray.map((filter) => {
-                  return <li>{filter}</li>;
-                })}
-              </ul>
-              <button
-                id="SendImageRequestButton"
-                onClick={() =>
-                  sendImageGatheringRequest(
-                    subreddit,
-                    amountOfPosts,
-                    titleFiltersArray
-                  )
-                }
-              >
-                Request images
-              </button>
-              <button
-                id="OpenCollectionButton"
-                onClick={() => setIsModalActive(true)}
-              >
-                Collection
-              </button>
-              {isLoading && (
-                <>
-                  <div className="loaderContainer">
-                    <div className="loader" id="loader"></div>
-                  </div>
-                </>
-              )}
-              {responseError.length > 0 && (
-                <p id="ErrorText">{responseError}</p>
-              )}
-            </div>
-          </>
-        )}
-      </MainSection>
+              <div className="imageGathererHowTo">
+                <h3>Image Gatherer</h3>
+                <p>Welcome to my reddit app!</p>
+                <p>How to use:</p>
+                <p>
+                  Just enter the name of the subreddit you would like to scan
+                  for images in recent posts ("wallpaper" for example)
+                </p>
+                <p>
+                  then wait until the collection view pops up and displays your
+                  images.
+                </p>
+                <p>
+                  Inside the collection view you can favorite images, select
+                  which ones to download or download all{" "}
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+      )}
     </>
   );
 };

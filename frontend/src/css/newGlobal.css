@@ -33,9 +33,14 @@
   letter-spacing: 0.085rem;
 }
 
+html {
+  height: 100%;
+}
+
 body {
   background-color: var(--color-surface-100);
   padding: 0;
+  height: 100%;
   margin: 0;
 }
 
@@ -101,6 +106,131 @@ img {
   margin: auto;
 }
 
+input:focus,
+textarea:focus,
+input:hover,
+textarea:hover {
+  border: 1px solid var(--color-primary-600);
+  outline: none;
+}
+
+input {
+  text-indent: 6.5rem;
+}
+
+.btnPrimary:disabled,
+input:disabled {
+  background-color: var(--color-surface-100);
+  background: linear-gradient(
+        to right,
+        var(--color-surface-100),
+        var(--color-surface-100)
+      )
+      padding-box,
+    var(--color-primary-gradient) border-box;
+}
+
+input,
+textarea {
+  font-size: 20px;
+  height: 2rem;
+  width: 400px;
+  margin: 0.25rem;
+  border: 1px solid transparent;
+  border-radius: 25px;
+  background-color: var(--color-surface-400);
+  color: var(--color-primary-600);
+}
+
+textarea {
+  height: 150px;
+  padding-top: 1.6rem;
+  resize: none;
+}
+
+.btnPrimary,
+input[type="submit"] {
+  width: 100%;
+  max-width: 200px;
+  margin: 0;
+  text-indent: 0;
+  color: var(--color-primary-600);
+}
+
+.btnPrimary:hover,
+input[type="submit"]:hover {
+  border: 3px solid var(--color-primary-600);
+  outline: none;
+}
+
+.btnPrimary:active:not(:disabled),
+input[type="submit"]:active:not(:disabled) {
+  transition: scale 0.3s;
+  scale: 0.9;
+}
+.btnPrimary:not(:active),
+input[type="submit"]:not(:active) {
+  transition: scale 0.3s;
+  scale: 1;
+}
+
+.btnPrimary {
+  min-width: 120px;
+  min-height: 40px;
+  border-radius: 25px;
+  border: 1px solid transparent;
+  background: linear-gradient(
+        to right,
+        var(--color-surface-200),
+        var(--color-surface-200)
+      )
+      padding-box,
+    var(--color-primary-gradient) border-box;
+  color: var(--color-primary-600);
+}
+
+input:-internal-autofill-selected,
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+textarea:-webkit-autofill:active,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+select:-webkit-autofill:active {
+  box-shadow: none;
+  border: 1px solid var(--color-primary-600);
+  -webkit-text-fill-color: var(--color-primary-600);
+  -webkit-box-shadow: 0 0 0px 1000px var(--color-surface-400) inset;
+}
+
+input:-internal-autofill-selected:disabled,
+input:-webkit-autofill:disabled,
+input:-webkit-autofill:hover:disabled,
+input:-webkit-autofill:focus:disabled,
+input:-webkit-autofill:active:disabled,
+textarea:-webkit-autofill:disabled,
+textarea:-webkit-autofill:hover:disabled,
+textarea:-webkit-autofill:focus:disabled,
+textarea:-webkit-autofill:active:disabled,
+select:-webkit-autofill:disabled,
+select:-webkit-autofill:hover:disabled,
+select:-webkit-autofill:focus:disabled,
+select:-webkit-autofill:active:disabled
+  input:-internal-autofill-selected:disabled,
+.contactFormWrapper form div input:disabled,
+.contactFormWrapper form div textarea:disabled {
+  box-shadow: none;
+  border: 1px solid var(--color-primary-600);
+  -webkit-text-fill-color: var(--color-primary-600);
+  -webkit-box-shadow: 0 0 0px 1000px var(--color-surface-100) inset;
+  background-color: var(--color-surface-100) !important;
+}
+
 #errorPage {
   display: flex;
   flex-direction: column;
@@ -120,21 +250,6 @@ img {
   height: 100%;
 }
 
-.btn-primary {
-  min-width: 120px;
-  min-height: 40px;
-  border-radius: 25px;
-  border: 3px solid transparent;
-  background: linear-gradient(
-        to right,
-        var(--color-surface-100),
-        var(--color-surface-100)
-      )
-      padding-box,
-    var(--color-primary-gradient) border-box;
-  color: var(--color-primary-100);
-}
-
 .mainContainer {
   height: 100%;
 }
@@ -151,30 +266,43 @@ img {
   text-align: center;
 }
 
-.profileImgAnimationWrapper {
+.profileImgWrapper {
+  position: relative;
+  background-color: transparent;
+  perspective: 1000px;
   margin: auto;
-  width: fit-content;
+  height: 250px;
+  width: 250px;
 }
 
-.profileImgWrapper {
-  margin: auto;
-  height: auto;
-  max-width: 250px;
-  max-height: 250px;
+.profileImgInner {
+  height: 100%;
+  width: 100%;
+
+  object-fit: cover;
+  transition: transform 0.5s;
+  transform-style: preserve-3d;
+  position: relative;
+}
+.profileImgWrapper:hover .profileImgInner {
+  transform: rotateY(180deg);
+}
+
+.profileImageFront,
+.profileImageBack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  background-color: (var(--color-surface-200));
+}
+
+.profileImageBack {
+  transform: rotateY(180deg);
+  overflow: hidden;
   border: 1px solid transparent;
   border-radius: 50%;
-  object-fit: cover;
-  overflow: hidden;
-  transition: transform 1s ease;
-}
-
-.profileImgAnimationWrapper:hover > .profileImgWrapper > img {
-  animation: imageTransition 1s forwards;
-}
-
-.profileImgAnimationWrapper:hover > .profileImgWrapper {
-  transition: transform 1.5s;
-  transform: rotateY(540deg);
 }
 
 .headerTitleText {
@@ -239,6 +367,10 @@ img {
   color: var(--color-primary-600);
   transition: scale 0.15s;
   scale: 1.1;
+}
+.aboutSkillsWrapper p:not(:hover) {
+  transition: scale 0.15s;
+  scale: 1;
 }
 
 .projectCardDisplayWrapper {
@@ -315,14 +447,7 @@ img {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-
   align-items: center;
-}
-
-.contactFormWrapper form input:focus,
-.contactFormWrapper form textarea:focus {
-  border: 1px solid var(--color-primary-600);
-  outline: none;
 }
 
 .contactFormWrapper form div {
@@ -331,53 +456,21 @@ img {
 
 .inputLabel {
   position: absolute;
-  top: 0.65rem;
+  top: 0.75rem;
   left: 1rem;
 }
 
-.contactFormWrapper form div input {
-  text-indent: 6.5rem;
-}
-
-.contactFormWrapper form input,
-.contactFormWrapper form textarea {
-  font-size: 20px;
-  height: 2rem;
-  width: 400px;
-  margin: 0.25rem;
-  border: 1px solid transparent;
-  border-radius: 25px;
-  background-color: var(--color-surface-400);
-  text-indent: 0.5rem;
-  color: var(--color-primary-600);
-}
-
-.contactFormWrapper form textarea {
-  height: 150px;
-  padding-top: 1.6rem;
-  resize: none;
-}
-
 #contactFormSubmit,
-.contactFormWrapper form input::placeholder,
-.contactFormWrapper form textarea::placeholder {
+input::placeholder,
+textarea::placeholder {
   text-indent: 0.5rem;
   color: var(--color-surface-200);
-}
-
-#contactFormSubmit > input {
-  width: 100%;
-  margin: 0;
-  text-indent: 0;
-  color: var(--color-primary-600);
 }
 
 #contactFormSubmit {
   height: 2rem;
   width: 50%;
-}
-#contactFormSubmit input:hover {
-  border: 1px solid var(--color-primary-600);
+  text-align: center;
 }
 
 .inputFieldErrorText {

@@ -5,6 +5,7 @@ export type TFormData = {
   email: string;
   message: string;
 };
+
 export const sendEmail = async (data: TFormData) => {
   init();
   return emailjs.send("service_o8ay9sa", "template_xfv49lp", {
