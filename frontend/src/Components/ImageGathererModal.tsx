@@ -39,7 +39,7 @@ const ImageGathererModal = () => {
           <button
             ref={mainButtonRef}
             id="modalMainCollectionButton"
-            className={showFavorites ? " " : "activeBtn"}
+            className={(showFavorites ? "" : "activeBtn") + " btnPrimary"}
             onClick={() => {
               setShowFavorites(false);
             }}
@@ -48,7 +48,7 @@ const ImageGathererModal = () => {
           </button>
           <button
             ref={favoriteButtonRef}
-            className={showFavorites ? "activeBtn" : ""}
+            className={(showFavorites ? "activeBtn" : "") + " btnPrimary"}
             id="modalFavCollectionButton"
             onClick={() => {
               setShowFavorites(true);
@@ -67,11 +67,9 @@ const ImageGathererModal = () => {
             <option value={"false"}>Size &darr; </option>
           </select>
         </div>
-        <FontAwesomeIcon
-          className="FontAwesome"
-          icon={faX}
-          onClick={() => setIsModalActive(false)}
-        />
+        <div className="exitButton" onClick={() => setIsModalActive(false)}>
+          <FontAwesomeIcon icon={faX}></FontAwesomeIcon>
+        </div>
       </div>
 
       <div id="modalContentContainer">
@@ -91,9 +89,15 @@ const ImageGathererModal = () => {
         })}
       </div>
       <div className="modalFooter">
-        <button onClick={downloadAll}>Download all</button>
-        <button onClick={downloadSelected}>Download selected</button>
-        <button onClick={clearFavorites}>Clear All favorites</button>
+        <button className="btnPrimary" onClick={downloadAll}>
+          Download all
+        </button>
+        <button className="btnPrimary" onClick={downloadSelected}>
+          Download selected
+        </button>
+        <button className="btnPrimary" onClick={clearFavorites}>
+          Clear All favorites
+        </button>
       </div>
       {isPreviewActive && <ImageGathererPreview imageLink={previewImageLink} />}
     </div>

@@ -3,9 +3,9 @@ import { createRoot } from "react-dom/client";
 import { Toaster } from "react-hot-toast";
 import App from "./app";
 
-import "../src/css/newGlobal.css";
+import "../src/css/global.css";
 import "../src/css/animations.css";
-import { ProjectProvider } from "./Providers/ProjectProvider";
+import "../src/css/responsive.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -13,9 +13,7 @@ createRoot(document.getElementById("root")!).render(
       <div className="backgroundContainer">
         <div className="backgroundAnimation">
           <Toaster />
-          <ProjectProvider>
-            <App />
-          </ProjectProvider>
+          <App />
         </div>
       </div>
     </div>

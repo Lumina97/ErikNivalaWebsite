@@ -8,3 +8,6 @@ export const messageMinimumLength = 10;
 
 //links
 export const githubLink = "https://github.com/Lumina97";
+
+//responsive
+export const mobileImageGathererButtonShowWidth = 560;

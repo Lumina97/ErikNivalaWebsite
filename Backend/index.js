@@ -94,12 +94,7 @@ app.post("/api/ImageLoader", async function (request, response) {
     return;
   }
 
-  await RedditAPI.GetAllImageLinks(
-    data.subreddit,
-    data.amount,
-    session,
-    data.filters
-  )
+  await RedditAPI.GetAllImageLinks(data.subreddit, session)
     .then((result) => {
       let returnData;
       try {

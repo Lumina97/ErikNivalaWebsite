@@ -16,8 +16,16 @@
   font-family: "Rubik", sans-serif;
 }
 
-.Saas-Page h1 {
+#Saas-Page h1 {
   color: var(--color-black);
+  text-shadow: none;
+  background: transparent;
+  -webkit-text-fill-color: black;
+}
+#Saas-Page h2 {
+  color: var(--color-black);
+  -webkit-text-fill-color: black;
+  background: transparent;
   text-shadow: none;
 }
 

@@ -3,3 +3,96 @@
     animation: none 25s linear infinite;
   }
 }
+
+@media (max-width: 730px) {
+  header nav ul {
+    gap: 1rem;
+  }
+
+  .aboutSkillsWrapper {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 560px) {
+  h2 {
+    font-size: 3rem;
+  }
+  header {
+    justify-content: space-between;
+  }
+
+  .aboutDescriptionText {
+    max-width: 95%;
+  }
+
+  .projectCard:hover .projectCardInner {
+    transform: none;
+  }
+
+  .projectCard {
+    width: 100%;
+  }
+  .projectImageWrapper,
+  .projectCardInformationWrapper {
+    position: relative;
+  }
+
+  .projectCardInner {
+    display: flex;
+  }
+
+  .projectCardInformationWrapper {
+    transform: unset;
+  }
+
+  .mobileMenu > .fontAwesome {
+    color: var(--color-primary-600);
+    position: absolute;
+    top: 1.65rem;
+    right: 3.25rem;
+  }
+
+  .mobileMenuWrapper {
+    display: block;
+    padding-right: 3rem;
+  }
+
+  .mobileMenuWrapper .fontAwesome {
+    color: var(--color-primary-600);
+  }
+
+  .mobileMenu > ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .mobileMenu {
+    padding-top: 7rem;
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: var(--color-white);
+    height: 100%;
+    width: 100%;
+    z-index: 100;
+  }
+
+  .open .mobileMenu {
+    display: block;
+    background-color: var(--color-surface-100);
+    z-index: 90;
+  }
+
+  .contactFormWrapper {
+    width: 95%;
+  }
+  .contactFormWrapper form {
+    width: 95%;
+  }
+}

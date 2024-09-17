@@ -9,7 +9,7 @@
   width: 90vw;
   max-width: 1200px;
   height: 90vh;
-  background: white;
+  background: var(--color-surface-200);
   z-index: 100;
   border-radius: 0.75rem;
   padding-bottom: 0.5rem;
@@ -34,11 +34,16 @@
   margin-right: 1rem;
   gap: 0.75rem;
 }
+
 .modalHeader > div:nth-child(1) {
   display: flex;
   flex-wrap: wrap;
   flex: 1;
   gap: 1rem;
+}
+
+.modalHeader .exitButton {
+  color: var(--color-primary-600);
 }
 
 .modalHeader button {
@@ -77,17 +82,18 @@
 }
 
 #modalContentContainer::-webkit-scrollbar-thumb {
-  background: var(--color-turquoise); /* Scrollbar thumb color */
+  background: var(--color-surface-200); /* Scrollbar thumb color */
   border-radius: 6px;
 }
 
 #modalContentContainer::-webkit-scrollbar-track {
-  background: var(--color-orange); /* Scrollbar track color */
+  background: var(--color-primary-gradient); /* Scrollbar track color */
   border-radius: 6px;
 }
 
 .modalItem {
-  border: 1px solid var(--color-orange);
+  border: 1px solid var(--color-primary-600);
+  background: var(--color-surface-600);
   border-radius: 8px;
   width: fit-content;
   margin: 1rem;
@@ -103,6 +109,10 @@
   justify-content: space-around;
 }
 
+#ImageDisplayModal .btnPrimary {
+  width: 2rem;
+}
+
 .imageContainer img {
   width: 100%;
   height: 100%;
@@ -116,29 +126,45 @@
   height: 150px;
 }
 
+.previewImage {
+  position: absolute;
+  width: 100%;
+  max-width: 80vw;
+  margin: auto;
+  height: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 10px);
+}
+
 #itemPreview {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: fixed;
   background-color: white;
-  border: 1px solid var(--color-turquoise);
+  border: 3px solid var(--color-primary-gradient);
   border-radius: 10px;
   transition: linear 0.15s;
   margin: auto;
-  max-width: 1024px;
-  width: 80vw;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
+  width: fit-content;
+  height: fit-content;
 }
 
 #itemPreview img {
-  width: 100%;
-  object-fit: cover;
+  min-width: 80vw;
+  min-height: 80vh;
   position: absolute;
-  top: 0;
-  left: 0;
+  width: 100%;
+  height: 100%;
+  max-width: 80vh;
+  max-height: 80vh;
+  object-fit: contain;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 10px);
 }
 
 #itemPreview .FontAwesome {
