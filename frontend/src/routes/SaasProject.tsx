@@ -41,7 +41,7 @@ const SaasProject = () => {
   };
 
   return (
-    <div className="Saas-Page">
+    <div id="Saas-Page" className="Saas-Page">
       <header>
         <div className="SaaS-container header-wrapper">
           <div className="company-logo">
@@ -479,8 +479,7 @@ const SaasProject = () => {
                 <a href="/">View privacy policy</a>
 
                 <a href="/" className="btn btn-primary">
-                  {" "}
-                  Get started{" "}
+                  Get started
                 </a>
               </form>
             </div>
@@ -551,19 +550,15 @@ const SaasProject = () => {
 
               <span className="socials-container">
                 <a href="/">
-                  {" "}
                   <FontAwesomeIcon className="I" icon={faFacebook} />
                 </a>
                 <a href="/">
-                  {" "}
                   <FontAwesomeIcon className="I" icon={faGoogle} />
                 </a>
                 <a href="/">
-                  {" "}
                   <FontAwesomeIcon className="I" icon={faTwitter} />
                 </a>
                 <a href="/">
-                  {" "}
                   <FontAwesomeIcon className="I" icon={faGithub} />
                 </a>
 

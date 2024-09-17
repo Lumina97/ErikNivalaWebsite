@@ -13,11 +13,8 @@ type TImageGathererProvider = {
   isPreviewActive: boolean;
   setIsPreviewActive: Dispatch<SetStateAction<boolean>>;
   isLoading: boolean;
-  sendImageGatheringRequest: (
-    subreddit: string,
-    amount: number,
-    filters: string[]
-  ) => Promise<void>;
+  hasImages: boolean;
+  sendImageGatheringRequest: (subreddit: string) => Promise<void>;
   responseError: string;
   mainImageList: TImageListItem[];
   favoriteImageList: TImageListItem[];
@@ -26,7 +23,7 @@ type TImageGathererProvider = {
   showFavorites: boolean;
   setShowFavorites: Dispatch<SetStateAction<boolean>>;
   downloadAll: () => void;
-  downloadSelected: () => void;
+  downloadSelected: () => Promise<void>;
   clearFavorites: () => void;
   sortCollection: (bSortAscending: boolean) => void;
 };
@@ -51,6 +48,7 @@ export type TImageListItem = {
 const ImageGathererContext = createContext<TImageGathererProvider>(
   {} as TImageGathererProvider
 );
+
 export const ImageGathererProvider = ({
   children,
 }: {
@@ -66,14 +64,10 @@ export const ImageGathererProvider = ({
   );
   const [showFavorites, setShowFavorites] = useState<boolean>(false);
 
-  const sendImageGatheringRequest = async (
-    subreddit: string,
-    amount: number,
-    filters: string[]
-  ) => {
+  const sendImageGatheringRequest = async (subreddit: string) => {
     setResponseError("");
     setIsLoading(true);
-    const sendData = { subreddit, amount, filters };
+    const sendData = { subreddit };
     const options = {
       method: "POST",
       body: JSON.stringify(sendData),
@@ -114,7 +108,7 @@ export const ImageGathererProvider = ({
     const list = (showFavorites ? favoriteImageList : mainImageList)
       .filter((item) => item.isSelected)
       .map((item) => item.url.main);
-    await downloadFromLinks(list); //.then((result) => console.log(result));
+    downloadFromLinks(list).then(clearSelectedImages);
   };
 
   const downloadFromLinks = (links: string[]) => {
@@ -126,7 +120,7 @@ export const ImageGathererProvider = ({
       headers: { "Content-Type": "application/json" },
     };
 
-    fetch("/api/downloadFilesFromLinks", options)
+    return fetch("/api/downloadFilesFromLinks", options)
       .then((response) => {
         if (!response.ok) {
           console.log(`Err: ${response}`);
@@ -156,12 +150,18 @@ export const ImageGathererProvider = ({
         a.download = "images";
         document.body.appendChild(a);
         a.click();
-        a.remove(); // Clean up after download
+        a.remove();
       })
       .catch((error) => {
         console.error("There was an error with the download:", error);
       })
       .finally(() => setIsLoading(false));
+  };
+
+  const clearSelectedImages = () => {
+    (showFavorites ? favoriteImageList : mainImageList).map((item) => {
+      item.isSelected = false;
+    });
   };
 
   const addImageLinksToCollection = (links: string[]) => {
@@ -246,6 +246,7 @@ export const ImageGathererProvider = ({
         isPreviewActive,
         setIsPreviewActive,
         isLoading,
+        hasImages: mainImageList.length > 0,
         sendImageGatheringRequest,
         responseError,
         mainImageList,

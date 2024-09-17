@@ -15,20 +15,13 @@ async function GetAccessToken() {
 }
 
 module.exports = {
-  GetAllImageLinks: async function (
-    subreddit,
-    amount,
-    session,
-    postTitleFilters
-  ) {
+  GetAllImageLinks: async function (subreddit, session) {
     return new Promise(async function (resolve, reject) {
       if (session === undefined) {
         reject("Session was invalid");
         return;
       }
-
       SubRedditToScan = subreddit;
-      AmountOfPosts = parseInt(amount);
 
       let access_token;
       try {
@@ -41,8 +34,6 @@ module.exports = {
 
       await RedditLinksGatherer.GetImageLinksFromSubreddit(
         subreddit,
-        AmountOfPosts,
-        postTitleFilters,
         access_token
       )
         .then((result) => {

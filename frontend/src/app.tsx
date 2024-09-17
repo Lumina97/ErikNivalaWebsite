@@ -1,47 +1,67 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./error-page";
-import About from "./routes/About";
-import Home from "./routes/Home";
-import Website from "./routes/Website";
-import SpaceTrace from "./routes/SpaceTrace";
-import Saas from "./routes/Saas";
+import LandingPage from "./routes/LandingPage";
 import SaasProject from "./routes/SaasProject";
 import ImageGathererWrapper from "./routes/ImageGathererWrapper";
+import { useState, useEffect } from "react";
+import { ProjectProvider } from "./Providers/ProjectProvider";
+import SpaceTrace from "./routes/SpaceTrace";
+
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height,
+  };
+}
+
+export function useWindowDimensions() {
+  const [windowDimensions, setWindowDimensions] = useState(
+    getWindowDimensions()
+  );
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimensions(getWindowDimensions());
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return windowDimensions;
+}
 
 //add new routes here
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <LandingPage />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/home",
-    element: <Home />,
-  },
-  {
-    path: "/website",
-    element: <Website />,
-  },
-  {
     path: "/Saas",
-    element: <Saas />,
-  },
-  {
-    path: "/SaasProject",
-    element: <SaasProject />,
+    element: (
+      <ProjectProvider>
+        <SaasProject />
+      </ProjectProvider>
+    ),
   },
   {
     path: "/ImageGatherer",
-    element: <ImageGathererWrapper />,
-  },
-  {
-    path: "/about",
-    element: <About />,
+    element: (
+      <ProjectProvider>
+        <ImageGathererWrapper />
+      </ProjectProvider>
+    ),
   },
   {
     path: "/SpaceTrace",
-    element: <SpaceTrace />,
+    element: (
+      <ProjectProvider>
+        <SpaceTrace />
+      </ProjectProvider>
+    ),
   },
 ]);
 

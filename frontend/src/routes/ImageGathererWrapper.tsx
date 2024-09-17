@@ -1,5 +1,5 @@
 import { ImageGathererProvider } from "../Providers/ImageGathererProvider";
-import ImageGatherer from "./ImageGatherer";
+import ImageGatherer from "../Components/ImageGatherer";
 
 const ImageGathererWrapper = () => {
   return (

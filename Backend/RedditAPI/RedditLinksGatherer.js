@@ -4,16 +4,17 @@ const querystring = require("querystring");
 const log = require("../Config").log;
 
 const oAuthURL = "https://oauth.reddit.com";
+const imagePostAmount = 100;
 let Access_Token;
 
-async function GetRedditPosts(subreddit, amount, titleFilters) {
+async function GetRedditPosts(subreddit) {
   return new Promise(async function (resolve, reject) {
     log.info(
-      `Getting ${amount} posts from ${subreddit} - LinksGatherer.js - GetRedditPosts()`
+      `Getting posts from ${subreddit} - LinksGatherer.js - GetRedditPosts()`
     );
 
     const params = querystring.stringify({
-      limit: amount,
+      limit: imagePostAmount,
     });
 
     let urlink = oAuthURL + "/r/" + subreddit + "/new" + "?" + params;
@@ -54,14 +55,6 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
             post.data.url.includes(".png") ||
             post.data.url.includes(".jpeg"))
         ) {
-          if (
-            titleFilters.length > 0 &&
-            !FilterTitle(post.data.title, titleFilters)
-          ) {
-            log.info("Title does not meet filter requirements!");
-            continue;
-          }
-
           let thumbnail = "";
           if (post.data.preview) {
             const resolutions = post.data.preview.images[0].resolutions;
@@ -99,28 +92,8 @@ async function GetRedditPosts(subreddit, amount, titleFilters) {
   });
 }
 
-// Iterates given title and checks if the given filters exist within the title
-function FilterTitle(Title, Filters) {
-  for (let i = 0; i < Filters.length; i++) {
-    log.info("TITLE: \t" + Title);
-    log.info("Filter: \t" + Filters[i]);
-
-    if (Title.includes(Filters[i])) {
-      log.info("title contains filter!");
-      return true;
-    }
-    log.info("title does NOT contains filter!");
-  }
-  return false;
-}
-
 module.exports = {
-  GetImageLinksFromSubreddit: async function (
-    subreddit,
-    amountOfPostsSearched,
-    titleFilters,
-    access_token
-  ) {
+  GetImageLinksFromSubreddit: async function (subreddit, access_token) {
     return new Promise(async function (resolve, reject) {
       Access_Token = access_token;
 
@@ -129,30 +102,17 @@ module.exports = {
         log.warn(
           "Passed in subreddit was undefined! - DownloadImagesFromSubreddit() "
         );
-        reject("Unable to find subreddit");
-        return;
-      }
-      if (
-        typeof amountOfPostsSearched === "undefined" ||
-        isNaN(amountOfPostsSearched) === true ||
-        typeof amountOfPostsSearched != "number"
-      ) {
-        log.info(
-          "Defaulting search amount to 25 posts - DownloadImagesFromSubreddit()"
-        );
-        amountOfPostsSearched = 25;
+        return reject("Unable to find subreddit");
       }
 
       //wait to get links
-      await GetRedditPosts(subreddit, amountOfPostsSearched, titleFilters)
+      await GetRedditPosts(subreddit)
         .then((result) => {
-          resolve(result);
-          return;
+          return resolve(result);
         })
         .catch((err) => {
           if (err) console.log("Error Getting image links: " + err);
-          reject(err);
-          return;
+          return reject(err);
         });
     });
   },

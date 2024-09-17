@@ -8,7 +8,7 @@ let warningBanner;
 let playButton;
 let space_trace_text;
 
-function TogglePlayButtonAndCanvas(play) {
+function getElements() {
   container = document.querySelector("#unity-container");
   canvas = document.querySelector("#unity-canvas");
   loadingBar = document.querySelector("#unity-loading-bar");
@@ -16,20 +16,10 @@ function TogglePlayButtonAndCanvas(play) {
   warningBanner = document.querySelector("#unity-warning");
   playButton = document.getElementById("PlaySpaceTrace");
   space_trace_text = document.getElementById("space-trace-text");
-
-  if (play) {
-    canvas.style.display = "block";
-    playButton.style.display = "none";
-    space_trace_text.style.display = "none";
-  } else {
-    playButton.style.display = "block";
-    space_trace_text.style.display = "block";
-    canvas.style.display = "none";
-  }
 }
 
 export function PlaySpaceTrace() {
-  TogglePlayButtonAndCanvas(true);
+  getElements();
 
   function unityShowBanner(msg, type) {
     function updateBannerVisibility() {
@@ -101,7 +91,7 @@ export function StopPlayingSpaceTrace() {
   if (myGameInstance === undefined || myGameInstance === null) {
     return;
   }
-  TogglePlayButtonAndCanvas(false);
+  getElements();
 
   myGameInstance.SendMessage("JSManager", "CloseGame");
   myGameInstance = null;
