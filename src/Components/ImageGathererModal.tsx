@@ -59,8 +59,10 @@ const ImageGathererModal = () => {
           <select
             id="sort"
             onChange={(e) => sortCollection(e.target.value === "true")}
+            defaultValue={"sort"}
+            value={"sort"}
           >
-            <option value="" disabled selected>
+            <option value="sort" disabled>
               Sort...
             </option>
             <option value={"true"}>Size &#8593; </option>
@@ -81,6 +83,7 @@ const ImageGathererModal = () => {
         {imageList.map((item) => {
           return (
             <ImageListItemComponent
+              key={item.url.preview}
               imageItem={item}
               toggleFavoriteAnimation={toggleButtonAnimation}
               setPreviewImage={setPreviewImageLink}
