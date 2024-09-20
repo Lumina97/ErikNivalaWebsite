@@ -1,3 +1,4 @@
+import JSZip from "jszip";
 import {
   createContext,
   Dispatch,
@@ -6,6 +7,7 @@ import {
   useContext,
   useState,
 } from "react";
+import { saveAs } from "file-saver";
 
 type TImageGathererProvider = {
   isModalActive: boolean;
@@ -72,15 +74,18 @@ export const ImageGathererProvider = ({
       method: "POST",
       body: JSON.stringify(sendData),
       headers: { "Content-Type": "application/json" },
+      withCredentials: true,
     };
-    return await fetch("/api/ImageLoader", options)
+
+    return await fetch("http://127.0.0.1:3000/api/ImageLoader", options)
       .then((result) => {
-        if (!result.ok) {
+        if (result.statusText !== "OK") {
           setResponseError("There was an error getting your data.");
           return;
         }
-        result.json().then(async function (result) {
+        result.json().then(async (result: string) => {
           const data = JSON.parse(result);
+          if (!data.links) throw new Error("Response data had no links.");
           setMainImageList([]);
           addImageLinksToCollection(data.links)
             .then(() => setIsModalActive(true))
@@ -101,61 +106,32 @@ export const ImageGathererProvider = ({
     const list = (showFavorites ? favoriteImageList : mainImageList).map(
       (item) => item.url.main
     );
-    await downloadFromLinks(list);
+    downloadImagesFromLinks(list).then(clearSelectedImages);
   };
 
   const downloadSelected = async () => {
     const list = (showFavorites ? favoriteImageList : mainImageList)
       .filter((item) => item.isSelected)
       .map((item) => item.url.main);
-    downloadFromLinks(list).then(clearSelectedImages);
+    downloadImagesFromLinks(list).then(clearSelectedImages);
   };
 
-  const downloadFromLinks = (links: string[]) => {
-    if (!links) throw new Error("given Links was not defined!");
+  const downloadImagesFromLinks = async (links: string[]) => {
+    const zip = new JSZip();
+    const imageFolder = zip.folder("images")!;
 
-    const options = {
-      method: "POST",
-      body: JSON.stringify({ links: links }),
-      headers: { "Content-Type": "application/json" },
+    const fetchAndAddImage = async (url: string, index: number) => {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const fileName = `image${index + 1}.jpg`;
+      imageFolder.file(fileName, blob);
     };
 
-    return fetch("/api/downloadFilesFromLinks", options)
-      .then((response) => {
-        if (!response.ok) {
-          console.log(`Err: ${response}`);
-          throw new Error("Error");
-        }
+    await Promise.all(links.map(fetchAndAddImage));
 
-        response.json().then(async () => await downloadFile());
-      })
-      .catch(() => console.log("Tihi Error"));
-  };
-
-  const downloadFile = () => {
-    setIsLoading(true);
-    return fetch(`/api/download/`, {
-      method: "GET",
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.blob();
-        }
-        throw new Error("Network response was not ok");
-      })
-      .then((blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "images";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-      })
-      .catch((error) => {
-        console.error("There was an error with the download:", error);
-      })
-      .finally(() => setIsLoading(false));
+    zip.generateAsync({ type: "blob" }).then(function (content) {
+      saveAs(content, "images.zip");
+    });
   };
 
   const clearSelectedImages = () => {

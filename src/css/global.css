@@ -60,7 +60,7 @@ header {
 
 header nav a {
   text-decoration: none;
-  color: inherit;
+  color: var(--color-surface-700);
 }
 
 header nav ul {
@@ -324,7 +324,7 @@ select:-webkit-autofill:active:disabled
 
 .headerTitleText {
   margin: 0;
-  color: var(--color-surface-500);
+  color: var(--color-surface-700);
 }
 
 .section {
@@ -365,7 +365,7 @@ select:-webkit-autofill:active:disabled
 }
 
 .aboutSectionWrapper p {
-  color: var(--color-surface-500);
+  color: var(--color-surface-700);
   font-size: 1.25rem;
 }
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { PlaySpaceTrace } from "../JS/SpaceTrace";
 import "../css/spaceTrace.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,6 +8,21 @@ import { EActiveTab, useProject } from "../Providers/ProjectProvider";
 const SpaceTrace = () => {
   const [playingSpaceTrace, setPlayingSpaceTrace] = useState<boolean>(false);
   const { changeActiveTab } = useProject();
+
+  const escFunction = useCallback((event: KeyboardEvent) => {
+    if (event.key === "Escape") {
+      changeActiveTab(EActiveTab.None);
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("keydown", escFunction, false);
+
+    return () => {
+      document.removeEventListener("keydown", escFunction, false);
+    };
+  }, [escFunction]);
+
   return (
     <>
       <div className="spaceTrace">
