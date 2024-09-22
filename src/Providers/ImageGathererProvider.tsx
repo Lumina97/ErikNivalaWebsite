@@ -1,4 +1,3 @@
-import JSZip from "jszip";
 import {
   createContext,
   Dispatch,
@@ -7,7 +6,6 @@ import {
   useContext,
   useState,
 } from "react";
-import { saveAs } from "file-saver";
 
 type TImageGathererProvider = {
   isModalActive: boolean;
@@ -66,6 +64,12 @@ export const ImageGathererProvider = ({
   );
   const [showFavorites, setShowFavorites] = useState<boolean>(false);
 
+  const clearSelectedImages = () => {
+    (showFavorites ? favoriteImageList : mainImageList).map((item) => {
+      item.isSelected = false;
+    });
+  };
+
   const sendImageGatheringRequest = async (subreddit: string) => {
     setResponseError("");
     setIsLoading(true);
@@ -77,9 +81,9 @@ export const ImageGathererProvider = ({
       withCredentials: true,
     };
 
-    return await fetch("http://127.0.0.1:3000/api/ImageLoader", options)
+    return await fetch("/api/ImageLoader", options)
       .then((result) => {
-        if (result.statusText !== "OK") {
+        if (!result.ok) {
           setResponseError("There was an error getting your data.");
           return;
         }
@@ -106,38 +110,63 @@ export const ImageGathererProvider = ({
     const list = (showFavorites ? favoriteImageList : mainImageList).map(
       (item) => item.url.main
     );
-    downloadImagesFromLinks(list).then(clearSelectedImages);
+    downloadFromLinks(list).then(clearSelectedImages);
   };
 
   const downloadSelected = async () => {
     const list = (showFavorites ? favoriteImageList : mainImageList)
       .filter((item) => item.isSelected)
       .map((item) => item.url.main);
-    downloadImagesFromLinks(list).then(clearSelectedImages);
+    downloadFromLinks(list).then(clearSelectedImages);
   };
 
-  const downloadImagesFromLinks = async (links: string[]) => {
-    const zip = new JSZip();
-    const imageFolder = zip.folder("images")!;
+  const downloadFromLinks = (links: string[]) => {
+    if (!links) throw new Error("given Links was not defined!");
 
-    const fetchAndAddImage = async (url: string, index: number) => {
-      const response = await fetch(url);
-      const blob = await response.blob();
-      const fileName = `image${index + 1}.jpg`;
-      imageFolder.file(fileName, blob);
+    const options = {
+      method: "POST",
+      body: JSON.stringify({ links: links }),
+      headers: { "Content-Type": "application/json" },
     };
 
-    await Promise.all(links.map(fetchAndAddImage));
+    return fetch("/api/downloadFilesFromLinks", options)
+      .then((response) => {
+        if (!response.ok) {
+          console.log(`Err: ${response}`);
+          throw new Error("Error");
+        }
 
-    zip.generateAsync({ type: "blob" }).then(function (content) {
-      saveAs(content, "images.zip");
-    });
+        response.json().then(async (result) => await downloadFile(result));
+      })
+      .catch(() => {});
   };
 
-  const clearSelectedImages = () => {
-    (showFavorites ? favoriteImageList : mainImageList).map((item) => {
-      item.isSelected = false;
-    });
+  const downloadFile = (path: string) => {
+    setIsLoading(true);
+    return fetch(`/api/download/`, {
+      method: "POST",
+      body: path,
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.blob();
+        }
+        throw new Error("Network response was not ok");
+      })
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "images";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      })
+      .catch((error) => {
+        console.error("There was an error with the download:", error);
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const addImageLinksToCollection = (links: string[]) => {
