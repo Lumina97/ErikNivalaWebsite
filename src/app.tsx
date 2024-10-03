@@ -6,6 +6,7 @@ import ImageGathererWrapper from "./routes/ImageGathererWrapper";
 import { useState, useEffect } from "react";
 import { ProjectProvider } from "./Providers/ProjectProvider";
 import SpaceTrace from "./routes/SpaceTrace";
+import Admin from "./routes/Admin";
 
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
         <SpaceTrace />
       </ProjectProvider>
     ),
+  },
+  {
+    path: "/admin",
+    element: <Admin />,
   },
 ]);
 

@@ -3,6 +3,10 @@
   src: url("fonts/Rounded Elegance Regular.otf");
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   /** CSS DARK THEME PRIMARY COLORS */
   --color-primary-gradient: linear-gradient(

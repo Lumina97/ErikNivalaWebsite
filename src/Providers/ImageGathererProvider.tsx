@@ -6,6 +6,7 @@ import {
   useContext,
   useState,
 } from "react";
+import { apiBasePath } from "../settings";
 
 type TImageGathererProvider = {
   isModalActive: boolean;
@@ -81,7 +82,7 @@ export const ImageGathererProvider = ({
       withCredentials: true,
     };
 
-    return await fetch("/api/ImageLoader", options)
+    return await fetch(`${apiBasePath}/api/ImageLoader`, options)
       .then((result) => {
         if (!result.ok) {
           setResponseError("There was an error getting your data.");
@@ -129,7 +130,7 @@ export const ImageGathererProvider = ({
       headers: { "Content-Type": "application/json" },
     };
 
-    return fetch("/api/downloadFilesFromLinks", options)
+    return fetch(`${apiBasePath}/api/downloadFilesFromLinks`, options)
       .then((response) => {
         if (!response.ok) {
           console.log(`Err: ${response}`);
@@ -143,7 +144,7 @@ export const ImageGathererProvider = ({
 
   const downloadFile = (path: string) => {
     setIsLoading(true);
-    return fetch(`/api/download/`, {
+    return fetch(`${apiBasePath}/api/download/`, {
       method: "POST",
       body: path,
       headers: { "Content-Type": "application/json" },

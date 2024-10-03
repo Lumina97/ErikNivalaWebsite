@@ -8,6 +8,6 @@ export const messageMinimumLength = 10;
 
 //links
 export const githubLink = "https://github.com/Lumina97";
-
+export const apiBasePath = "https://website-backend-pp83.onrender.com";
 //responsive
 export const mobileImageGathererButtonShowWidth = 560;
