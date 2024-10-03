@@ -9,7 +9,8 @@
     "build1": "react-scripts build",
     "watch-build1": "nodemon --watch src --exec \"npm run build\"",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
