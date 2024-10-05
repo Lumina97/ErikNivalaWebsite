@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import { apiBasePath } from "../settings";
+import { gatherImages } from "../TS/api";
 
 type TImageGathererProvider = {
   isModalActive: boolean;
@@ -74,36 +75,16 @@ export const ImageGathererProvider = ({
   const sendImageGatheringRequest = async (subreddit: string) => {
     setResponseError("");
     setIsLoading(true);
-    const sendData = { subreddit };
-    const options = {
-      method: "POST",
-      body: JSON.stringify(sendData),
-      headers: { "Content-Type": "application/json" },
-    };
+    const links = await gatherImages(subreddit);
+    if (links.length === 0) return;
 
-    return await fetch(`${apiBasePath}/api/ImageLoader`, options)
-      .then((result) => {
-        if (!result.ok) {
-          setResponseError("There was an error getting your data.");
-          return;
-        }
-        result.json().then(async (result: string) => {
-          const data = JSON.parse(result);
-          if (!data.links) throw new Error("Response data had no links.");
-          setMainImageList([]);
-          addImageLinksToCollection(data.links)
-            .then(() => setIsModalActive(true))
-            .catch((e) => {
-              throw new Error(e);
-            });
-        });
-      })
-      .catch(() => {
-        setResponseError("There was an error getting your data!");
-      })
-      .finally(() => {
-        setIsLoading(false);
+    setMainImageList([]);
+    addImageLinksToCollection(links)
+      .then(() => setIsModalActive(true))
+      .catch((e) => {
+        throw new Error(e);
       });
+    setIsLoading(false);
   };
 
   const downloadAll = async () => {
@@ -169,7 +150,7 @@ export const ImageGathererProvider = ({
       .finally(() => setIsLoading(false));
   };
 
-  const addImageLinksToCollection = (links: string[]) => {
+  const addImageLinksToCollection = (links: [string, string][]) => {
     if (!links) return Promise.reject("Links was not defined!");
 
     links.forEach((link) => {
