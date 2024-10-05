@@ -79,7 +79,6 @@ export const ImageGathererProvider = ({
       method: "POST",
       body: JSON.stringify(sendData),
       headers: { "Content-Type": "application/json" },
-      withCredentials: true,
     };
 
     return await fetch(`${apiBasePath}/api/ImageLoader`, options)
