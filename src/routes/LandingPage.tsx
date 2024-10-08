@@ -6,6 +6,7 @@ import About from "../Components/About";
 import ContactFormComponent from "../Components/ContactFormComponent";
 import FooterComponent from "../Components/FooterComponent";
 import { ProjectProvider } from "../Providers/ProjectProvider";
+import Calendly from "../Components/Calendly";
 
 const LandingPage = () => {
   return (
@@ -41,7 +42,10 @@ const LandingPage = () => {
             className: "section oddContainer",
           }}
         >
-          <ContactFormComponent />
+          <div className="ContactWrapper">
+            <ContactFormComponent />
+            <Calendly />
+          </div>
         </SectionComponent>
         <SectionComponent props={{ className: "section footerSection" }}>
           <FooterComponent />

@@ -123,6 +123,11 @@ img {
   margin: auto;
 }
 
+.calendly-inline-widget {
+  min-width: 320px;
+  height: 700px;
+}
+
 input:focus,
 textarea:focus,
 input:hover,
