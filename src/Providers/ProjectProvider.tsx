@@ -7,6 +7,7 @@ export enum EActiveTab {
   SpaceTrace = "SpaceTrace",
   Saas = "Saas",
   ImageGatherer = "ImageGatherer",
+  hannulawells = "hannulawells",
 }
 
 export type TActiveTab = keyof typeof EActiveTab;
@@ -40,6 +41,13 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
         break;
       case EActiveTab.SpaceTrace:
         navigate("/SpaceTrace");
+        break;
+      case EActiveTab.hannulawells:
+        window.open(
+          "https://hannulawells.com",
+          "_blank",
+          "noopener,noreferrer"
+        );
         break;
       default:
         navigate("/");

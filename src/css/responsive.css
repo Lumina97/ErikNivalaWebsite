@@ -4,6 +4,67 @@
   }
 }
 
+@media (max-width: 1200px) {
+  .landingPageWrapper {
+    max-width: 90%;
+  }
+  .projectCardDisplayWrapper,
+  .workExperience {
+    width: 95%;
+  }
+}
+
+@media (max-width: 970px) {
+  .landingPageWrapper {
+    max-width: 98%;
+  }
+  .projectCardDisplayWrapper,
+  .workExperience {
+    width: 98%;
+  }
+}
+
+@media (max-width: 800px) {
+  .workExperience {
+    padding-top: 10rem;
+  }
+
+  .sidebar {
+    position: fixed;
+    padding: 0;
+    margin: 0;
+    left: 0;
+    top: 0;
+    right: 0;
+    z-index: 999;
+    background-color: var(--color-surface-100);
+    border: none;
+    border-bottom: 2px solid var(--color-primary-600);
+    max-height: 200px;
+    min-height: 200px;
+    height: 100%;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .socialInformation > ul > li {
+    margin: auto;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .sideBarTechStack {
+    display: none;
+  }
+
+  .profileInformation {
+    min-width: 320px;
+  }
+}
+
 @media (max-width: 730px) {
   header nav ul {
     gap: 1rem;
@@ -22,77 +83,36 @@
   header {
     justify-content: space-between;
   }
+  .profileInformation {
+    min-width: 0;
+  }
+  .socialInformation > ul > li {
+    width: auto;
+    margin-left: 0.5rem;
+  }
+  .sidebar {
+    flex-direction: column;
+  }
 
   .aboutDescriptionText {
     max-width: 95%;
   }
 
-  .projectCard:hover .projectCardInner {
-    transform: none;
-  }
-
   .projectCard {
-    width: 100%;
-  }
-  .projectImageWrapper,
-  .projectCardInformationWrapper {
-    position: relative;
-  }
-
-  .projectCardInner {
-    display: flex;
+    padding: 1rem;
   }
 
   .projectCardInformationWrapper {
-    transform: unset;
+    width: 70%;
   }
 
-  .mobileMenu > .fontAwesome {
-    color: var(--color-primary-600);
-    position: absolute;
-    top: 1.65rem;
-    right: 3.25rem;
+  .projectCardInformationWrapper > h2 {
+    margin: 0;
+
+    font-size: 1.8em;
   }
 
-  .mobileMenuWrapper {
-    display: block;
-    padding-right: 3rem;
-  }
-
-  .mobileMenuWrapper .fontAwesome {
-    color: var(--color-primary-600);
-  }
-
-  .mobileMenu > ul {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-  }
-
-  .mobileMenu {
-    padding-top: 7rem;
+  .projectImageWrapper {
     display: none;
-    position: absolute;
-    left: 0;
-    top: 0;
-    background-color: var(--color-white);
-    height: 100%;
-    width: 100%;
-    z-index: 100;
-  }
-
-  .open .mobileMenu {
-    display: block;
-    background-color: var(--color-surface-100);
-    z-index: 90;
-  }
-
-  .contactFormWrapper {
-    width: 95%;
-  }
-  .contactFormWrapper form {
-    width: 95%;
   }
 }

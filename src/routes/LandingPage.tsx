@@ -1,57 +1,21 @@
-import Header from "../Components/Header";
-import HeaderNav from "../Components/HeaderNav";
-import SectionComponent from "../Components/SectionComponent";
 import ProjectDisplayComponent from "../Components/ProjectDisplayComponent";
-import About from "../Components/About";
-import ContactFormComponent from "../Components/ContactFormComponent";
-import FooterComponent from "../Components/FooterComponent";
 import { ProjectProvider } from "../Providers/ProjectProvider";
-import Calendly from "../Components/Calendly";
+import Sidebar from "../Components/Sidebar/Sidebar";
+
+import WorkExperience from "../Components/WorkExperience/WorkExperience";
 
 const LandingPage = () => {
   return (
-    <>
-      <>
-        <HeaderNav />
-        <SectionComponent props={{ id: "home", className: "section" }}>
-          <Header />
-        </SectionComponent>
+    <div className="landingPageWrapper">
+      <Sidebar />
 
-        <SectionComponent
-          props={{
-            id: "about",
-            className: "section aboutSectionWrapper oddContainer",
-          }}
-        >
-          <About />
-        </SectionComponent>
-
-        <SectionComponent
-          props={{
-            id: "projects",
-            className: "section",
-          }}
-        >
-          <ProjectProvider>
-            <ProjectDisplayComponent />
-          </ProjectProvider>
-        </SectionComponent>
-        <SectionComponent
-          props={{
-            id: "contact",
-            className: "section oddContainer",
-          }}
-        >
-          <div className="ContactWrapper">
-            <ContactFormComponent />
-            <Calendly />
-          </div>
-        </SectionComponent>
-        <SectionComponent props={{ className: "section footerSection" }}>
-          <FooterComponent />
-        </SectionComponent>
-      </>
-    </>
+      <div className="contentWrapper">
+        <ProjectProvider>
+          <WorkExperience />
+          <ProjectDisplayComponent />
+        </ProjectProvider>
+      </div>
+    </div>
   );
 };
 
