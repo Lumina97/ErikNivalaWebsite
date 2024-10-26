@@ -1,16 +1,16 @@
 import { useState } from "react";
-import InputFieldComponent from "./InputFieldComponent";
-import { useImageGatherer } from "../Providers/ImageGathererProvider";
+import InputFieldComponent from "../InputFieldComponent";
+import { useImageGatherer } from "../../Providers/ImageGathererProvider";
 import ImageGathererModal from "./ImageGathererModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 
-import "../css/ImageGatherer.css";
-import "../css/ImageGathererResponsive.css";
-import "../css/animations.css";
-import { EActiveTab, useProject } from "../Providers/ProjectProvider";
-import { mobileImageGathererButtonShowWidth } from "../settings";
-import { useWindowDimensions } from "../app";
+import "../../css/ImageGatherer.css";
+import "../../css/ImageGathererResponsive.css";
+import "../../css/animations.css";
+import { EActiveTab, useProject } from "../../Providers/ProjectProvider";
+import { mobileImageGathererButtonShowWidth } from "../../settings";
+import { useWindowDimensions } from "../../app";
 
 const ImageGatherer = () => {
   const {

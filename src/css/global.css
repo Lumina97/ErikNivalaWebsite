@@ -329,11 +329,6 @@ img {
   margin: auto;
 }
 
-.calendly-inline-widget {
-  min-width: 320px;
-  height: 700px;
-}
-
 input:focus,
 textarea:focus,
 input:hover,
@@ -677,9 +672,10 @@ select:-webkit-autofill:active:disabled
   padding-bottom: 1rem;
 }
 
-.projectCardInformationWrapper p:last-child {
+.projectCardInformationWrapper a:last-child {
   margin-top: auto;
   padding-bottom: 1rem;
+  color: var(--color-primary-600);
 }
 
 .projectTechStack {

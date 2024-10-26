@@ -1,8 +1,8 @@
 import ProjectComponent from "../ProjectComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faReact } from "@fortawesome/free-brands-svg-icons";
-import { projectImagePath } from "../../settings";
 import { EActiveTab, useProject } from "../../Providers/ProjectProvider";
+import { WorkExperienceList } from "../../data";
 
 const WorkExperience = () => {
   const { changeActiveTab } = useProject();
@@ -16,9 +16,7 @@ const WorkExperience = () => {
             changeActiveTab(EActiveTab.hannulawells);
           },
         }}
-        imagePath={`${projectImagePath}Hannula.PNG`}
-        title="hannulawells"
-        description="Performed various CSS adjustments and additions based on client provided figma design."
+        project={WorkExperienceList[0]}
       >
         <div>
           <FontAwesomeIcon icon={faReact} /> React

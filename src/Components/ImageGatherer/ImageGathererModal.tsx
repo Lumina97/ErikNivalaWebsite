@@ -1,11 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGrip, faStar, faX } from "@fortawesome/free-solid-svg-icons";
-import { useImageGatherer } from "../Providers/ImageGathererProvider";
+import { useImageGatherer } from "../../Providers/ImageGathererProvider";
 import ImageListItemComponent from "./ImageListItemComponent";
 import ImageGathererPreview from "./ImageGathererPreview";
 import { useRef, useState } from "react";
 
-import "../css/ImageGathererModal.css";
+import "../../css/ImageGathererModal.css";
 
 const ImageGathererModal = () => {
   const {

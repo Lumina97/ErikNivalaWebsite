@@ -1,7 +1,7 @@
 import {
   TImageListItem,
   useImageGatherer,
-} from "../Providers/ImageGathererProvider";
+} from "../../Providers/ImageGathererProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHeart as faRegularHeart,

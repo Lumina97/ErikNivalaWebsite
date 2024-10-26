@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react";
-import { useImageGatherer } from "../Providers/ImageGathererProvider";
+import { useImageGatherer } from "../../Providers/ImageGathererProvider";
 const ImageGathererPreview = ({ imageLink }: { imageLink: string }) => {
   const escFunction = useCallback((event: KeyboardEvent) => {
     if (event.key === "Escape") {
