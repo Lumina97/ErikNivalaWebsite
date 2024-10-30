@@ -58,7 +58,7 @@ body {
   display: flex;
   flex-direction: row;
   padding-top: 8rem;
-  max-width: 70%;
+  max-width: 85%;
   margin: auto;
   border-radius: 1rem;
 }
