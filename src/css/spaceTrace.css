@@ -10,10 +10,8 @@
   z-index: 100;
   border-radius: 0.75rem;
   padding-bottom: 0.5rem;
-  width: 80%;
-  height: 80%;
-  max-width: 1200px;
-  min-height: 375px;
+  width: 90%;
+  height: 90%;
 }
 
 .spaceTraceInfo {
