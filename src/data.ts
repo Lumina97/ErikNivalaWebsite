@@ -38,7 +38,7 @@ export const Projects: TProject[] = [
     imagePath: projectImagePath + "Gw2_taskmaster.png",
     title: "Tyria Tracker",
     description:
-      "Daily/Weekly activity tracker for the game Guild Wars 2. Front and Backend application with complete log in system and database storing users. Backend hosted on render and front end on vercel.",
+      "Daily/Weekly activity tracker for the game Guild Wars 2. Front and Backend application with complete log in system and database storing users.",
     githubPath: "https://github.com/Lumina97/TyriaTracker",
   },
 ];
