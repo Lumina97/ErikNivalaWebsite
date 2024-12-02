@@ -34,6 +34,13 @@ export const Projects: TProject[] = [
       "First place in a chrome extension Hackathon over a 2 week duration",
     githubPath: "https://github.com/Lumina97/NoteMaster",
   },
+  {
+    imagePath: projectImagePath + "Gw2_taskmaster.png",
+    title: "Tyria Tracker",
+    description:
+      "Daily/Weekly activity tracker for the game Guild Wars 2. Front and Backend application with complete log in system and database storing users. Backend hosted on render and front end on vercel.",
+    githubPath: "https://github.com/Lumina97/TyriaTracker",
+  },
 ];
 
 export const WorkExperienceList: TProject[] = [

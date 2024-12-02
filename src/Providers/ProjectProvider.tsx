@@ -8,6 +8,7 @@ export enum EActiveTab {
   Saas = "Saas",
   ImageGatherer = "ImageGatherer",
   hannulawells = "hannulawells",
+  tyriaTracker = "tyriaTracker",
 }
 
 export type TActiveTab = keyof typeof EActiveTab;
@@ -45,6 +46,13 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
       case EActiveTab.hannulawells:
         window.open(
           "https://hannulawells.com",
+          "_blank",
+          "noopener,noreferrer"
+        );
+        break;
+      case EActiveTab.tyriaTracker:
+        window.open(
+          "https://tyria-tracker.vercel.app",
           "_blank",
           "noopener,noreferrer"
         );
