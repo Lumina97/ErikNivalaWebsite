@@ -57,10 +57,7 @@ const SpaceTrace = () => {
         )}
 
         <div id="unity-container" className="unity-desktop">
-          <canvas
-            id="unity-canvas"
-            style={{ width: "0%", height: "0%" }}
-          ></canvas>
+          <canvas id="unity-canvas"></canvas>
           <div id="unity-loading-bar">
             <div id="unity-logo"></div>
             <div id="unity-progress-bar-empty">

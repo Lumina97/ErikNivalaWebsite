@@ -11,7 +11,11 @@
   border-radius: 0.75rem;
   padding-bottom: 0.5rem;
   width: 90%;
-  height: 90%;
+  height: 65%;
+}
+
+#unity-canvas {
+  width: 50%;
 }
 
 .spaceTraceInfo {

@@ -58,13 +58,13 @@ export function PlaySpaceTrace() {
     let meta = document.createElement("meta");
     meta.name = "viewport";
     meta.content =
-      "width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes";
+      "width=device-width , height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes";
     document.getElementsByTagName("head")[0].appendChild(meta);
     container.className = "unity-mobile";
     canvas.className = "unity-mobile";
   } else {
-    canvas.style.width = "100%";
-    canvas.style.height = "75%";
+    canvas.style.width = screen.width / 2;
+    canvas.style.height = screen.height / 2;
   }
 
   loadingBar.style.display = "block";
